@@ -12,16 +12,12 @@ import {
   LogOut,
   Sparkles,
   Home,
-  Sun,
-  Moon,
 } from 'lucide-react'
 import { useAuth } from '@/features/auth/AuthContext'
-import { useTheme } from '@/features/theme/ThemeContext'
 import { cn } from '@/lib/utils'
 
 export const Sidebar: React.FC = () => {
   const { user, isDemoUser, logout } = useAuth()
-  const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
 
   const navItems = [
@@ -79,27 +75,6 @@ export const Sidebar: React.FC = () => {
           </NavLink>
         ))}
       </nav>
-
-      {/* Theme Switcher in Sidebar */}
-      <div className="my-2">
-        <button
-          onClick={toggleTheme}
-          type="button"
-          className="flex w-full items-center justify-between rounded-xl border border-slate-800 bg-slate-900/60 px-3.5 py-2 text-xs font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white"
-        >
-          <span className="flex items-center gap-2">
-            {theme === 'dark' ? (
-              <Moon className="h-4 w-4 text-indigo-400" />
-            ) : (
-              <Sun className="h-4 w-4 text-amber-500" />
-            )}
-            <span>Theme Mode</span>
-          </span>
-          <span className="rounded-md border border-slate-700 bg-slate-800/80 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-300">
-            {theme === 'dark' ? 'Dark' : 'Light'}
-          </span>
-        </button>
-      </div>
 
       {/* User profile & Sign out */}
       <div className="border-t border-slate-900 pt-3">

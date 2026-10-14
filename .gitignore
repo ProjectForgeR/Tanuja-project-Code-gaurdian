@@ -66,3 +66,5 @@ backend/codeguardian.db
 *.swo
 .DS_Store
 Thumbs.db
+scratch/
+

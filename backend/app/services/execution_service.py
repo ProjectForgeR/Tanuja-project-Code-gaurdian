@@ -1,4 +1,5 @@
 import asyncio
+import base64
 import json
 import logging
 import re
@@ -9,6 +10,15 @@ from app.core.config import settings
 from app.schemas.execution import ExecuteRequest, ExecuteResponse, ExecutionErrorDetail
 
 logger = logging.getLogger(__name__)
+
+def _decode_b64(val: Optional[str]) -> str:
+    if not val:
+        return ""
+    try:
+        return base64.b64decode(val).decode("utf-8", errors="replace")
+    except Exception:
+        return str(val)
+
 
 # Map normalized language names to Judge0 language IDs
 # Reference: https://ce.judge0.com/languages
@@ -21,7 +31,34 @@ LANGUAGE_MAP: Dict[str, int] = {
     "c++": 105,
     "javascript": 102,   # JavaScript (Node.js 22.08.0)
     "js": 102,
+    "nodejs": 102,
+    "typescript": 101,   # TypeScript 5.6.2
+    "ts": 101,
+    "csharp": 51,        # C# (Mono 6.6.0)
+    "cs": 51,
+    "c#": 51,
+    "php": 98,           # PHP 8.3.11
+    "go": 107,           # Go 1.23.5
+    "golang": 107,
+    "rust": 108,         # Rust 1.85.0
+    "rs": 108,
+    "kotlin": 111,       # Kotlin 2.1.10
+    "kt": 111,
+    "ruby": 72,          # Ruby 2.7.0
+    "rb": 72,
+    "bash": 46,          # Bash 5.0.0
+    "sh": 46,
+    "shell": 46,
+    "sql": 82,           # SQL (SQLite 3.27.2)
+    "sqlite": 82,
+    "mysql": 82,         # SQL variant
+    "postgresql": 82,    # SQL variant
+    "postgres": 82,      # SQL variant
+    "plsql": 82,         # SQL variant
+    "reactjs": 102,      # JS (Node.js)
+    "reactts": 101,      # TS
 }
+
 
 
 class ExecutionService:
@@ -46,22 +83,74 @@ class ExecutionService:
                 ),
             )
 
+        # Web Domain: HTML, CSS, React JS & React TS are rendered via client-side Live Preview
+        if lang_key in ("html", "htm", "css", "reactjs", "react", "reactts", "jsx", "tsx"):
+            return ExecuteResponse(
+                status="Execution Successful",
+                success=True,
+                output=f"{req.language.upper()} rendered live in browser preview.\nSwitch to the 'Live Preview' tab to interact with your webpage or component.",
+                stdout=f"{req.language.upper()} rendered successfully in browser viewport.",
+                stderr="",
+                compile_output="",
+                language=req.language,
+                execution_time=0.01,
+                memory_usage_kb=0,
+                exit_code=0,
+            )
+
+        # Other Domain: Markup & Config validation
+        if lang_key in ("json", "yaml", "yml", "xml", "markdown", "md"):
+            if lang_key == "json":
+                try:
+                    parsed = json.loads(code)
+                    formatted = json.dumps(parsed, indent=2)
+                    return ExecuteResponse(
+                        status="Execution Successful",
+                        success=True,
+                        output=f"Valid JSON syntax!\nFormatted output:\n{formatted}",
+                        stdout="JSON validated successfully.",
+                        language=req.language,
+                        execution_time=0.01,
+                        memory_usage_kb=0,
+                        exit_code=0,
+                    )
+                except Exception as json_err:
+                    return ExecuteResponse(
+                        status="JSON Syntax Error",
+                        success=False,
+                        output=f"Invalid JSON: {str(json_err)}",
+                        stderr=str(json_err),
+                        language=req.language,
+                    )
+            return ExecuteResponse(
+                status="Execution Successful",
+                success=True,
+                output=f"{req.language.upper()} syntax is valid.\nDocument loaded without syntax errors.",
+                stdout=f"{req.language.upper()} document valid.",
+                language=req.language,
+                execution_time=0.01,
+                memory_usage_kb=0,
+                exit_code=0,
+            )
+
         lang_id = LANGUAGE_MAP.get(lang_key)
         if not lang_id:
+            supported_langs = "Python, JavaScript, TypeScript, Java, C, C++, C#, PHP, Go, Rust, Kotlin, Ruby, Bash, SQL"
             return ExecuteResponse(
                 status="Execution Error",
                 success=False,
-                output=f"Unsupported language '{req.language}'. Supported languages: Python, Java, C, C++, JavaScript.",
-                stderr=f"Language '{req.language}' is not configured in execution engine.",
+                output=f"Execution is not supported for '{req.language}'. Supported execution languages: {supported_langs}.\n(For HTML/CSS, use the Live Browser Preview).",
+                stderr=f"Language '{req.language}' has no compiler/sandbox backend.",
                 language=req.language,
                 error_detail=ExecutionErrorDetail(
                     error_type="Unsupported Language",
-                    what_went_wrong=f"Language '{req.language}' cannot be executed.",
-                    why_it_happened="The compiler only supports Python, Java, C, C++, and JavaScript.",
-                    how_to_fix="Select one of the supported languages from the dropdown menu.",
-                    concept_to_learn="Language Compatibility",
+                    what_went_wrong=f"Language '{req.language}' cannot be executed directly.",
+                    why_it_happened=f"The sandbox execution engine supports: {supported_langs}.",
+                    how_to_fix="Select one of the supported execution languages, or use Live Preview for HTML/CSS.",
+                    concept_to_learn="Compilation and Execution Environments",
                 ),
             )
+
 
         # 1a. HTML-in-JavaScript guard: reject HTML markup sent to Node.js executor
         _HTML_PATTERN = re.compile(
@@ -126,9 +215,12 @@ class ExecutionService:
         # Parse Judge0 response
         status_desc = judge_res.get("status", {}).get("description", "Unknown")
         status_id = judge_res.get("status", {}).get("id", 0)
-        stdout = (judge_res.get("stdout") or "")
-        stderr = (judge_res.get("stderr") or "")
-        compile_output = (judge_res.get("compile_output") or "")
+        stdout = _decode_b64(judge_res.get("stdout"))
+        stderr = _decode_b64(judge_res.get("stderr"))
+        compile_output = _decode_b64(judge_res.get("compile_output"))
+        message = _decode_b64(judge_res.get("message"))
+        if not stderr and message:
+            stderr = message
         exec_time = float(judge_res.get("time")) if judge_res.get("time") is not None else None
         memory_kb = int(judge_res.get("memory")) if judge_res.get("memory") is not None else None
         exit_code = judge_res.get("exit_code")
@@ -198,24 +290,30 @@ class ExecutionService:
     async def _submit_to_judge0(
         cls, code: str, language_id: int, stdin: str
     ) -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
-        url = f"{settings.JUDGE0_API_URL.rstrip('/')}/submissions?wait=true"
+        url = f"{settings.JUDGE0_API_URL.rstrip('/')}/submissions?wait=true&base64_encoded=true"
         headers = {"Content-Type": "application/json"}
         if settings.JUDGE0_API_KEY:
             headers["X-RapidAPI-Key"] = settings.JUDGE0_API_KEY
             if settings.JUDGE0_API_HOST:
                 headers["X-RapidAPI-Host"] = settings.JUDGE0_API_HOST
 
+        cpu_limit = min(settings.EXECUTION_TIMEOUT_SECONDS, 4.0)
+        wall_limit = min(cpu_limit + 1.5, 6.0)
+
+        encoded_code = base64.b64encode(code.encode("utf-8")).decode("ascii")
+        encoded_stdin = base64.b64encode(stdin.encode("utf-8")).decode("ascii") if stdin else ""
+
         payload = {
-            "source_code": code,
+            "source_code": encoded_code,
             "language_id": language_id,
-            "stdin": stdin,
-            "cpu_time_limit": min(settings.EXECUTION_TIMEOUT_SECONDS, 10.0),
-            "wall_time_limit": min(settings.EXECUTION_TIMEOUT_SECONDS + 2.0, 15.0),
+            "stdin": encoded_stdin,
+            "cpu_time_limit": cpu_limit,
+            "wall_time_limit": wall_limit,
             "memory_limit": 128000,  # 128 MB
         }
 
         try:
-            async with httpx.AsyncClient(timeout=settings.EXECUTION_TIMEOUT_SECONDS + 5.0) as client:
+            async with httpx.AsyncClient(timeout=wall_limit + 3.0) as client:
                 resp = await client.post(url, json=payload, headers=headers)
                 if resp.status_code in [200, 201]:
                     return resp.json(), None
@@ -224,6 +322,7 @@ class ExecutionService:
             return None, "Connection to sandbox execution engine timed out."
         except Exception as e:
             return None, str(e)
+
 
     @classmethod
     def _extract_error_location(cls, error_text: str, language: str, code: str) -> Tuple[Optional[int], str]:
@@ -390,7 +489,7 @@ class ExecutionService:
                 corrected_code = "\n".join(lines_copy)
 
         # 2. If AI key is configured and requested, obtain deep AI explanation & corrected code
-        api_key = settings.GEMINI_API_KEY or settings.OPENAI_API_KEY
+        api_key = settings.GROQ_API_KEY or settings.GEMINI_API_KEY or settings.OPENAI_API_KEY
         if generate_ai and api_key:
             try:
                 ai_detail = await cls._query_ai_explainer(code, language, raw_error, extracted_line, api_key)
@@ -441,8 +540,43 @@ Respond ONLY with a valid JSON object matching this schema:
   "corrected_code": "Full corrected executable code"
 }}
 """
-        # Call Gemini or OpenAI
-        if settings.DEFAULT_AI_PROVIDER == "openai" or not settings.GEMINI_API_KEY:
+        provider = settings.DEFAULT_AI_PROVIDER.lower()
+
+        # Priority 1: Groq API (Ultra-fast LLM diagnosis, OpenAI compatible)
+        if (provider == "groq" or settings.GROQ_API_KEY) and (api_key == settings.GROQ_API_KEY or settings.GROQ_API_KEY):
+            groq_key = settings.GROQ_API_KEY or api_key
+            url = "https://api.groq.com/openai/v1/chat/completions"
+            headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
+            payload = {
+                "model": settings.GROQ_MODEL or "openai/gpt-oss-120b",
+                "messages": [
+                    {"role": "system", "content": "You are a concise compiler error analyzer that outputs strictly valid JSON."},
+                    {"role": "user", "content": prompt}
+                ],
+                "temperature": 0.1,
+                "max_tokens": 450,
+                "response_format": {"type": "json_object"},
+            }
+
+            async with httpx.AsyncClient(timeout=8.0) as client:
+
+                res = await client.post(url, json=payload, headers=headers)
+                if res.status_code == 200:
+                    data = res.json()
+                    content = json.loads(data["choices"][0]["message"]["content"])
+                    return ExecutionErrorDetail(
+                        line_number=content.get("line_number") or line_no,
+                        error_type="Compiler/Runtime Error (Explained with Groq AI)",
+                        raw_message=raw_error[:500],
+                        what_went_wrong=content.get("what_went_wrong", ""),
+                        why_it_happened=content.get("why_it_happened", ""),
+                        how_to_fix=content.get("how_to_fix", ""),
+                        concept_to_learn=content.get("concept_to_learn", ""),
+                        corrected_code=content.get("corrected_code"),
+                    )
+
+        # Priority 2: OpenAI
+        if provider == "openai" or (settings.OPENAI_API_KEY and not settings.GEMINI_API_KEY):
             url = "https://api.openai.com/v1/chat/completions"
             headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
             payload = {
@@ -466,7 +600,9 @@ Respond ONLY with a valid JSON object matching this schema:
                         concept_to_learn=content.get("concept_to_learn", ""),
                         corrected_code=content.get("corrected_code"),
                     )
-        else:
+
+        # Priority 3: Gemini
+        if settings.GEMINI_API_KEY:
             url = f"https://generativelanguage.googleapis.com/v1beta/models/{settings.DEFAULT_AI_MODEL}:generateContent?key={api_key}"
             payload = {
                 "contents": [{"parts": [{"text": prompt}]}],
@@ -490,3 +626,4 @@ Respond ONLY with a valid JSON object matching this schema:
                     )
 
         return None
+

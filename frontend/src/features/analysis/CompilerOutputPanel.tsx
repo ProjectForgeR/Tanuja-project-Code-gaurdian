@@ -22,6 +22,7 @@ interface CompilerOutputPanelProps {
   stdin: string
   onStdinChange: (val: string) => void
   onApplyFix: (correctedCode: string) => void
+  onRunCorrectedCode?: (correctedCode: string) => void
   onClearOutput: () => void
 }
 
@@ -31,8 +32,10 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
   stdin,
   onStdinChange,
   onApplyFix,
+  onRunCorrectedCode,
   onClearOutput,
 }) => {
+
   const [activeTab, setActiveTab] = useState<'output' | 'errors' | 'ai' | 'stdin'>('output')
   const [copied, setCopied] = useState<boolean>(false)
 
@@ -239,30 +242,42 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
             {/* Tab: OUTPUT */}
             {activeTab === 'output' && (
               <div className="space-y-3">
+                {result.success && (
+                  <div className="flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-400 font-sans">
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />
+                    <span>Status: Execution Successful</span>
+                  </div>
+                )}
+
                 {result.stdout ? (
                   <div>
-                    <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 font-sans">
-                      Standard Output:
+                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 font-sans">
+                      Program Output:
                     </div>
-                    <pre className="whitespace-pre-wrap rounded-lg bg-slate-900/80 border border-slate-800/80 p-3 text-emerald-400 leading-relaxed font-mono">
+                    <pre className="whitespace-pre-wrap rounded-lg bg-slate-900 border border-slate-800 p-3.5 text-emerald-400 text-sm leading-relaxed font-mono shadow-inner">
                       {result.stdout}
                     </pre>
                   </div>
                 ) : result.output ? (
                   <div>
-                    <pre className={`whitespace-pre-wrap rounded-lg border p-3 leading-relaxed font-mono ${
+                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 font-sans">
+                      Program Output:
+                    </div>
+                    <pre className={`whitespace-pre-wrap rounded-lg border p-3.5 text-sm leading-relaxed font-mono shadow-inner ${
                       result.success
-                        ? 'bg-slate-900/80 border-slate-800/80 text-slate-200'
+                        ? 'bg-slate-900 border-slate-800 text-emerald-400'
                         : 'bg-rose-950/20 border-rose-900/30 text-rose-300'
                     }`}>
                       {result.output}
                     </pre>
                   </div>
                 ) : (
-                  <p className="text-slate-500 italic font-sans">
-                    Program executed successfully without producing any standard output.
-                  </p>
+                  <div className="rounded-lg bg-slate-900 border border-slate-800 p-3.5 text-slate-300 font-mono">
+                    <span className="text-emerald-400 font-bold">✓ Program completed successfully.</span>
+                    <span className="text-slate-500 block text-xs mt-1">(No output was printed. Use print(), console.log(), or printf() to see text.)</span>
+                  </div>
                 )}
+
 
                 {/* If error occurred, show banner pointing to errors tab */}
                 {!result.success && (
@@ -388,22 +403,55 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                       </div>
                     )}
 
-                    {/* Corrected Code & Action Button */}
+                    {/* Corrected Code & Action Buttons */}
                     <div className="rounded-xl border border-emerald-500/30 bg-slate-900/90 p-3.5 space-y-2.5">
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
                         <span className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
                           <Check className="h-4 w-4" />
                           Recommended Solution:
                         </span>
                         {result.error_detail.corrected_code && (
-                          <button
-                            type="button"
-                            onClick={() => onApplyFix(result.error_detail!.corrected_code!)}
-                            className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-md shadow-emerald-500/20 hover:bg-emerald-500 transition cursor-pointer"
-                          >
-                            <Wrench className="h-3 w-3" />
-                            <span>Fix Code</span>
-                          </button>
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                navigator.clipboard.writeText(result.error_detail!.corrected_code!)
+                                setCopied(true)
+                                setTimeout(() => setCopied(false), 2000)
+                              }}
+                              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition cursor-pointer"
+                              title="Copy Corrected Code"
+                            >
+                              <Copy className="h-3 w-3" />
+                              <span>Copy Fix</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (window.confirm("Apply AI-corrected code to replace current editor content?")) {
+                                  onApplyFix(result.error_detail!.corrected_code!)
+                                }
+                              }}
+                              className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-md shadow-emerald-500/20 hover:bg-emerald-500 transition cursor-pointer"
+                              title="Apply Fix to Editor"
+                            >
+                              <Wrench className="h-3 w-3" />
+                              <span>Apply Fix</span>
+                            </button>
+
+                            {onRunCorrectedCode && (
+                              <button
+                                type="button"
+                                onClick={() => onRunCorrectedCode(result.error_detail!.corrected_code!)}
+                                className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-md shadow-blue-500/20 hover:from-blue-500 hover:to-indigo-500 transition cursor-pointer"
+                                title="Run Corrected Code in Sandbox"
+                              >
+                                <ArrowRight className="h-3 w-3" />
+                                <span>Run Corrected Code</span>
+                              </button>
+                            )}
+                          </div>
                         )}
                       </div>
                       {result.error_detail.corrected_code ? (
@@ -416,6 +464,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                         </div>
                       )}
                     </div>
+
                   </div>
                 ) : (
                   <p className="text-xs text-slate-400">

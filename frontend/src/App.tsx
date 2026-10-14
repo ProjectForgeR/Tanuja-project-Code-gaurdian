@@ -14,6 +14,7 @@ import { SignInPage } from '@/pages/SignInPage'
 import { SignUpPage } from '@/pages/SignUpPage'
 import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage'
 import { ScrollToTop } from '@/components/layout/ScrollToTop'
+import { ErrorBoundary } from '@/components/common/ErrorBoundary'
 
 interface ProtectedRouteProps {
   children: React.ReactNode
@@ -40,7 +41,12 @@ export function App() {
       <AuthProvider>
         <BrowserRouter>
           <ScrollToTop />
-          <Routes>
+          <ErrorBoundary
+            fallbackTitle="Application Workspace Notice"
+            fallbackMessage="An unexpected runtime issue occurred. Click below to restore the application view."
+            onReset={() => window.location.reload()}
+          >
+            <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/workspace" element={<WorkspacePage />} />
             <Route
@@ -89,7 +95,8 @@ export function App() {
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-        </BrowserRouter>
+        </ErrorBoundary>
+      </BrowserRouter>
       </AuthProvider>
     </ThemeProvider>
   )

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ShieldCheck, Mail, Lock, User, AlertCircle } from 'lucide-react'
+import { ShieldCheck, Mail, Lock, User, AlertCircle, Home } from 'lucide-react'
 import { useAuth } from '@/features/auth/AuthContext'
 
 export const SignUpPage: React.FC = () => {
@@ -33,7 +33,19 @@ export const SignUpPage: React.FC = () => {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-12 text-slate-100">
+    <div className="relative flex min-h-screen flex-col items-center justify-center bg-slate-950 px-4 py-12 pt-16 sm:pt-12 text-slate-100">
+      {/* Home Navigation Button */}
+      <div className="absolute left-4 top-4 sm:left-8 sm:top-8 z-20">
+        <Link
+          to="/"
+          className="group inline-flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-900/80 px-3.5 py-2 text-xs font-semibold text-slate-300 shadow-sm backdrop-blur-md transition-all hover:border-blue-500/50 hover:bg-gradient-to-r hover:from-blue-600/20 hover:to-purple-600/20 hover:text-white hover:shadow-md hover:shadow-blue-500/10 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+          title="Return to Home"
+        >
+          <Home className="h-4 w-4 text-blue-400 transition-transform group-hover:-translate-x-0.5" />
+          <span>Home</span>
+        </Link>
+      </div>
+
       <div className="w-full max-w-md space-y-8 rounded-2xl border border-slate-800 bg-slate-900/60 p-8 shadow-2xl backdrop-blur-md">
         <div className="text-center">
           <Link to="/" className="inline-flex items-center gap-2.5">

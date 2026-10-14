@@ -16,6 +16,8 @@ import {
   BrainCircuit,
   Sun,
   Moon,
+  Trash2,
+  ExternalLink,
 } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Navbar } from '@/components/layout/Navbar'
@@ -23,6 +25,7 @@ import { Sidebar } from '@/components/layout/Sidebar'
 import { useTheme } from '@/features/theme/ThemeContext'
 import { useAuth } from '@/features/auth/AuthContext'
 import { CodeEditor } from '@/features/analysis/CodeEditor'
+import { ErrorBoundary } from '@/components/common/ErrorBoundary'
 import { ScoreCard } from '@/features/analysis/ScoreCard'
 import { FindingsList } from '@/features/analysis/FindingsList'
 import { DuplicateGroupsView } from '@/features/analysis/DuplicateGroupsView'
@@ -60,7 +63,7 @@ export const WorkspacePage: React.FC = () => {
   const [isExecuting, setIsExecuting] = useState<boolean>(false)
   const [executionResult, setExecutionResult] = useState<ExecuteResponse | null>(null)
   const [programStdin, setProgramStdin] = useState<string>('')
-  const [activeWorkspaceMode, setActiveWorkspaceMode] = useState<'compiler' | 'audit'>('compiler')
+  const [activeWorkspaceMode, setActiveWorkspaceMode] = useState<'compiler' | 'audit' | 'preview'>('compiler')
 
   // Modals state
   const [selectedFindingForFix, setSelectedFindingForFix] = useState<Finding | null>(null)
@@ -130,15 +133,7 @@ export const WorkspacePage: React.FC = () => {
     const trimmed = sourceCode.trim()
     if (!trimmed || trimmed.length < 5) return
 
-    // LANGUAGE MISMATCH GATE: Detect if code belongs to a different language
-    if (!bypassMismatch) {
-      const mismatch = detectLangMismatch(trimmed, lang)
-      if (mismatch) {
-        setMismatchDetectedLang(mismatch)
-        setShowLangMismatchModal(true)
-        return
-      }
-    }
+
 
     abortControllerRef.current?.abort()
     abortControllerRef.current = new AbortController()
@@ -201,6 +196,31 @@ export const WorkspacePage: React.FC = () => {
     setIsExecuting(true)
     setErrorMsg(null)
 
+    // Web Preview for HTML, CSS, React JS & React TS: switch to preview immediately
+    if (['html', 'css', 'reactjs', 'reactts'].includes(language.toLowerCase())) {
+      setIsExecuting(false)
+      setActiveWorkspaceMode('preview')
+      const labels: Record<string, string> = {
+        html: 'HTML & Embedded Scripts',
+        css: 'CSS Stylesheet',
+        reactjs: 'React JS Component',
+        reactts: 'React TypeScript Component',
+      }
+      setExecutionResult({
+        status: 'Execution Successful',
+        success: true,
+        output: `${labels[language.toLowerCase()] || language.toUpperCase()} rendered directly in the Live Browser Preview viewport.`,
+        stdout: `${labels[language.toLowerCase()] || language.toUpperCase()} active in sandboxed preview.`,
+        stderr: '',
+        compile_output: '',
+        language,
+        execution_time: 0.01,
+        memory_usage_kb: 0,
+        exit_code: 0,
+      })
+      return
+    }
+
     // HTML-in-JavaScript guard: catch before hitting the sandbox
     const isJsSelected = language === 'javascript' || language === 'js'
     const htmlPattern = /<!doctype\s+html|<html[\s>]|<head[\s>]|<body[\s>]/i
@@ -212,7 +232,7 @@ export const WorkspacePage: React.FC = () => {
         output:
           'HTML code cannot be run in the JavaScript (Node.js) sandbox.\n\n' +
           'Node.js executes .js files only — not HTML pages.\n\n' +
-          '👉 Write pure JavaScript (e.g. console.log("Hello")) or open your HTML file in a browser.',
+          '👉 Write pure JavaScript (e.g. console.log("Hello")) or switch Language to HTML to use Live Preview.',
         stdout: '',
         stderr: '',
         compile_output: '',
@@ -225,7 +245,7 @@ export const WorkspacePage: React.FC = () => {
           why_it_happened:
             'Node.js is a JavaScript runtime — it cannot parse or render HTML. HTML is a browser-rendered document format.',
           how_to_fix:
-            'Replace the HTML with valid JavaScript, e.g. console.log("Hello World"), then click Run Code again.',
+            'Switch language to HTML or replace the HTML with valid JavaScript, e.g. console.log("Hello World").',
           concept_to_learn:
             'Execution Environments — browser renders HTML/CSS, Node.js executes JavaScript.',
         },
@@ -241,12 +261,14 @@ export const WorkspacePage: React.FC = () => {
         stdin: programStdin,
         generate_ai_fix: true,
       })
+      setActiveWorkspaceMode('compiler')
       setExecutionResult(res)
 
       // If an error line was identified, scroll/highlight it
       if (res.error_detail?.line_number) {
         setTargetLine(res.error_detail.line_number)
       }
+
     } catch (err: unknown) {
       console.error('Execution request failed:', err)
       const is401 = err instanceof Error && (err.message.includes('401') || err.message.toLowerCase().includes('unauthorized'))
@@ -275,7 +297,41 @@ export const WorkspacePage: React.FC = () => {
     }
   }
 
+  const handleRunCorrectedCode = async (correctedCode: string) => {
+    setCode(correctedCode)
+    setIsExecuting(true)
+    setErrorMsg(null)
+
+    try {
+      const res = await compilerService.executeCode({
+        code: correctedCode,
+        language,
+        stdin: programStdin,
+        generate_ai_fix: true,
+      })
+      setExecutionResult(res)
+      if (res.error_detail?.line_number) {
+        setTargetLine(res.error_detail.line_number)
+      }
+    } catch (err: unknown) {
+      console.error('Execution request failed for corrected code:', err)
+      const msg = err instanceof Error ? err.message : 'Execution service error'
+      setErrorMsg(`Execution of corrected code failed: ${msg}`)
+    } finally {
+      setIsExecuting(false)
+    }
+  }
+
+
   const handleLanguageChange = (newLang: string) => {
+    // Abort any pending analysis request immediately
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+      abortControllerRef.current = new AbortController()
+    }
+    setIsAnalyzing(false)
+    setAnalysisStep('')
+
     setLanguage(newLang)
     const extMap: Record<string, string> = {
       python: 'py', javascript: 'js', typescript: 'ts', java: 'java',
@@ -285,14 +341,54 @@ export const WorkspacePage: React.FC = () => {
       markdown: 'md', csharp: 'cs', php: 'php', rust: 'rs', kotlin: 'kt',
       swift: 'swift', ruby: 'rb', nodejs: 'js',
     }
-    // If in compiler mode, prefer clean runnable sample
-    if (activeWorkspaceMode === 'compiler' && EXECUTABLE_SAMPLES[newLang]) {
-      setCode(EXECUTABLE_SAMPLES[newLang].code)
-      setFilename(`main.${extMap[newLang] || newLang}`)
-    } else if (CODE_SAMPLES[newLang]) {
-      setCode(CODE_SAMPLES[newLang].code)
-      setFilename(`sample.${extMap[newLang] || newLang}`)
+    const targetExt = extMap[newLang.toLowerCase()] || 'txt'
+
+    // Update filename extension while preserving existing file name
+    setFilename((prev) => {
+      const parts = prev.split('.')
+      if (parts.length > 1) {
+        parts[parts.length - 1] = targetExt
+        return parts.join('.')
+      }
+      return `main.${targetExt}`
+    })
+
+    // Auto-switch to Live Preview for visual Web languages; switch back to compiler for all other languages
+    if (['html', 'css', 'reactjs', 'reactts'].includes(newLang.toLowerCase())) {
+      setActiveWorkspaceMode('preview')
+    } else {
+      setActiveWorkspaceMode('compiler')
     }
+
+    // Do not clear the user's code when switching languages.
+    // Only load a sample if the editor is currently empty.
+    if (!code || code.trim() === '') {
+      if (EXECUTABLE_SAMPLES[newLang]) {
+        setCode(EXECUTABLE_SAMPLES[newLang].code)
+      } else if (CODE_SAMPLES[newLang]) {
+        setCode(CODE_SAMPLES[newLang].code)
+      }
+    }
+
+    // Invalidate stale execution and analysis results from the previous language
+    setExecutionResult(null)
+    setAnalysisResult(null)
+    setErrorMsg(null)
+    setTargetLine(null)
+  }
+
+  const handleResetCode = () => {
+    if (EXECUTABLE_SAMPLES[language]) {
+      setCode(EXECUTABLE_SAMPLES[language].code)
+    } else if (CODE_SAMPLES[language]) {
+      setCode(CODE_SAMPLES[language].code)
+    } else {
+      setCode('')
+    }
+    setExecutionResult(null)
+    setAnalysisResult(null)
+    setProgramStdin('')
+    setErrorMsg(null)
   }
 
   // Returns detected language key or null
@@ -485,6 +581,205 @@ export const WorkspacePage: React.FC = () => {
     setSelectedFindingForFix(null)
   }
 
+  const isWebPreviewLang = ['html', 'css', 'javascript', 'js', 'typescript', 'ts', 'reactjs', 'reactts', 'react', 'nodejs'].includes(language.toLowerCase())
+  const currentMode = (activeWorkspaceMode === 'preview' && !isWebPreviewLang) ? 'compiler' : activeWorkspaceMode
+
+  const getPreviewDocument = () => {
+    const l = language.toLowerCase()
+
+    if (l === 'html' || l === 'htm') {
+      const consoleScript = `
+        <script>
+          (function() {
+            var oldLog = console.log, oldErr = console.error;
+            var box = null;
+            function getBox() {
+              if (!box) {
+                box = document.createElement('div');
+                box.id = '__cg_console__';
+                box.style.cssText = 'position:fixed;bottom:10px;left:10px;right:10px;max-height:100px;overflow-y:auto;background:rgba(15,23,42,0.95);border:1px solid #334155;border-radius:8px;padding:8px 12px;font-family:monospace;font-size:11px;color:#38bdf8;z-index:999999;box-shadow:0 4px 12px rgba(0,0,0,0.5);';
+                var title = document.createElement('div');
+                title.style.cssText = 'font-weight:bold;color:#94a3b8;margin-bottom:4px;border-bottom:1px solid #1e293b;padding-bottom:2px;';
+                title.innerText = 'Browser Console:';
+                box.appendChild(title);
+                document.body.appendChild(box);
+              }
+              return box;
+            }
+            console.log = function() {
+              oldLog.apply(console, arguments);
+              try {
+                var b = getBox();
+                var p = document.createElement('div');
+                p.style.cssText = 'color:#4ade80;margin:2px 0;white-space:pre-wrap;';
+                p.innerText = '> ' + Array.from(arguments).map(function(a){ return typeof a === 'object' ? JSON.stringify(a) : String(a); }).join(' ');
+                b.appendChild(p);
+                b.scrollTop = b.scrollHeight;
+              } catch(e){}
+            };
+            console.error = function() {
+              oldErr.apply(console, arguments);
+              try {
+                var b = getBox();
+                var p = document.createElement('div');
+                p.style.cssText = 'color:#f87171;margin:2px 0;white-space:pre-wrap;';
+                p.innerText = '[Error] ' + Array.from(arguments).join(' ');
+                b.appendChild(p);
+                b.scrollTop = b.scrollHeight;
+              } catch(e){}
+            };
+          })();
+        </script>
+      `
+      if (/<!doctype\s+html|<html[\s>]/i.test(code)) {
+        return code.replace(/(<\/body>|$)/i, `${consoleScript}</body>`)
+      }
+      return `<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{font-family:system-ui,sans-serif;background:#0f172a;color:#f8fafc;padding:24px;margin:0;}</style></head><body>${code}${consoleScript}</body></html>`
+    }
+
+    if (l === 'css') {
+      return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; padding: 24px; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 85vh; }
+    ${code}
+  </style>
+</head>
+<body>
+  <div class="preview-card card">
+    <span class="badge glow-badge">CSS Active</span>
+    <h2>Interactive Component Preview</h2>
+    <p>Applying your custom styles from the editor in real-time.</p>
+    <button class="btn button primary-button">Click Preview Button</button>
+  </div>
+</body>
+</html>`
+    }
+
+    if (l === 'reactjs' || l === 'reactts' || l === 'react') {
+      return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; padding: 24px; margin: 0; }
+    .comment-card, .comment-box, .card, .container { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin: 12px 0; max-width: 500px; }
+    button { background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+    button:hover { background: #2563eb; }
+    #console-box { position:fixed;bottom:10px;left:10px;right:10px;max-height:90px;overflow-y:auto;background:rgba(15,23,42,0.95);border:1px solid #334155;border-radius:8px;padding:8px 12px;font-family:monospace;font-size:11px;color:#38bdf8; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <div id="console-box"><strong style="color:#94a3b8">React Console:</strong></div>
+  <script type="text/babel">
+    const oldLog = console.log;
+    console.log = function(...args) {
+      oldLog.apply(console, args);
+      const c = document.getElementById('console-box');
+      if (c) {
+        const line = document.createElement('div');
+        line.style.color = '#4ade80';
+        line.innerText = '> ' + args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ');
+        c.appendChild(line);
+        c.scrollTop = c.scrollHeight;
+      }
+    };
+
+    try {
+      let clean = ${JSON.stringify(code)}
+        .replace(/import\\s+React\\b[^;]*;?/g, '')
+        .replace(/import\\s+{[^}]*}\\s+from\\s+['"][^'"]*['"];?/g, '')
+        .replace(/export\\s+default\\s+/g, '')
+        .replace(/export\\s+const\\s+/g, 'const ')
+        .replace(/export\\s+function\\s+/g, 'function ');
+
+      eval(Babel.transform(clean, { presets: ['react', 'typescript'] }).code);
+
+      const candidates = [typeof App !== 'undefined' ? App : null,
+                          typeof RichComment !== 'undefined' ? RichComment : null,
+                          typeof UserComment !== 'undefined' ? UserComment : null,
+                          typeof CounterDemo !== 'undefined' ? CounterDemo : null,
+                          typeof CounterApp !== 'undefined' ? CounterApp : null];
+      const Comp = candidates.find(c => Boolean(c));
+      if (Comp) {
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(React.createElement(Comp, {
+          rawHtml: '<p style="color:#38bdf8">Interactive component rendered</p>',
+          comment: { content: 'Sample user comment' },
+          metadata: { author: 'Developer' }
+        }));
+      }
+    } catch(err) {
+      console.error(err);
+      document.getElementById('root').innerHTML = '<div style="color:#f87171;padding:16px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;"><strong>React Notice:</strong> ' + err.message + '</div>';
+    }
+  </script>
+</body>
+</html>`
+    }
+
+    // Default JS / TS / Node.js
+    return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; padding: 20px; margin: 0; }
+    #console { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 16px; font-family: monospace; font-size: 12px; min-height: 160px; max-height: 380px; overflow-y: auto; }
+    .header { font-size: 12px; font-weight: bold; color: #94a3b8; margin-bottom: 8px; border-bottom: 1px solid #334155; padding-bottom: 6px; display: flex; justify-content: space-between; }
+    .log-line { color: #4ade80; margin: 4px 0; white-space: pre-wrap; }
+    .err-line { color: #f87171; margin: 4px 0; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span>Live JavaScript / Client Console</span>
+    <span style="color:#38bdf8;">Interactive Runtime</span>
+  </div>
+  <div id="console"></div>
+  <div id="app" style="margin-top:16px;"></div>
+  <script>
+    (function() {
+      var consoleEl = document.getElementById('console');
+      function log(msg, isErr) {
+        var line = document.createElement('div');
+        line.className = isErr ? 'err-line' : 'log-line';
+        line.innerText = (isErr ? '[Error] ' : '> ') + msg;
+        consoleEl.appendChild(line);
+      }
+      var oldLog = console.log;
+      console.log = function() {
+        oldLog.apply(console, arguments);
+        var str = Array.from(arguments).map(function(a) {
+          return typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a);
+        }).join(' ');
+        log(str, false);
+      };
+      var oldErr = console.error;
+      console.error = function() {
+        oldErr.apply(console, arguments);
+        log(Array.from(arguments).join(' '), true);
+      };
+      window.onerror = function(msg, url, line) {
+        log(msg + ' (line ' + line + ')', true);
+      };
+      try {
+        ${code.replace(/import\s+.*from\s+['"].*['"];?/g, '')}
+      } catch(e) {
+        log(e.message, true);
+      }
+    })();
+  </script>
+</body>
+</html>`
+  }
+
   return (
     <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden">
       <Sidebar />
@@ -602,13 +897,8 @@ export const WorkspacePage: React.FC = () => {
               {/* Sample Code Quick Picker */}
               <button
                 type="button"
-                onClick={() => {
-                  if (EXECUTABLE_SAMPLES[language]) {
-                    setCode(EXECUTABLE_SAMPLES[language].code)
-                  } else if (CODE_SAMPLES[language]) {
-                    setCode(CODE_SAMPLES[language].code)
-                  }
-                }}
+                onClick={handleResetCode}
+                title="Load sample code for this language"
                 className="rounded-lg border border-slate-700 bg-slate-800/80 px-2.5 py-1.5 text-xs text-slate-300 hover:bg-slate-700 transition"
               >
                 Load Sample
@@ -633,10 +923,22 @@ export const WorkspacePage: React.FC = () => {
               </button>
 
               <button
+                type="button"
+                onClick={handleResetCode}
+                title="Reset editor to clean working code and clear errors"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition"
+              >
+                <RotateCcw className="h-3.5 w-3.5 text-amber-400" />
+                Reset Code
+              </button>
+
+              <button
+                type="button"
                 onClick={() => setCode('')}
+                title="Clear code editor"
                 className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-400 hover:bg-slate-800 hover:text-white transition"
               >
-                <RotateCcw className="h-3.5 w-3.5" />
+                <Trash2 className="h-3.5 w-3.5" />
                 Clear
               </button>
 
@@ -709,19 +1011,22 @@ export const WorkspacePage: React.FC = () => {
                 onChange={setCode}
                 findings={analysisResult?.findings || []}
                 targetLine={targetLine}
+                executionErrorLine={executionResult?.error_detail?.line_number || null}
+                executionErrorMessage={executionResult?.error_detail?.raw_message || executionResult?.error_detail?.what_went_wrong || null}
                 height="560px"
               />
+
             </div>
 
             {/* Right: Mode Switcher & Dynamic Output Panel */}
             <div className="lg:col-span-5 space-y-4">
               {/* Workspace View Mode Switcher */}
-              <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/60 p-1.5">
+              <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/60 p-1.5 gap-1">
                 <button
                   type="button"
                   onClick={() => setActiveWorkspaceMode('compiler')}
                   className={`flex-1 flex items-center justify-center gap-1.5 rounded-lg py-2 text-xs font-bold transition ${
-                    activeWorkspaceMode === 'compiler'
+                    currentMode === 'compiler'
                       ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-500/20'
                       : 'text-slate-400 hover:text-slate-200'
                   }`}
@@ -730,11 +1035,26 @@ export const WorkspacePage: React.FC = () => {
                   <span>Compiler & Output</span>
                 </button>
 
+                {isWebPreviewLang && (
+                  <button
+                    type="button"
+                    onClick={() => setActiveWorkspaceMode('preview')}
+                    className={`flex-1 flex items-center justify-center gap-1.5 rounded-lg py-2 text-xs font-bold transition ${
+                      currentMode === 'preview'
+                        ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-500/20'
+                        : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    <ExternalLink className="h-3.5 w-3.5" />
+                    <span>Live Preview</span>
+                  </button>
+                )}
+
                 <button
                   type="button"
                   onClick={() => setActiveWorkspaceMode('audit')}
                   className={`flex-1 flex items-center justify-center gap-1.5 rounded-lg py-2 text-xs font-bold transition ${
-                    activeWorkspaceMode === 'audit'
+                    currentMode === 'audit'
                       ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
                       : 'text-slate-400 hover:text-slate-200'
                   }`}
@@ -744,14 +1064,41 @@ export const WorkspacePage: React.FC = () => {
                 </button>
               </div>
 
+              {/* View 0: Browser Live Preview for HTML/CSS/JS */}
+              {currentMode === 'preview' && isWebPreviewLang && (
+                <ErrorBoundary
+                  fallbackTitle="Live Preview Notice"
+                  fallbackMessage="A rendering issue occurred in the preview container. Click below to reset."
+                >
+                  <div className="flex flex-col rounded-xl border border-slate-800 bg-slate-950/80 shadow-2xl backdrop-blur-md overflow-hidden">
+                    <div className="flex items-center justify-between border-b border-slate-800/80 bg-slate-900/70 px-4 py-2.5">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-white">
+                        <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                        <span>Interactive Browser Preview</span>
+                      </div>
+                      <span className="text-[11px] text-slate-400">Sandbox Iframe</span>
+                    </div>
+                    <div className="p-2 bg-slate-900/40">
+                      <iframe
+                        title="Browser Live Preview"
+                        srcDoc={getPreviewDocument()}
+                        sandbox="allow-scripts allow-modals"
+                        className="w-full h-[480px] rounded-lg bg-white border border-slate-700 shadow-inner"
+                      />
+                    </div>
+                  </div>
+                </ErrorBoundary>
+              )}
+
               {/* View 1: Real Sandboxed Compiler Output Panel */}
-              {activeWorkspaceMode === 'compiler' && (
+              {currentMode === 'compiler' && (
                 <CompilerOutputPanel
                   result={executionResult}
                   isExecuting={isExecuting}
                   stdin={programStdin}
                   onStdinChange={setProgramStdin}
                   onApplyFix={handleApplyCompilerFix}
+                  onRunCorrectedCode={handleRunCorrectedCode}
                   onClearOutput={() => {
                     setExecutionResult(null)
                     setProgramStdin('')
@@ -759,8 +1106,10 @@ export const WorkspacePage: React.FC = () => {
                 />
               )}
 
+
+
               {/* View 2: Security Findings & Duplicate Clusters */}
-              {activeWorkspaceMode === 'audit' && (
+              {currentMode === 'audit' && (
                 <>
                   {/* Duplicate Groups view if present */}
                   {analysisResult && analysisResult.duplicate_groups.length > 0 && (
@@ -866,75 +1215,7 @@ export const WorkspacePage: React.FC = () => {
           </div>
         )}
 
-        {/* Language Mismatch Modal */}
-        {showLangMismatchModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-            <div className="w-full max-w-sm rounded-2xl border border-amber-500/30 bg-slate-900 p-6 shadow-2xl shadow-amber-500/10 space-y-5 animate-in fade-in slide-in-from-bottom-4">
-              {/* Icon */}
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/15 border border-amber-500/30 mx-auto">
-                <AlertTriangle className="h-7 w-7 text-amber-400" />
-              </div>
 
-              {/* Title + Description */}
-              <div className="text-center space-y-2">
-                <h3 className="text-base font-bold text-white">Wrong Language Detected</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  You selected{' '}
-                  <span className="font-semibold text-white">{LANG_LABELS[language] ?? language}</span>,
-                  but the code appears to be{' '}
-                  <span className="font-semibold text-amber-400">{LANG_LABELS[mismatchDetectedLang] ?? mismatchDetectedLang}</span>.
-                </p>
-                <p className="text-[11px] text-slate-500 leading-relaxed">
-                  Code must be analyzed using its correct language for accurate security scanning.
-                  Please switch the language selector or paste the correct code.
-                </p>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-col gap-2.5">
-                {/* Switch to detected language */}
-                <button
-                  onClick={() => {
-                    handleLanguageChange(mismatchDetectedLang)
-                    setShowLangMismatchModal(false)
-                    // Re-run analysis with correct language (will use current code)
-                    setTimeout(() => runAnalysis(code, mismatchDetectedLang, filename, false), 100)
-                  }}
-                  className="w-full rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 py-2.5 text-xs font-semibold text-white shadow-lg shadow-amber-500/20 hover:from-amber-400 hover:to-orange-400 transition"
-                >
-                  Switch to {LANG_LABELS[mismatchDetectedLang] ?? mismatchDetectedLang} & Analyze
-                </button>
-                {/* Load correct sample for selected language */}
-                <button
-                  onClick={() => {
-                    if (CODE_SAMPLES[language]) setCode(CODE_SAMPLES[language].code)
-                    setShowLangMismatchModal(false)
-                  }}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-800 py-2.5 text-xs font-semibold text-slate-200 hover:bg-slate-700 transition"
-                >
-                  Load {LANG_LABELS[language] ?? language} Sample Code Instead
-                </button>
-                {/* Analyze anyway with selected language */}
-                <button
-                  onClick={() => {
-                    setShowLangMismatchModal(false)
-                    runAnalysis(code, language, filename, false, true)
-                  }}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-800/60 py-2 text-xs font-medium text-slate-300 hover:bg-slate-700 hover:text-white transition"
-                >
-                  Analyze Anyway as {LANG_LABELS[language] ?? language}
-                </button>
-                {/* Cancel */}
-                <button
-                  onClick={() => setShowLangMismatchModal(false)}
-                  className="text-xs text-slate-500 hover:text-slate-300 py-1 transition"
-                >
-                  Dismiss
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </main>
     </div>
   )

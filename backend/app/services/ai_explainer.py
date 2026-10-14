@@ -85,7 +85,7 @@ class AIExplainer:
                 "message": "No findings detected — your code looks clean!",
             }
 
-        key = api_key or settings.GEMINI_API_KEY or settings.OPENAI_API_KEY
+        key = api_key or settings.GROQ_API_KEY or settings.GEMINI_API_KEY or settings.OPENAI_API_KEY
         prov = provider or settings.DEFAULT_AI_PROVIDER
 
         if key:
@@ -181,8 +181,26 @@ Use simple, clear language. Assume the reader is a competent developer but may b
 Return ONLY the JSON array, no markdown fences, no extra text.
 """
 
+        prov_lower = provider.lower()
         async with httpx.AsyncClient(timeout=45.0) as client:
-            if provider == "gemini" or (key and "AIza" in key):
+            if prov_lower == "groq" or (key and (key.startswith("gsk_") or settings.GROQ_API_KEY)):
+                groq_key = settings.GROQ_API_KEY or key
+                url = "https://api.groq.com/openai/v1/chat/completions"
+                headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
+                payload = {
+                    "model": settings.GROQ_MODEL or "openai/gpt-oss-120b",
+                    "messages": [
+                        {"role": "system", "content": "You are a secure code analysis tutor. Output ONLY a valid JSON array."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    "temperature": 0.15,
+                }
+                resp = await client.post(url, json=payload, headers=headers)
+                if resp.status_code != 200:
+                    raise RuntimeError(f"Groq API error: HTTP {resp.status_code} — {resp.text[:200]}")
+                data = resp.json()
+                raw_text = data["choices"][0]["message"]["content"]
+            elif provider == "gemini" or (key and "AIza" in key):
                 url = (
                     f"https://generativelanguage.googleapis.com/v1beta/models/"
                     f"{settings.DEFAULT_AI_MODEL}:generateContent?key={key}"
@@ -218,6 +236,7 @@ Return ONLY the JSON array, no markdown fences, no extra text.
                     raise RuntimeError(f"OpenAI API error: HTTP {resp.status_code}")
                 data = resp.json()
                 raw_text = data["choices"][0]["message"]["content"]
+
 
         # Parse JSON response
         parsed = json.loads(raw_text)
