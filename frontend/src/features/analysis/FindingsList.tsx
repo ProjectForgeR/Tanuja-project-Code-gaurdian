@@ -5,6 +5,7 @@ import { FindingCard } from './FindingCard'
 
 interface FindingsListProps {
   findings: Finding[]
+  filename?: string
   onJumpToLine?: (line: number) => void
   onReviewFix?: (finding: Finding) => void
   onGenerateTests?: (finding: Finding) => void
@@ -12,6 +13,7 @@ interface FindingsListProps {
 
 export const FindingsList: React.FC<FindingsListProps> = ({
   findings,
+  filename,
   onJumpToLine,
   onReviewFix,
   onGenerateTests,
@@ -141,6 +143,7 @@ export const FindingsList: React.FC<FindingsListProps> = ({
             <FindingCard
               key={finding.id || idx}
               finding={finding}
+              filename={filename}
               onJumpToLine={onJumpToLine}
               onReviewFix={onReviewFix}
               onGenerateTests={onGenerateTests}

@@ -130,10 +130,10 @@ export const Navbar: React.FC = () => {
           </button>
           <button
             type="button"
-            onClick={(e) => handleSectionClick(e, 'hero-showcase')}
+            onClick={(e) => handleSectionClick(e, 'languages')}
             className="rounded-full px-3.5 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white cursor-pointer"
           >
-            Live Sandbox
+            Languages
           </button>
           <button
             type="button"
@@ -147,7 +147,7 @@ export const Navbar: React.FC = () => {
             onClick={(e) => handleSectionClick(e, 'how-it-works')}
             className="rounded-full px-3.5 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white cursor-pointer"
           >
-            Workflow
+            How It Works
           </button>
           <Link
             to="/docs"
@@ -302,10 +302,10 @@ export const Navbar: React.FC = () => {
           </button>
           <button
             type="button"
-            onClick={(e) => handleSectionClick(e, 'hero-showcase')}
+            onClick={(e) => handleSectionClick(e, 'languages')}
             className="w-full text-left rounded-xl px-3.5 py-2 text-sm font-medium text-slate-300 transition hover:bg-slate-900 hover:text-white"
           >
-            Live Sandbox
+            Languages
           </button>
           <button
             type="button"
@@ -319,7 +319,7 @@ export const Navbar: React.FC = () => {
             onClick={(e) => handleSectionClick(e, 'how-it-works')}
             className="w-full text-left rounded-xl px-3.5 py-2 text-sm font-medium text-slate-300 transition hover:bg-slate-900 hover:text-white"
           >
-            Workflow
+            How It Works
           </button>
           <Link
             to="/docs"

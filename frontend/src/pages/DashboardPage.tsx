@@ -186,8 +186,23 @@ export const DashboardPage: React.FC = () => {
 
             <div className="mt-4 overflow-x-auto">
               {analyses.length === 0 ? (
-                <div className="py-12 text-center text-xs text-slate-500">
-                  No analysis records found. Click Quick Analyze to run your first code scan.
+                <div className="py-12 text-center space-y-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 mx-auto">
+                    <ShieldCheck className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-base font-bold text-white">No Code Reviews Yet</h3>
+                  <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
+                    You haven't performed any code scans. Launch the analysis workspace to test code, uncover security vulnerabilities, and inspect live compiler output.
+                  </p>
+                  <div className="pt-2">
+                    <Link
+                      to="/workspace"
+                      className="ui-button-lift inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2.5 text-xs font-semibold text-white shadow-md shadow-blue-500/20 transition hover:from-blue-500 hover:to-indigo-500"
+                    >
+                      <Sparkles className="h-3.5 w-3.5" />
+                      <span>Start Your First Analysis</span>
+                    </Link>
+                  </div>
                 </div>
               ) : (
                 <table className="w-full text-left text-xs">

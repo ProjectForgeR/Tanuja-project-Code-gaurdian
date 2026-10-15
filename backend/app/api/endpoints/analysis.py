@@ -42,7 +42,7 @@ router = APIRouter(prefix="/analyses", tags=["Analysis"])
 async def analyze_code(
     req: AnalyzeRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: Optional[User] = Depends(get_optional_current_user),
 ):
     start_time = time.time()
     code = req.code.strip()

@@ -23,7 +23,7 @@ class AIFixAssistant:
         api_key: Optional[str] = None,
         provider: Optional[str] = None,
     ) -> FixResponse:
-        key = api_key or settings.GEMINI_API_KEY or settings.OPENAI_API_KEY
+        key = api_key or settings.GROQ_API_KEY or settings.GEMINI_API_KEY or settings.OPENAI_API_KEY
         prov = provider or settings.DEFAULT_AI_PROVIDER
 
         # If live AI key is available, attempt AI fix generation
@@ -70,8 +70,27 @@ Source code to fix:
 {code}
 ```
 """
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            if provider == "gemini" or ("AIza" in key):
+        prov_lower = provider.lower()
+        async with httpx.AsyncClient(timeout=25.0) as client:
+            if prov_lower == "groq" or (key and (key.startswith("gsk_") or settings.GROQ_API_KEY)):
+                groq_key = settings.GROQ_API_KEY or key
+                url = "https://api.groq.com/openai/v1/chat/completions"
+                headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
+                payload = {
+                    "model": settings.GROQ_MODEL or "openai/gpt-oss-120b",
+                    "messages": [
+                        {"role": "system", "content": "You are a senior software security engineer that returns ONLY a valid JSON object."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    "temperature": 0.2,
+                    "response_format": {"type": "json_object"},
+                }
+                resp = await client.post(url, json=payload, headers=headers)
+                if resp.status_code != 200:
+                    return None
+                data = resp.json()
+                raw_text = data["choices"][0]["message"]["content"]
+            elif provider == "gemini" or ("AIza" in key):
                 url = f"https://generativelanguage.googleapis.com/v1beta/models/{settings.DEFAULT_AI_MODEL}:generateContent?key={key}"
                 payload = {
                     "contents": [{"parts": [{"text": prompt}]}],

@@ -4,6 +4,11 @@ import { Finding } from '@/types/analysis'
 import { useTheme } from '@/features/theme/ThemeContext'
 import { ErrorBoundary } from '@/components/common/ErrorBoundary'
 
+export interface CodeEditorHandle {
+  formatDocument: () => void
+  focus: () => void
+}
+
 interface CodeEditorProps {
   code: string
   language: string
@@ -15,7 +20,7 @@ interface CodeEditorProps {
   height?: string
 }
 
-export const CodeEditor: React.FC<CodeEditorProps> = ({
+export const CodeEditor = React.forwardRef<CodeEditorHandle, CodeEditorProps>(({
   code,
   language,
   onChange,
@@ -24,10 +29,29 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   executionErrorLine = null,
   executionErrorMessage = null,
   height = '500px',
-}) => {
+}, ref) => {
   const { theme } = useTheme()
   const editorRef = useRef<any>(null)
   const monacoRef = useRef<Monaco | null>(null)
+
+  React.useImperativeHandle(ref, () => ({
+    formatDocument: () => {
+      try {
+        if (editorRef.current) {
+          editorRef.current.getAction('editor.action.formatDocument')?.run()
+        }
+      } catch (err) {
+        console.warn('Format action failed:', err)
+      }
+    },
+    focus: () => {
+      try {
+        editorRef.current?.focus()
+      } catch (err) {
+        console.warn('Focus action failed:', err)
+      }
+    },
+  }))
 
   const handleEditorDidMount: OnMount = (editor, monaco) => {
     editorRef.current = editor
@@ -177,6 +201,6 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
       </div>
     </ErrorBoundary>
   )
-}
+})
 
 export default CodeEditor

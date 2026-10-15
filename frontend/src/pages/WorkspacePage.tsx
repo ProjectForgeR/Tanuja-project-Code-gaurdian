@@ -18,13 +18,19 @@ import {
   Moon,
   Trash2,
   ExternalLink,
+  TestTube2,
+  Copy,
+  Check,
+  Undo2,
+  AlignLeft,
+  Wrench,
 } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Navbar } from '@/components/layout/Navbar'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { useTheme } from '@/features/theme/ThemeContext'
 import { useAuth } from '@/features/auth/AuthContext'
-import { CodeEditor } from '@/features/analysis/CodeEditor'
+import { CodeEditor, CodeEditorHandle } from '@/features/analysis/CodeEditor'
 import { ErrorBoundary } from '@/components/common/ErrorBoundary'
 import { ScoreCard } from '@/features/analysis/ScoreCard'
 import { FindingsList } from '@/features/analysis/FindingsList'
@@ -36,10 +42,11 @@ import { CompilerOutputPanel } from '@/features/analysis/CompilerOutputPanel'
 import { LanguageSelector } from '@/features/analysis/LanguageSelector'
 import { CODE_SAMPLES } from '@/lib/samples'
 import { EXECUTABLE_SAMPLES } from '@/lib/compilerSamples'
+import { getDefaultTestCases } from '@/lib/defaultTestCases'
 import { analysisService } from '@/services/analysisService'
 import { compilerService } from '@/services/compilerService'
 import { AnalysisResult, ExplainResult, Finding, FixResult, TestResult } from '@/types/analysis'
-import { ExecuteResponse } from '@/types/execution'
+import { ExecuteResponse, TestCaseItem, RunTestsResponse } from '@/types/execution'
 
 export const WorkspacePage: React.FC = () => {
   const { theme, toggleTheme } = useTheme()
@@ -64,6 +71,19 @@ export const WorkspacePage: React.FC = () => {
   const [executionResult, setExecutionResult] = useState<ExecuteResponse | null>(null)
   const [programStdin, setProgramStdin] = useState<string>('')
   const [activeWorkspaceMode, setActiveWorkspaceMode] = useState<'compiler' | 'audit' | 'preview'>('compiler')
+  const [compilerTab, setCompilerTab] = useState<'output' | 'errors' | 'tests' | 'logs' | 'stdin'>('output')
+
+  // Test Suite Bench state
+  const [testCases, setTestCases] = useState<TestCaseItem[]>(() => getDefaultTestCases('python'))
+  const [testResults, setTestResults] = useState<RunTestsResponse | null>(null)
+  const [isRunningTests, setIsRunningTests] = useState<boolean>(false)
+  const [isGeneratingTests, setIsGeneratingTests] = useState<boolean>(false)
+
+  // Editor history & formatting
+  const editorRef = useRef<CodeEditorHandle>(null)
+  const [codeHistory, setCodeHistory] = useState<string[]>([])
+  const [lastSavedCode, setLastSavedCode] = useState<string>(code)
+  const [copiedCode, setCopiedCode] = useState<boolean>(false)
 
   // Modals state
   const [selectedFindingForFix, setSelectedFindingForFix] = useState<Finding | null>(null)
@@ -285,19 +305,25 @@ export const WorkspacePage: React.FC = () => {
   }
 
   const handleApplyCompilerFix = (correctedCode: string) => {
+    setCodeHistory((prev) => [...prev, code])
     setCode(correctedCode)
     // Clear error result to indicate fix applied
     if (executionResult) {
       setExecutionResult({
         ...executionResult,
-        output: 'Fix applied to editor! Click "Run Code" to verify.',
+        output: 'Fix applied to editor! Click "Run Code" or "Run Tests" to verify.',
         status: 'Fix Applied',
         success: false,
       })
     }
+    // Auto-reanalyze static checks after fix
+    setTimeout(() => {
+      runAnalysis(correctedCode, language, filename, false)
+    }, 250)
   }
 
   const handleRunCorrectedCode = async (correctedCode: string) => {
+    setCodeHistory((prev) => [...prev, code])
     setCode(correctedCode)
     setIsExecuting(true)
     setErrorMsg(null)
@@ -322,6 +348,140 @@ export const WorkspacePage: React.FC = () => {
     }
   }
 
+  // Test Suite Runner
+  const handleRunTests = async () => {
+    if (!isAuthenticated) {
+      setShowAuthGateModal(true)
+      return
+    }
+
+    const trimmed = code.trim()
+    if (!trimmed) {
+      setErrorMsg('Please enter code before running test suite.')
+      return
+    }
+
+    let casesToRun = testCases
+    if (!casesToRun || casesToRun.length === 0) {
+      setIsGeneratingTests(true)
+      try {
+        const genRes = await compilerService.generateTestCases({
+          code,
+          language,
+          count: 3,
+        })
+        if (genRes.test_cases && genRes.test_cases.length > 0) {
+          setTestCases(genRes.test_cases)
+          casesToRun = genRes.test_cases
+        }
+      } catch (e) {
+        console.warn('Auto test generation fallback:', e)
+      } finally {
+        setIsGeneratingTests(false)
+      }
+    }
+
+    setActiveWorkspaceMode('compiler')
+    setCompilerTab('tests')
+    setIsRunningTests(true)
+    setErrorMsg(null)
+
+    try {
+      const res = await compilerService.runTestCases({
+        code,
+        language,
+        test_cases: casesToRun,
+      })
+      setTestResults(res)
+    } catch (err: unknown) {
+      console.error('Run tests failed:', err)
+      const msg = err instanceof Error ? err.message : 'Test runner error'
+      setErrorMsg(`Test execution failed: ${msg}`)
+    } finally {
+      setIsRunningTests(false)
+    }
+  }
+
+  // AI-Assisted Test Case Generator
+  const handleGenerateTestCases = async () => {
+    if (!isAuthenticated) {
+      setShowAuthGateModal(true)
+      return
+    }
+    setIsGeneratingTests(true)
+    try {
+      const res = await compilerService.generateTestCases({
+        code,
+        language,
+        count: 4,
+      })
+      if (res.test_cases && res.test_cases.length > 0) {
+        setTestCases(res.test_cases)
+        setActiveWorkspaceMode('compiler')
+        setCompilerTab('tests')
+      }
+    } catch (err: unknown) {
+      console.error('Generate test cases failed:', err)
+      const msg = err instanceof Error ? err.message : 'AI generation error'
+      setErrorMsg(`Failed to generate test cases: ${msg}`)
+    } finally {
+      setIsGeneratingTests(false)
+    }
+  }
+
+  const handleAddTestCase = (tc: TestCaseItem) => {
+    setTestCases((prev) => [...prev, tc])
+  }
+
+  const handleDeleteTestCase = (id: string) => {
+    setTestCases((prev) => prev.filter((t) => t.id !== id))
+  }
+
+  // Format Code via Monaco
+  const handleFormatCode = () => {
+    editorRef.current?.formatDocument()
+  }
+
+  // Copy Code to Clipboard
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(code)
+    setCopiedCode(true)
+    setTimeout(() => setCopiedCode(false), 2000)
+  }
+
+  // Undo Fix
+  const handleUndoFix = () => {
+    if (codeHistory.length === 0) return
+    const prevCode = codeHistory[codeHistory.length - 1]
+    setCodeHistory((h) => h.slice(0, -1))
+    setCode(prevCode)
+  }
+
+  // Fix First Error / AI Quick-Fix
+  const handleFixFirstError = async () => {
+    // 1. If sandbox execution failed with an AI fix suggestion
+    if (executionResult?.error_detail?.corrected_code) {
+      handleApplyCompilerFix(executionResult.error_detail.corrected_code)
+      return
+    }
+
+    // 2. If static audit detected findings
+    if (analysisResult?.findings && analysisResult.findings.length > 0) {
+      const critical = analysisResult.findings.find((f) => f.severity === 'Critical')
+      const high = analysisResult.findings.find((f) => f.severity === 'High')
+      const target = critical || high || analysisResult.findings[0]
+      handleReviewFix(target)
+      return
+    }
+
+    // 3. Otherwise run analysis to uncover any hidden issues
+    if (!analysisResult) {
+      await runAnalysis(code, language, filename, true)
+      return
+    }
+
+    setErrorMsg('No errors or warnings currently detected to fix. Great job!')
+  }
 
   const handleLanguageChange = (newLang: string) => {
     // Abort any pending analysis request immediately
@@ -360,13 +520,21 @@ export const WorkspacePage: React.FC = () => {
       setActiveWorkspaceMode('compiler')
     }
 
+    // Load default test cases for the new language
+    setTestCases(getDefaultTestCases(newLang))
+    setTestResults(null)
+
     // Do not clear the user's code when switching languages.
     // Only load a sample if the editor is currently empty.
     if (!code || code.trim() === '') {
       if (EXECUTABLE_SAMPLES[newLang]) {
-        setCode(EXECUTABLE_SAMPLES[newLang].code)
+        const sampleCode = EXECUTABLE_SAMPLES[newLang].code
+        setCode(sampleCode)
+        setLastSavedCode(sampleCode)
       } else if (CODE_SAMPLES[newLang]) {
-        setCode(CODE_SAMPLES[newLang].code)
+        const sampleCode = CODE_SAMPLES[newLang].code
+        setCode(sampleCode)
+        setLastSavedCode(sampleCode)
       }
     }
 
@@ -378,15 +546,18 @@ export const WorkspacePage: React.FC = () => {
   }
 
   const handleResetCode = () => {
+    let nextCode = ''
     if (EXECUTABLE_SAMPLES[language]) {
-      setCode(EXECUTABLE_SAMPLES[language].code)
+      nextCode = EXECUTABLE_SAMPLES[language].code
     } else if (CODE_SAMPLES[language]) {
-      setCode(CODE_SAMPLES[language].code)
-    } else {
-      setCode('')
+      nextCode = CODE_SAMPLES[language].code
     }
+    setCode(nextCode)
+    setLastSavedCode(nextCode)
+    setCodeHistory([])
     setExecutionResult(null)
     setAnalysisResult(null)
+    setTestResults(null)
     setProgramStdin('')
     setErrorMsg(null)
   }
@@ -577,8 +748,12 @@ export const WorkspacePage: React.FC = () => {
   }
 
   const handleApplyFix = (correctedCode: string) => {
+    setCodeHistory((prev) => [...prev, code])
     setCode(correctedCode)
     setSelectedFindingForFix(null)
+    setTimeout(() => {
+      runAnalysis(correctedCode, language, filename, false)
+    }, 250)
   }
 
   const isWebPreviewLang = ['html', 'css', 'javascript', 'js', 'typescript', 'ts', 'reactjs', 'reactts', 'react', 'nodejs'].includes(language.toLowerCase())
@@ -798,20 +973,41 @@ export const WorkspacePage: React.FC = () => {
               </p>
             </div>
 
-            {/* Quick Actions */}
-            <div className="flex flex-wrap items-center gap-2.5">
-              {/* Main RUN CODE Button — Real Isolated Execution */}
+            {/* 5 Primary Top Actions Toolbar */}
+            <div className="flex flex-wrap items-center gap-2">
+              {/* 1. ANALYZE CODE Button */}
+              <button
+                type="button"
+                onClick={() => runAnalysis(code, language, filename, true)}
+                disabled={isAnalyzing}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 px-4 py-2 text-xs font-bold text-white shadow-md shadow-blue-500/20 transition hover:from-blue-500 hover:to-indigo-500 disabled:opacity-50 cursor-pointer"
+                title="Analyze code for bugs, syntax errors, and security issues"
+              >
+                {isAnalyzing ? (
+                  <>
+                    <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    <span>Analyzing...</span>
+                  </>
+                ) : (
+                  <>
+                    <ShieldCheck className="h-3.5 w-3.5" />
+                    <span>Analyze Code</span>
+                  </>
+                )}
+              </button>
+
+              {/* 2. RUN CODE Button — Real Isolated Execution */}
               <button
                 type="button"
                 onClick={runExecution}
                 disabled={isExecuting}
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 px-5 py-2 text-xs font-bold text-white shadow-lg shadow-emerald-500/25 transition hover:from-emerald-500 hover:to-teal-500 disabled:opacity-50 cursor-pointer"
-                title="Execute code in real sandboxed environment (Judge0)"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 px-4 py-2 text-xs font-bold text-white shadow-md shadow-emerald-500/20 transition hover:from-emerald-500 hover:to-teal-500 disabled:opacity-50 cursor-pointer"
+                title="Execute code in real sandboxed environment (Judge0 / SQLite)"
               >
                 {isExecuting ? (
                   <>
                     <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                    <span>Executing...</span>
+                    <span>Running...</span>
                   </>
                 ) : (
                   <>
@@ -821,16 +1017,47 @@ export const WorkspacePage: React.FC = () => {
                 )}
               </button>
 
-              {/* Security Audit Analysis Button */}
+              {/* 3. FIX ERROR Button — AI Remediation */}
               <button
                 type="button"
-                onClick={() => runAnalysis(code, language, filename, true)}
-                disabled={isAnalyzing}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-200 transition hover:bg-slate-800 hover:text-white disabled:opacity-50"
-                title="Run deep security & code quality audit"
+                onClick={handleFixFirstError}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-600 via-orange-600 to-amber-500 px-4 py-2 text-xs font-bold text-white shadow-md shadow-amber-500/20 transition hover:from-amber-500 hover:to-orange-500 cursor-pointer"
+                title="Suggest or apply fixes for identified issues using AI"
               >
-                <ShieldCheck className="h-3.5 w-3.5 text-blue-400" />
-                <span>{isAnalyzing ? 'Scanning...' : 'Security Audit'}</span>
+                <Sparkles className="h-3.5 w-3.5" />
+                <span>Fix Error</span>
+              </button>
+
+              {/* 4. RUN TESTS Button */}
+              <button
+                type="button"
+                onClick={handleRunTests}
+                disabled={isRunningTests}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-purple-600 via-violet-600 to-purple-500 px-4 py-2 text-xs font-bold text-white shadow-md shadow-purple-500/20 transition hover:from-purple-500 hover:to-violet-500 disabled:opacity-50 cursor-pointer"
+                title="Run automated test suite and verify outputs"
+              >
+                {isRunningTests ? (
+                  <>
+                    <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    <span>Testing...</span>
+                  </>
+                ) : (
+                  <>
+                    <TestTube2 className="h-3.5 w-3.5" />
+                    <span>Run Tests</span>
+                  </>
+                )}
+              </button>
+
+              {/* 5. RESET CODE Button */}
+              <button
+                type="button"
+                onClick={handleResetCode}
+                title="Restore default or initial code and clear errors"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-2 text-xs font-semibold text-slate-300 transition hover:bg-slate-800 hover:text-white"
+              >
+                <RotateCcw className="h-3.5 w-3.5 text-amber-400" />
+                <span>Reset Code</span>
               </button>
 
               {/* Explain Errors with AI Button */}
@@ -847,7 +1074,7 @@ export const WorkspacePage: React.FC = () => {
                     ? 'Run Analyze Code first to generate findings'
                     : 'Explain detected findings in plain English using AI'
                 }
-                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-40 ${
+                className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-40 ${
                   showExplanationPanel && !isExplaining
                     ? 'border border-violet-500/40 bg-violet-500/15 text-violet-300 hover:bg-violet-500/25 shadow-sm shadow-violet-500/10'
                     : 'border border-violet-500/30 bg-violet-500/10 text-violet-400 hover:bg-violet-500/20 hover:text-violet-300 shadow-sm shadow-violet-500/10'
@@ -856,12 +1083,12 @@ export const WorkspacePage: React.FC = () => {
                 {isExplaining ? (
                   <>
                     <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-violet-400 border-t-transparent" />
-                    Explaining...
+                    <span>Explaining...</span>
                   </>
                 ) : (
                   <>
                     <BrainCircuit className="h-3.5 w-3.5" />
-                    Explain Errors with AI
+                    <span>Explain with AI</span>
                   </>
                 )}
               </button>
@@ -872,7 +1099,7 @@ export const WorkspacePage: React.FC = () => {
                 type="button"
                 aria-label="Toggle theme mode"
                 title={theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-800 bg-slate-900/60 text-slate-300 transition hover:bg-slate-800 hover:text-white"
+                className="flex h-8.5 w-8.5 items-center justify-center rounded-xl border border-slate-800 bg-slate-900/60 text-slate-300 transition hover:bg-slate-800 hover:text-white"
               >
                 {theme === 'dark' ? (
                   <Sun className="h-4 w-4 text-amber-400" />
@@ -889,8 +1116,8 @@ export const WorkspacePage: React.FC = () => {
         <div className="p-6 space-y-6">
           {/* Editor Controls Toolbar */}
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-800 bg-slate-900/60 p-3 text-xs">
-            {/* Language Selector — searchable categorized dropdown */}
-            <div className="flex items-center gap-2.5">
+            {/* Left: Language Selector & Unsaved Changes Status */}
+            <div className="flex flex-wrap items-center gap-2.5">
               <span className="font-semibold text-slate-400 text-[11px] uppercase tracking-wider">Language:</span>
               <LanguageSelector value={language} onChange={handleLanguageChange} />
 
@@ -903,10 +1130,66 @@ export const WorkspacePage: React.FC = () => {
               >
                 Load Sample
               </button>
+
+              {/* Unsaved Changes Indicator */}
+              {code !== lastSavedCode ? (
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-[11px] font-semibold text-amber-300" title="Editor has unsaved code modifications">
+                  <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
+                  Unsaved Changes
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-400" title="All edits are up-to-date">
+                  <CheckCircle2 className="h-3 w-3" />
+                  Code Saved
+                </span>
+              )}
             </div>
 
-            {/* File Actions */}
-            <div className="flex items-center gap-2">
+            {/* Right: Format, Copy, Undo, Upload, Clear, Export Actions */}
+            <div className="flex flex-wrap items-center gap-2">
+              {/* Format Code */}
+              <button
+                type="button"
+                onClick={handleFormatCode}
+                title="Format source code using Monaco beautifier"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition"
+              >
+                <AlignLeft className="h-3.5 w-3.5 text-sky-400" />
+                <span>Format</span>
+              </button>
+
+              {/* Copy Code */}
+              <button
+                type="button"
+                onClick={handleCopyCode}
+                title="Copy editor code to clipboard"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition"
+              >
+                {copiedCode ? (
+                  <>
+                    <Check className="h-3.5 w-3.5 text-emerald-400" />
+                    <span className="text-emerald-400">Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="h-3.5 w-3.5 text-slate-400" />
+                    <span>Copy</span>
+                  </>
+                )}
+              </button>
+
+              {/* Undo Fix */}
+              <button
+                type="button"
+                onClick={handleUndoFix}
+                disabled={codeHistory.length === 0}
+                title={codeHistory.length > 0 ? `Revert to previous code before AI fix (${codeHistory.length} state available)` : 'No applied fixes to undo'}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                <Undo2 className="h-3.5 w-3.5 text-indigo-400" />
+                <span>Undo Fix {codeHistory.length > 0 ? `(${codeHistory.length})` : ''}</span>
+              </button>
+
               <input
                 ref={fileInputRef}
                 type="file"
@@ -915,31 +1198,25 @@ export const WorkspacePage: React.FC = () => {
                 accept=".py,.js,.ts,.tsx,.jsx,.java,.cpp,.c,.go,.cs,.php,.rs,.kt,.swift,.rb,.sql,.sh,.bash,.html,.htm,.css,.json,.yaml,.yml,.xml,.md"
               />
               <button
+                type="button"
                 onClick={() => fileInputRef.current?.click()}
                 className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition"
               >
                 <Upload className="h-3.5 w-3.5 text-blue-400" />
-                Upload File
+                <span>Upload</span>
               </button>
 
               <button
                 type="button"
-                onClick={handleResetCode}
-                title="Reset editor to clean working code and clear errors"
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition"
-              >
-                <RotateCcw className="h-3.5 w-3.5 text-amber-400" />
-                Reset Code
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setCode('')}
+                onClick={() => {
+                  setCodeHistory((prev) => [...prev, code])
+                  setCode('')
+                }}
                 title="Clear code editor"
                 className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-400 hover:bg-slate-800 hover:text-white transition"
               >
                 <Trash2 className="h-3.5 w-3.5" />
-                Clear
+                <span>Clear</span>
               </button>
 
               {analysisResult && (
@@ -950,7 +1227,7 @@ export const WorkspacePage: React.FC = () => {
                     className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition"
                   >
                     <Download className="h-3.5 w-3.5 text-emerald-400" />
-                    HTML Report
+                    <span>Report</span>
                   </a>
                   <a
                     href={analysisService.getExportJsonUrl(analysisResult.id)}
@@ -958,7 +1235,7 @@ export const WorkspacePage: React.FC = () => {
                     className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition"
                   >
                     <FileCode className="h-3.5 w-3.5 text-indigo-400" />
-                    JSON
+                    <span>JSON</span>
                   </a>
                 </>
               )}
@@ -1006,6 +1283,7 @@ export const WorkspacePage: React.FC = () => {
                 <span>{code.split('\n').length} lines</span>
               </div>
               <CodeEditor
+                ref={editorRef}
                 code={code}
                 language={language}
                 onChange={setCode}
@@ -1103,6 +1381,17 @@ export const WorkspacePage: React.FC = () => {
                     setExecutionResult(null)
                     setProgramStdin('')
                   }}
+                  onJumpToLine={(line) => setTargetLine(line)}
+                  testCases={testCases}
+                  testResults={testResults}
+                  isRunningTests={isRunningTests}
+                  isGeneratingTests={isGeneratingTests}
+                  onRunTests={handleRunTests}
+                  onAddTestCase={handleAddTestCase}
+                  onDeleteTestCase={handleDeleteTestCase}
+                  onGenerateTestCases={handleGenerateTestCases}
+                  activeTabOverride={compilerTab}
+                  onTabChange={setCompilerTab}
                 />
               )}
 

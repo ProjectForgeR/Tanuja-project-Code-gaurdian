@@ -50,9 +50,9 @@ export const Footer: React.FC = () => {
             <div className="mt-3 rounded-lg border border-slate-800 bg-slate-900/40 p-3 text-[11px] text-slate-400">
               <div className="mb-1 flex items-center gap-1.5 font-semibold text-slate-200">
                 <ShieldAlert className="h-3.5 w-3.5 text-blue-400" />
-                Zero-Code Execution
+                Isolated Sandbox Execution
               </div>
-              Submitted code is strictly analyzed via static AST parsers and regex patterns. User code is never executed on server infrastructure.
+              Code is executed in ephemeral, isolated Judge0 containers or safe in-memory SQLite sandboxes with strict resource limits and zero permanent code retention.
             </div>
           </div>
         </div>

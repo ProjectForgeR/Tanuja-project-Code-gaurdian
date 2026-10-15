@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import {
   History,
   Search,
@@ -10,6 +11,7 @@ import {
   CheckCircle2,
   AlertTriangle,
   X,
+  Terminal,
 } from 'lucide-react'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { analysisService } from '@/services/analysisService'
@@ -271,78 +273,101 @@ export const HistoryPage: React.FC = () => {
 
           {/* History Records Table */}
           <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-xl backdrop-blur-md">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead>
-                  <tr className="border-b border-slate-800 text-slate-400">
-                    <th className="pb-3 font-semibold">Audit Title</th>
-                    <th className="pb-3 font-semibold">Language</th>
-                    <th className="pb-3 font-semibold">Quality Score</th>
-                    <th className="pb-3 font-semibold">Findings</th>
-                    <th className="pb-3 font-semibold">Critical</th>
-                    <th className="pb-3 font-semibold">Scan Duration</th>
-                    <th className="pb-3 font-semibold">Date</th>
-                    <th className="pb-3 font-semibold text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800/60">
-                  {filtered.map((a) => (
-                    <tr key={a.id} className="transition hover:bg-slate-800/40">
-                      <td className="py-3.5 font-semibold text-white">
-                        {a.title}
-                      </td>
-                      <td className="py-3.5">
-                        <span className={`inline-flex items-center rounded-md border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${getLanguageBadge(a.language)}`}>
-                          {a.language}
-                        </span>
-                      </td>
-                      <td className={`py-3.5 font-bold ${getScoreColor(a.quality_score)}`}>
-                        {a.quality_score} / 100
-                      </td>
-                      <td className="py-3.5 text-slate-300">{a.findings_count}</td>
-                      <td className="py-3.5">
-                        {a.critical_count > 0 ? (
-                          <span className="rounded bg-red-500/20 px-2 py-0.5 text-[10px] font-bold text-red-400">
-                            {a.critical_count}
-                          </span>
-                        ) : (
-                          <span className="text-slate-500">0</span>
-                        )}
-                      </td>
-                      <td className="py-3.5 text-purple-400 font-mono">{a.duration_ms}ms</td>
-                      <td className="py-3.5 text-slate-400">{formatDate(a.created_at)}</td>
-                      <td className="py-3.5 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <a
-                            href={analysisService.getExportHtmlUrl(a.id)}
-                            download
-                            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-emerald-400 transition"
-                            title="Download HTML Report"
-                          >
-                            <Download className="h-3.5 w-3.5" />
-                          </a>
-                          <a
-                            href={analysisService.getExportJsonUrl(a.id)}
-                            download
-                            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-indigo-400 transition"
-                            title="Export JSON"
-                          >
-                            <FileCode className="h-3.5 w-3.5" />
-                          </a>
-                          <button
-                            onClick={() => handleDelete(a.id)}
-                            className="rounded-lg p-1.5 text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition"
-                            title="Delete"
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </button>
-                        </div>
-                      </td>
+            {filtered.length === 0 ? (
+              <div className="py-12 text-center space-y-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 mx-auto">
+                  <History className="h-6 w-6" />
+                </div>
+                <h3 className="text-base font-bold text-white">No Analysis Records Found</h3>
+                <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
+                  {search || selectedLang !== 'all'
+                    ? 'No analysis runs match your search filters. Try adjusting your query or resetting language filters.'
+                    : 'You have not run any code reviews yet. Analyze code in the workspace to track vulnerabilities, test runs, and quality scores here.'}
+                </p>
+                <div className="pt-2">
+                  <Link
+                    to="/workspace"
+                    className="ui-button-lift inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2.5 text-xs font-semibold text-white shadow-md shadow-blue-500/20 transition hover:from-blue-500 hover:to-indigo-500"
+                  >
+                    <Terminal className="h-3.5 w-3.5" />
+                    <span>Start New Code Analysis</span>
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead>
+                    <tr className="border-b border-slate-800 text-slate-400">
+                      <th className="pb-3 font-semibold">Audit Title</th>
+                      <th className="pb-3 font-semibold">Language</th>
+                      <th className="pb-3 font-semibold">Quality Score</th>
+                      <th className="pb-3 font-semibold">Findings</th>
+                      <th className="pb-3 font-semibold">Critical</th>
+                      <th className="pb-3 font-semibold">Scan Duration</th>
+                      <th className="pb-3 font-semibold">Date</th>
+                      <th className="pb-3 font-semibold text-right">Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/60">
+                    {filtered.map((a) => (
+                      <tr key={a.id} className="transition hover:bg-slate-800/40">
+                        <td className="py-3.5 font-semibold text-white">
+                          {a.title}
+                        </td>
+                        <td className="py-3.5">
+                          <span className={`inline-flex items-center rounded-md border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${getLanguageBadge(a.language)}`}>
+                            {a.language}
+                          </span>
+                        </td>
+                        <td className={`py-3.5 font-bold ${getScoreColor(a.quality_score)}`}>
+                          {a.quality_score} / 100
+                        </td>
+                        <td className="py-3.5 text-slate-300">{a.findings_count}</td>
+                        <td className="py-3.5">
+                          {a.critical_count > 0 ? (
+                            <span className="rounded bg-red-500/20 px-2 py-0.5 text-[10px] font-bold text-red-400">
+                              {a.critical_count}
+                            </span>
+                          ) : (
+                            <span className="text-slate-500">0</span>
+                          )}
+                        </td>
+                        <td className="py-3.5 text-purple-400 font-mono">{a.duration_ms}ms</td>
+                        <td className="py-3.5 text-slate-400">{formatDate(a.created_at)}</td>
+                        <td className="py-3.5 text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            <a
+                              href={analysisService.getExportHtmlUrl(a.id)}
+                              download
+                              className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-emerald-400 transition"
+                              title="Download HTML Report"
+                            >
+                              <Download className="h-3.5 w-3.5" />
+                            </a>
+                            <a
+                              href={analysisService.getExportJsonUrl(a.id)}
+                              download
+                              className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-indigo-400 transition"
+                              title="Export JSON"
+                            >
+                              <FileCode className="h-3.5 w-3.5" />
+                            </a>
+                            <button
+                              onClick={() => handleDelete(a.id)}
+                              className="rounded-lg p-1.5 text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition"
+                              title="Delete"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </div>
       </main>

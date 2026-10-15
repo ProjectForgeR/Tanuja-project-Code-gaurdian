@@ -30,3 +30,35 @@ export interface ExecuteResponse {
   exit_code?: number | null
   error_detail?: ExecutionErrorDetail | null
 }
+
+export interface TestCaseItem {
+  id: string
+  name: string
+  input: string
+  expected_output: string
+}
+
+export interface TestCaseResultItem {
+  id: string
+  name: string
+  input: string
+  expected_output: string
+  actual_output: string
+  status: 'passed' | 'failed' | 'error' | 'not_run'
+  execution_time?: number | null
+  mismatch_line?: string | null
+  error_message?: string | null
+}
+
+export interface RunTestsResponse {
+  total: number
+  passed: number
+  failed: number
+  errors: number
+  all_passed: boolean
+  results: TestCaseResultItem[]
+}
+
+export interface GenerateTestCasesResponse {
+  test_cases: TestCaseItem[]
+}
