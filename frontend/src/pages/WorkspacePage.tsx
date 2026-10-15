@@ -25,7 +25,7 @@ import {
   AlignLeft,
   Wrench,
 } from 'lucide-react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Navbar } from '@/components/layout/Navbar'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { useTheme } from '@/features/theme/ThemeContext'
@@ -43,6 +43,8 @@ import { LanguageSelector } from '@/features/analysis/LanguageSelector'
 import { CODE_SAMPLES } from '@/lib/samples'
 import { EXECUTABLE_SAMPLES } from '@/lib/compilerSamples'
 import { getDefaultTestCases } from '@/lib/defaultTestCases'
+import { getStarterTemplate, STARTER_TEMPLATES } from '@/lib/starterTemplates'
+import { LANGUAGE_CONFIG } from '@/lib/languages'
 import { analysisService } from '@/services/analysisService'
 import { compilerService } from '@/services/compilerService'
 import { AnalysisResult, ExplainResult, Finding, FixResult, TestResult } from '@/types/analysis'
@@ -52,9 +54,22 @@ export const WorkspacePage: React.FC = () => {
   const { theme, toggleTheme } = useTheme()
   const { user, isAuthenticated } = useAuth()
   const navigate = useNavigate()
-  const [language, setLanguage] = useState<string>('python')
-  const [code, setCode] = useState<string>(CODE_SAMPLES.python.code)
-  const [filename, setFilename] = useState<string>('auth_service.py')
+  const location = useLocation()
+
+  // Helper to extract language requested via navigation state or URL query
+  const getNavLanguage = (): string | null => {
+    const fromState = (location.state as { selectedLanguage?: string } | null)?.selectedLanguage
+    const fromQuery = new URLSearchParams(location.search).get('lang')
+    const candidate = fromState || fromQuery
+    return candidate ? candidate.toLowerCase().trim() : null
+  }
+
+  const initialLang = getNavLanguage() || 'python'
+  const initialTemplate = getStarterTemplate(initialLang)
+
+  const [language, setLanguage] = useState<string>(initialLang)
+  const [code, setCode] = useState<string>(initialTemplate.code)
+  const [filename, setFilename] = useState<string>(initialTemplate.filename)
   const [isRealtime, setIsRealtime] = useState<boolean>(true)
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false)
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null)
@@ -70,11 +85,13 @@ export const WorkspacePage: React.FC = () => {
   const [isExecuting, setIsExecuting] = useState<boolean>(false)
   const [executionResult, setExecutionResult] = useState<ExecuteResponse | null>(null)
   const [programStdin, setProgramStdin] = useState<string>('')
-  const [activeWorkspaceMode, setActiveWorkspaceMode] = useState<'compiler' | 'audit' | 'preview'>('compiler')
+  const [activeWorkspaceMode, setActiveWorkspaceMode] = useState<'compiler' | 'audit' | 'preview'>(() => {
+    return ['html', 'css', 'reactjs', 'reactts'].includes(initialLang) ? 'preview' : 'compiler'
+  })
   const [compilerTab, setCompilerTab] = useState<'output' | 'errors' | 'tests' | 'logs' | 'stdin'>('output')
 
   // Test Suite Bench state
-  const [testCases, setTestCases] = useState<TestCaseItem[]>(() => getDefaultTestCases('python'))
+  const [testCases, setTestCases] = useState<TestCaseItem[]>(() => getDefaultTestCases(initialLang))
   const [testResults, setTestResults] = useState<RunTestsResponse | null>(null)
   const [isRunningTests, setIsRunningTests] = useState<boolean>(false)
   const [isGeneratingTests, setIsGeneratingTests] = useState<boolean>(false)
@@ -483,7 +500,17 @@ export const WorkspacePage: React.FC = () => {
     setErrorMsg('No errors or warnings currently detected to fix. Great job!')
   }
 
-  const handleLanguageChange = (newLang: string) => {
+  // Synchronize language when navigation state or URL query changes (e.g. from Home page cards)
+  const lastNavProcessedRef = useRef<string>(initialLang)
+  useEffect(() => {
+    const navLang = getNavLanguage()
+    if (navLang && navLang !== lastNavProcessedRef.current) {
+      lastNavProcessedRef.current = navLang
+      handleLanguageChange(navLang, true)
+    }
+  }, [location.state, location.search])
+
+  const handleLanguageChange = (newLang: string, fromNav: boolean = false) => {
     // Abort any pending analysis request immediately
     if (abortControllerRef.current) {
       abortControllerRef.current.abort()
@@ -492,50 +519,38 @@ export const WorkspacePage: React.FC = () => {
     setIsAnalyzing(false)
     setAnalysisStep('')
 
-    setLanguage(newLang)
-    const extMap: Record<string, string> = {
-      python: 'py', javascript: 'js', typescript: 'ts', java: 'java',
-      c: 'c', cpp: 'cpp', go: 'go', reactjs: 'jsx', reactts: 'tsx',
-      html: 'html', css: 'css', sql: 'sql', mysql: 'sql', postgresql: 'sql',
-      plsql: 'sql', bash: 'sh', json: 'json', yaml: 'yaml', xml: 'xml',
-      markdown: 'md', csharp: 'cs', php: 'php', rust: 'rs', kotlin: 'kt',
-      swift: 'swift', ruby: 'rb', nodejs: 'js',
-    }
-    const targetExt = extMap[newLang.toLowerCase()] || 'txt'
-
-    // Update filename extension while preserving existing file name
-    setFilename((prev) => {
-      const parts = prev.split('.')
-      if (parts.length > 1) {
-        parts[parts.length - 1] = targetExt
-        return parts.join('.')
-      }
-      return `main.${targetExt}`
-    })
+    const cleanLang = (newLang || 'python').toLowerCase().trim()
+    setLanguage(cleanLang)
+    const template = getStarterTemplate(cleanLang)
+    setFilename(template.filename)
 
     // Auto-switch to Live Preview for visual Web languages; switch back to compiler for all other languages
-    if (['html', 'css', 'reactjs', 'reactts'].includes(newLang.toLowerCase())) {
+    if (['html', 'css', 'reactjs', 'reactts'].includes(cleanLang)) {
       setActiveWorkspaceMode('preview')
     } else {
       setActiveWorkspaceMode('compiler')
     }
 
     // Load default test cases for the new language
-    setTestCases(getDefaultTestCases(newLang))
+    setTestCases(getDefaultTestCases(cleanLang))
     setTestResults(null)
 
     // Do not clear the user's code when switching languages.
-    // Only load a sample if the editor is currently empty.
-    if (!code || code.trim() === '') {
-      if (EXECUTABLE_SAMPLES[newLang]) {
-        const sampleCode = EXECUTABLE_SAMPLES[newLang].code
-        setCode(sampleCode)
-        setLastSavedCode(sampleCode)
-      } else if (CODE_SAMPLES[newLang]) {
-        const sampleCode = CODE_SAMPLES[newLang].code
-        setCode(sampleCode)
-        setLastSavedCode(sampleCode)
-      }
+    // Load starter code if:
+    // 1. Editor is currently empty or whitespace
+    // 2. Or navigating from Home page language card
+    // 3. Or current code matches a known starter template or sample (unmodified)
+    const isKnownStarterOrEmpty =
+      !code ||
+      code.trim() === '' ||
+      fromNav ||
+      Object.values(STARTER_TEMPLATES).some((t) => t.code.trim() === code.trim()) ||
+      Object.values(CODE_SAMPLES).some((s) => s.code.trim() === code.trim()) ||
+      Object.values(EXECUTABLE_SAMPLES).some((e) => e.code.trim() === code.trim())
+
+    if (isKnownStarterOrEmpty) {
+      setCode(template.code)
+      setLastSavedCode(template.code)
     }
 
     // Invalidate stale execution and analysis results from the previous language
@@ -546,20 +561,16 @@ export const WorkspacePage: React.FC = () => {
   }
 
   const handleResetCode = () => {
-    let nextCode = ''
-    if (EXECUTABLE_SAMPLES[language]) {
-      nextCode = EXECUTABLE_SAMPLES[language].code
-    } else if (CODE_SAMPLES[language]) {
-      nextCode = CODE_SAMPLES[language].code
-    }
-    setCode(nextCode)
-    setLastSavedCode(nextCode)
+    const template = getStarterTemplate(language)
+    setCode(template.code)
+    setLastSavedCode(template.code)
     setCodeHistory([])
     setExecutionResult(null)
     setAnalysisResult(null)
     setTestResults(null)
     setProgramStdin('')
     setErrorMsg(null)
+    setTargetLine(null)
   }
 
   // Returns detected language key or null
@@ -1121,15 +1132,36 @@ export const WorkspacePage: React.FC = () => {
               <span className="font-semibold text-slate-400 text-[11px] uppercase tracking-wider">Language:</span>
               <LanguageSelector value={language} onChange={handleLanguageChange} />
 
-              {/* Sample Code Quick Picker */}
+              {/* Starter Template button */}
               <button
                 type="button"
                 onClick={handleResetCode}
-                title="Load sample code for this language"
+                title={`Load clean ${LANGUAGE_CONFIG[language.toLowerCase()]?.label || language} starter template`}
                 className="rounded-lg border border-slate-700 bg-slate-800/80 px-2.5 py-1.5 text-xs text-slate-300 hover:bg-slate-700 transition"
               >
-                Load Sample
+                Starter Template
               </button>
+
+              {/* Vulnerability Audit Sample button */}
+              {CODE_SAMPLES[language.toLowerCase()] && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const sample = CODE_SAMPLES[language.toLowerCase()].code
+                    setCodeHistory((prev) => [...prev, code])
+                    setCode(sample)
+                    setLastSavedCode(sample)
+                    setExecutionResult(null)
+                    setAnalysisResult(null)
+                    setErrorMsg(null)
+                    setTargetLine(null)
+                  }}
+                  title="Load vulnerability audit sample with known security defects"
+                  className="rounded-lg border border-purple-500/30 bg-purple-500/10 px-2.5 py-1.5 text-xs text-purple-300 hover:bg-purple-500/20 transition"
+                >
+                  Load Audit Sample
+                </button>
+              )}
 
               {/* Unsaved Changes Indicator */}
               {code !== lastSavedCode ? (
@@ -1278,9 +1310,26 @@ export const WorkspacePage: React.FC = () => {
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
             {/* Left: Monaco Editor */}
             <div className="lg:col-span-7">
-              <div className="mb-2 flex items-center justify-between text-xs text-slate-400">
-                <span className="font-mono">{filename}</span>
-                <span>{code.split('\n').length} lines</span>
+              <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
+                <div className="flex items-center gap-2.5">
+                  <span className="font-mono text-slate-200 font-semibold">{filename}</span>
+                  <span className="inline-flex items-center gap-1.5 rounded-lg bg-blue-500/10 border border-blue-500/30 px-2.5 py-1 text-xs font-semibold text-blue-400 shadow-sm shadow-blue-500/10">
+                    <span>{LANGUAGE_CONFIG[language.toLowerCase()]?.icon || '🔹'}</span>
+                    <span>{LANGUAGE_CONFIG[language.toLowerCase()]?.label || language.toUpperCase()}</span>
+                  </span>
+                  <span className="text-[11px] text-slate-500 font-mono">
+                    {language.toLowerCase() === 'reactjs'
+                      ? 'JSX mode'
+                      : language.toLowerCase() === 'reactts'
+                      ? 'TSX mode'
+                      : language.toLowerCase() === 'nodejs'
+                      ? 'Node.js mode'
+                      : `${LANGUAGE_CONFIG[language.toLowerCase()]?.monacoLang || language} mode`}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-[11px] text-slate-500 font-mono">{code.split('\n').length} lines</span>
+                </div>
               </div>
               <CodeEditor
                 ref={editorRef}

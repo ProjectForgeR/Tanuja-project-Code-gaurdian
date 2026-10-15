@@ -360,6 +360,12 @@ export const LandingPage: React.FC = () => {
     }
   }
 
+  const handleLanguageSelect = (langCode: string) => {
+    navigate(`/workspace?lang=${encodeURIComponent(langCode)}`, {
+      state: { selectedLanguage: langCode },
+    })
+  }
+
   const filteredLanguages =
     languageFilter === 'All'
       ? SUPPORTED_LANGUAGES
@@ -684,13 +690,14 @@ export const LandingPage: React.FC = () => {
 
                   {/* Direct Link to full workspace */}
                   <div className="mt-5 pt-3 border-t border-slate-800/80">
-                    <Link
-                      to="/workspace"
-                      className="flex items-center justify-center gap-2 rounded-xl bg-slate-900 border border-slate-700/80 text-white hover:bg-slate-800 py-2.5 px-4 text-xs font-bold transition shadow-sm group"
+                    <button
+                      type="button"
+                      onClick={() => handleLanguageSelect(selectedSampleId)}
+                      className="w-full flex items-center justify-center gap-2 rounded-xl bg-slate-900 border border-slate-700/80 text-white hover:bg-slate-800 py-2.5 px-4 text-xs font-bold transition shadow-sm group cursor-pointer"
                     >
                       <span>Open Full Code Testing Workspace</span>
                       <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 text-blue-400" />
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -739,29 +746,41 @@ export const LandingPage: React.FC = () => {
             {filteredLanguages.map((lang) => (
               <div
                 key={lang.code}
-                className="ui-hover-card rounded-2xl border border-slate-800/80 bg-slate-900/50 p-5 backdrop-blur-sm flex flex-col justify-between"
+                role="button"
+                tabIndex={0}
+                onClick={() => handleLanguageSelect(lang.code)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    handleLanguageSelect(lang.code)
+                  }
+                }}
+                aria-label={`Open ${lang.name} in Code Workspace`}
+                className="ui-hover-card rounded-2xl border border-slate-800/80 bg-slate-900/50 p-5 backdrop-blur-sm flex flex-col justify-between cursor-pointer group hover:border-blue-500/60 hover:bg-slate-900/80 hover:shadow-xl hover:shadow-blue-500/10 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-200"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-2xl">{lang.icon}</span>
+                    <span className="text-2xl transition-transform duration-200 group-hover:scale-110">{lang.icon}</span>
                     <span className="rounded-full bg-slate-800/80 border border-slate-700/60 px-2 py-0.5 font-mono text-[10px] text-slate-400">
                       {lang.category}
                     </span>
                   </div>
-                  <h3 className="text-base font-bold text-white">{lang.name}</h3>
+                  <h3 className="text-base font-bold text-white group-hover:text-blue-300 transition-colors flex items-center justify-between">
+                    <span>{lang.name}</span>
+                    <ArrowRight className="h-4 w-4 text-blue-400 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0" />
+                  </h3>
                   <p className="text-xs font-mono text-blue-400 mt-0.5">{lang.version}</p>
                   <p className="text-xs text-slate-400 mt-2 leading-relaxed">{lang.capability}</p>
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-slate-800/60 flex items-center justify-between">
-                  <span className="text-[11px] font-medium text-slate-500">Execution Ready</span>
-                  <Link
-                    to="/workspace"
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-blue-400 hover:text-blue-300 transition"
+                  <span className="text-[11px] font-medium text-slate-500 group-hover:text-slate-400 transition">Click to Open Editor</span>
+                  <span
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-blue-400 group-hover:text-blue-300 transition"
                   >
                     <span>Test {lang.name}</span>
-                    <ChevronRight className="h-3 w-3" />
-                  </Link>
+                    <ChevronRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+                  </span>
                 </div>
               </div>
             ))}
