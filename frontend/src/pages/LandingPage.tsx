@@ -396,14 +396,8 @@ export const LandingPage: React.FC = () => {
         </div>
 
         <div className="relative mx-auto max-w-5xl text-center flex flex-col items-center z-10">
-          {/* Eyebrow */}
-          <div className="hero-animate-fade-in inline-flex items-center gap-2 rounded-full border border-sky-400/35 bg-slate-900/70 px-4 py-1.5 text-[11px] sm:text-xs font-bold tracking-widest uppercase text-cyan-300 shadow-md backdrop-blur-md">
-            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            <span>Built for the Next Generation of Developers</span>
-          </div>
-
           {/* Master Heading: Build Smarter. Ship Faster. */}
-          <h1 className="hero-animate-fade-in hero-delay-1 hero-bright-title mt-6 sm:mt-8 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-white drop-shadow-[0_2px_25px_rgba(0,0,0,0.95)]">
+          <h1 className="hero-animate-fade-in hero-delay-1 hero-bright-title mt-4 sm:mt-6 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-white drop-shadow-[0_2px_25px_rgba(0,0,0,0.95)]">
             Build Smarter.{' '}
             <br className="hidden sm:inline" />
             <span className="hero-bright-gradient text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-300 to-indigo-300 drop-shadow-[0_0_35px_rgba(56,189,248,0.55)]">
@@ -437,48 +431,12 @@ export const LandingPage: React.FC = () => {
               <span>Explore Features</span>
             </button>
           </div>
-
-          {/* Trust Indicators */}
-          <div className="hero-animate-fade-in hero-delay-4 mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2.5 text-xs font-medium text-slate-300">
-            <span className="flex items-center gap-1.5">
-              <Check className="h-3.5 w-3.5 text-cyan-400" />
-              <span>Real-time AST security analysis</span>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Check className="h-3.5 w-3.5 text-cyan-400" />
-              <span>12+ language runtimes</span>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Check className="h-3.5 w-3.5 text-cyan-400" />
-              <span>Zero configuration required</span>
-            </span>
-          </div>
         </div>
       </section>
 
-      {/* 3. Verified Capabilities & Live Product Preview */}
+      {/* 3. Live Product Preview */}
       <section className="relative border-t border-slate-900/80 bg-slate-950 py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Verified Capabilities Strip */}
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 max-w-4xl mx-auto mb-16">
-            <div className="flex items-center justify-center gap-2 rounded-xl border border-slate-700/80 bg-slate-900/80 py-2.5 px-3 backdrop-blur-sm shadow-md">
-              <ShieldCheck className="h-4 w-4 text-cyan-400" />
-              <span className="text-xs font-bold text-slate-100">150+ AST & Security Rules</span>
-            </div>
-            <div className="flex items-center justify-center gap-2 rounded-xl border border-slate-700/80 bg-slate-900/80 py-2.5 px-3 backdrop-blur-sm shadow-md">
-              <Zap className="h-4 w-4 text-amber-300" />
-              <span className="text-xs font-bold text-slate-100">&lt; 50ms Real-Time Analysis</span>
-            </div>
-            <div className="flex items-center justify-center gap-2 rounded-xl border border-slate-700/80 bg-slate-900/80 py-2.5 px-3 backdrop-blur-sm shadow-md">
-              <Server className="h-4 w-4 text-emerald-300" />
-              <span className="text-xs font-bold text-slate-100">Judge0 & SQLite Sandboxes</span>
-            </div>
-            <div className="flex items-center justify-center gap-2 rounded-xl border border-slate-700/80 bg-slate-900/80 py-2.5 px-3 backdrop-blur-sm shadow-md">
-              <Code2 className="h-4 w-4 text-purple-300" />
-              <span className="text-xs font-bold text-slate-100">12 Polyglot Runtimes</span>
-            </div>
-          </div>
-
           {/* Code-Editor-Inspired Product Preview */}
           <div className="text-left max-w-5xl mx-auto">
             <div className="relative rounded-3xl border border-slate-800/90 bg-slate-950/90 shadow-2xl overflow-hidden backdrop-blur-xl">
@@ -742,10 +700,6 @@ export const LandingPage: React.FC = () => {
       <section id="languages" className="relative border-t border-slate-900 bg-slate-950 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3.5 py-1 text-xs font-semibold text-cyan-400 mb-4">
-              <Globe className="h-3.5 w-3.5" />
-              <span>Multi-Language Polyglot Ecosystem</span>
-            </div>
             <h2 className="text-3xl font-black tracking-tight text-white sm:text-5xl drop-shadow-[0_2px_15px_rgba(255,255,255,0.3)]">
               Supported Programming Languages & Technologies
             </h2>
@@ -824,10 +778,6 @@ export const LandingPage: React.FC = () => {
       <section id="features" className="relative border-t border-slate-900 bg-slate-950 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-3.5 py-1 text-xs font-semibold text-purple-400 mb-4">
-              <Sparkles className="h-3.5 w-3.5" />
-              <span>Full-Stack Code Testing & Debugging Suite</span>
-            </div>
             <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
               Engineered for Complete Code Verification
             </h2>
@@ -942,10 +892,6 @@ export const LandingPage: React.FC = () => {
       <section id="how-it-works" className="relative border-t border-slate-900 bg-slate-950 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3.5 py-1 text-xs font-semibold text-blue-400 mb-4">
-              <Layers className="h-3.5 w-3.5" />
-              <span>Standardized 4-Step Pipeline</span>
-            </div>
             <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
               How CodeGuardian AI Works
             </h2>

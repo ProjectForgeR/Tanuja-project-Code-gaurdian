@@ -106,14 +106,9 @@ export const Navbar: React.FC = () => {
             <div className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-slate-950 bg-emerald-400 animate-pulse" />
           </div>
           <div className="flex flex-col">
-            <div className="flex items-center gap-1.5">
-              <span className="text-base font-extrabold tracking-tight text-white">
-                CodeGuardian<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">AI</span>
-              </span>
-              <span className="rounded-full bg-cyan-500/10 border border-cyan-500/30 px-1.5 py-0.2 text-[9px] font-semibold text-cyan-400 tracking-wide">
-                v2.4
-              </span>
-            </div>
+            <span className="text-base font-extrabold tracking-tight text-white">
+              CodeGuardian<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">AI</span>
+            </span>
             <span className="text-[10px] font-medium tracking-wider text-slate-400">
               Deterministic AST & Neural Security
             </span>
