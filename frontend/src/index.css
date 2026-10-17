@@ -738,3 +738,14 @@ input:focus, textarea:focus, select:focus, button:focus-visible {
 
 
 
+
+/* Hide scrollbar utility for clean carousels and ribbons */
+.no-scrollbar::-webkit-scrollbar,
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar,
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -18,9 +18,11 @@ import {
   FileCode,
   Zap,
   Play,
+  Pause,
   Check,
   Lock,
   ChevronRight,
+  ChevronLeft,
   AlertTriangle,
   FileText,
   Sliders,
@@ -328,6 +330,53 @@ const SUPPORTED_LANGUAGES: SupportedLanguage[] = [
   },
 ]
 
+interface LanguageCardProps {
+  lang: (typeof SUPPORTED_LANGUAGES)[0]
+  onSelect: (code: string) => void
+  isInteractive?: boolean
+}
+
+const LanguageCard: React.FC<LanguageCardProps> = ({ lang, onSelect, isInteractive = true }) => {
+  return (
+    <div
+      role={isInteractive ? 'button' : undefined}
+      tabIndex={isInteractive ? 0 : -1}
+      onClick={() => onSelect(lang.code)}
+      onKeyDown={(e) => {
+        if (isInteractive && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault()
+          onSelect(lang.code)
+        }
+      }}
+      aria-label={`Open ${lang.name} in Code Workspace`}
+      className="w-[280px] sm:w-[320px] shrink-0 ui-hover-card rounded-2xl border border-slate-700/80 bg-slate-900/80 p-5 backdrop-blur-sm flex flex-col justify-between cursor-pointer group hover:border-cyan-400/80 hover:bg-slate-900 hover:shadow-xl hover:shadow-cyan-500/15 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 transition-all duration-200 select-none text-left"
+    >
+      <div>
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-2xl transition-transform duration-200 group-hover:scale-110">{lang.icon}</span>
+          <span className="rounded-full bg-slate-800 border border-slate-700 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-cyan-300">
+            {lang.category}
+          </span>
+        </div>
+        <h3 className="text-lg font-black text-white group-hover:text-cyan-300 transition-colors flex items-center justify-between drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+          <span>{lang.name}</span>
+          <ArrowRight className="h-4 w-4 text-cyan-400 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0" />
+        </h3>
+        <p className="text-xs font-mono font-bold text-cyan-400 mt-1">{lang.version}</p>
+        <p className="text-xs text-slate-100 mt-2 leading-relaxed font-medium">{lang.capability}</p>
+      </div>
+
+      <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
+        <span className="text-[11px] font-semibold text-slate-300 group-hover:text-slate-100 transition">Click to Open Editor</span>
+        <span className="inline-flex items-center gap-1 text-xs font-bold text-cyan-400 group-hover:text-cyan-300 transition">
+          <span>Test {lang.name}</span>
+          <ChevronRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+        </span>
+      </div>
+    </div>
+  )
+}
+
 export const LandingPage: React.FC = () => {
   const { activateDemoUser } = useAuth()
   const { theme } = useTheme()
@@ -338,6 +387,13 @@ export const LandingPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'vuln' | 'fix' | 'output'>('vuln')
   const [copied, setCopied] = useState<boolean>(false)
   const [languageFilter, setLanguageFilter] = useState<'All' | 'Core' | 'Web' | 'Database'>('All')
+
+  // Language Carousel state and refs
+  const [isPlaying, setIsPlaying] = useState<boolean>(true)
+  const [isHovered, setIsHovered] = useState<boolean>(false)
+  const carouselRef = useRef<HTMLDivElement>(null)
+  const set1Ref = useRef<HTMLDivElement>(null)
+  const set2Ref = useRef<HTMLDivElement>(null)
 
   const activeSample = DEMO_SAMPLES.find((s) => s.id === selectedSampleId) || DEMO_SAMPLES[0]
 
@@ -370,6 +426,77 @@ export const LandingPage: React.FC = () => {
     languageFilter === 'All'
       ? SUPPORTED_LANGUAGES
       : SUPPORTED_LANGUAGES.filter((l) => l.category === languageFilter)
+
+  // Ensure enough items in each loop set so that wide screens never run out of cards
+  const normalizedLanguages = React.useMemo(() => {
+    let list = [...filteredLanguages]
+    while (list.length < 8) {
+      list = [...list, ...filteredLanguages]
+    }
+    return list
+  }, [filteredLanguages])
+
+  // Continuous smooth auto-scrolling (slow right-to-left marquee)
+  useEffect(() => {
+    const container = carouselRef.current
+    if (!container) return
+
+    // Respect reduced motion preference
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    if (mediaQuery.matches) return
+
+    let animationFrameId: number
+
+    const step = () => {
+      if (isPlaying && !isHovered && container && set1Ref.current && set2Ref.current) {
+        const loopDistance = set2Ref.current.offsetLeft - set1Ref.current.offsetLeft
+        if (loopDistance > 0) {
+          if (container.scrollLeft >= loopDistance * 2) {
+            container.scrollLeft -= loopDistance
+          } else {
+            // Smooth, slow right-to-left crawl (0.75px per frame)
+            container.scrollLeft += 0.75
+          }
+        }
+      }
+      animationFrameId = requestAnimationFrame(step)
+    }
+
+    animationFrameId = requestAnimationFrame(step)
+    return () => cancelAnimationFrame(animationFrameId)
+  }, [isPlaying, isHovered, normalizedLanguages])
+
+  // Reset scroll when user selects a different category filter
+  useEffect(() => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollLeft = 0
+    }
+  }, [languageFilter])
+
+  // Manual carousel navigation
+  const handleScrollLeft = () => {
+    const container = carouselRef.current
+    if (!container || !set1Ref.current || !set2Ref.current) return
+    const loopDistance = set2Ref.current.offsetLeft - set1Ref.current.offsetLeft
+    if (loopDistance > 0 && container.scrollLeft <= 40) {
+      container.scrollLeft += loopDistance
+    }
+    container.scrollBy({ left: -340, behavior: 'smooth' })
+  }
+
+  const handleScrollRight = () => {
+    const container = carouselRef.current
+    if (!container || !set1Ref.current || !set2Ref.current) return
+    const loopDistance = set2Ref.current.offsetLeft - set1Ref.current.offsetLeft
+    if (loopDistance > 0 && container.scrollLeft >= loopDistance * 2 - 400) {
+      container.scrollLeft -= loopDistance
+    }
+    container.scrollBy({ left: 340, behavior: 'smooth' })
+  }
+
+  const togglePlayPause = () => {
+    setIsPlaying((prev) => !prev)
+  }
 
   return (
     <div className="landing-page-root min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-blue-600 selection:text-white">
@@ -697,77 +824,135 @@ export const LandingPage: React.FC = () => {
       {/* ============================================================== */}
       {/* 3. SUPPORTED LANGUAGES SECTION */}
       {/* ============================================================== */}
-      <section id="languages" className="relative border-t border-slate-900 bg-slate-950 py-20 sm:py-28">
+      <section id="languages" className="relative border-t border-slate-900 bg-slate-950 py-20 sm:py-28 overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl font-black tracking-tight text-white sm:text-5xl drop-shadow-[0_2px_15px_rgba(255,255,255,0.3)]">
-              Supported Programming Languages & Technologies
-            </h2>
-            <p className="mt-4 text-base text-slate-200 font-medium leading-relaxed">
-              Native support for compiling, executing, and analyzing code across modern systems, web frontends, backend runtimes, and databases.
-            </p>
+          {/* Section Header with Title & Carousel Controls at Top-Right */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl font-black tracking-tight text-white sm:text-5xl drop-shadow-[0_2px_15px_rgba(255,255,255,0.3)]">
+                Supported Programming Languages & Technologies
+              </h2>
+              <p className="mt-4 text-base text-slate-200 font-medium leading-relaxed">
+                Native support for compiling, executing, and analyzing code across modern systems, web frontends, backend runtimes, and databases.
+              </p>
+            </div>
 
-            {/* Filter Tabs */}
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
-              {(['All', 'Core', 'Web', 'Database'] as const).map((filter) => (
-                <button
-                  key={filter}
-                  onClick={() => setLanguageFilter(filter)}
-                  className={`rounded-xl px-4 py-2 text-xs font-semibold transition cursor-pointer select-none ${
-                    languageFilter === filter
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
-                      : 'border border-slate-700/80 bg-slate-900/80 text-slate-200 hover:bg-slate-800 hover:text-white'
-                  }`}
-                >
-                  {filter === 'All' ? 'All Languages (12)' : filter}
-                </button>
-              ))}
+            {/* Carousel Controls (Pause/Play, Left Arrow, Right Arrow) */}
+            <div className="flex items-center gap-2 self-start md:self-end shrink-0 bg-slate-900/90 border border-slate-800 p-1.5 rounded-xl shadow-lg backdrop-blur-md">
+              <button
+                type="button"
+                onClick={togglePlayPause}
+                aria-label={isPlaying ? 'Pause automatic scrolling' : 'Resume automatic scrolling'}
+                title={isPlaying ? 'Pause' : 'Play'}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 hover:border-cyan-400/50 transition cursor-pointer"
+              >
+                {isPlaying ? (
+                  <>
+                    <Pause className="h-3.5 w-3.5 text-cyan-400" />
+                    <span>Pause</span>
+                  </>
+                ) : (
+                  <>
+                    <Play className="h-3.5 w-3.5 text-cyan-400 fill-cyan-400" />
+                    <span>Play</span>
+                  </>
+                )}
+              </button>
+
+              <div className="h-4 w-px bg-slate-800" />
+
+              <button
+                type="button"
+                onClick={handleScrollLeft}
+                aria-label="Scroll carousel to the left"
+                title="Scroll Left"
+                className="p-1.5 rounded-lg text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 hover:border-cyan-400/50 transition cursor-pointer"
+              >
+                <ChevronLeft className="h-4 w-4 text-cyan-400" />
+              </button>
+
+              <button
+                type="button"
+                onClick={handleScrollRight}
+                aria-label="Scroll carousel to the right"
+                title="Scroll Right"
+                className="p-1.5 rounded-lg text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 hover:border-cyan-400/50 transition cursor-pointer"
+              >
+                <ChevronRight className="h-4 w-4 text-cyan-400" />
+              </button>
             </div>
           </div>
 
-          {/* Languages Grid */}
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {filteredLanguages.map((lang) => (
-              <div
-                key={lang.code}
-                role="button"
-                tabIndex={0}
-                onClick={() => handleLanguageSelect(lang.code)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault()
-                    handleLanguageSelect(lang.code)
-                  }
-                }}
-                aria-label={`Open ${lang.name} in Code Workspace`}
-                className="ui-hover-card rounded-2xl border border-slate-700/80 bg-slate-900/80 p-5 backdrop-blur-sm flex flex-col justify-between cursor-pointer group hover:border-cyan-400/80 hover:bg-slate-900 hover:shadow-xl hover:shadow-cyan-500/15 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 transition-all duration-200"
+          {/* Filter Tabs */}
+          <div className="mt-6 flex flex-wrap items-center gap-2">
+            {(['All', 'Core', 'Web', 'Database'] as const).map((filter) => (
+              <button
+                key={filter}
+                onClick={() => setLanguageFilter(filter)}
+                className={`rounded-xl px-4 py-2 text-xs font-semibold transition cursor-pointer select-none ${
+                  languageFilter === filter
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
+                    : 'border border-slate-700/80 bg-slate-900/80 text-slate-200 hover:bg-slate-800 hover:text-white'
+                }`}
               >
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-2xl transition-transform duration-200 group-hover:scale-110">{lang.icon}</span>
-                    <span className="rounded-full bg-slate-800 border border-slate-700 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-cyan-300">
-                      {lang.category}
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-black text-white group-hover:text-cyan-300 transition-colors flex items-center justify-between drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
-                    <span>{lang.name}</span>
-                    <ArrowRight className="h-4 w-4 text-cyan-400 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0" />
-                  </h3>
-                  <p className="text-xs font-mono font-bold text-cyan-400 mt-1">{lang.version}</p>
-                  <p className="text-xs text-slate-100 mt-2 leading-relaxed font-medium">{lang.capability}</p>
-                </div>
-
-                <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
-                  <span className="text-[11px] font-semibold text-slate-300 group-hover:text-slate-100 transition">Click to Open Editor</span>
-                  <span
-                    className="inline-flex items-center gap-1 text-xs font-bold text-cyan-400 group-hover:text-cyan-300 transition"
-                  >
-                    <span>Test {lang.name}</span>
-                    <ChevronRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
-                  </span>
-                </div>
-              </div>
+                {filter === 'All' ? 'All Languages (12)' : filter}
+              </button>
             ))}
+          </div>
+        </div>
+
+        {/* Single-Line Horizontal Carousel */}
+        <div className="relative mt-8 w-full">
+          {/* Subtle edge fade overlays for a sleek high-end aesthetic */}
+          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-slate-950 to-transparent z-10" />
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-slate-950 to-transparent z-10" />
+
+          {/* Carousel Track Container */}
+          <div
+            ref={carouselRef}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onTouchStart={() => setIsHovered(true)}
+            onTouchEnd={() => setIsHovered(false)}
+            tabIndex={0}
+            role="region"
+            aria-label="Supported programming languages carousel"
+            className="flex overflow-x-auto scrollbar-none py-4 px-4 sm:px-6 focus:outline-none"
+          >
+            {/* Set 1 */}
+            <div ref={set1Ref} className="flex gap-5 shrink-0 pr-5">
+              {normalizedLanguages.map((lang, idx) => (
+                <LanguageCard
+                  key={`set1-${lang.code}-${idx}`}
+                  lang={lang}
+                  onSelect={handleLanguageSelect}
+                />
+              ))}
+            </div>
+
+            {/* Set 2 (for continuous seamless looping) */}
+            <div ref={set2Ref} className="flex gap-5 shrink-0 pr-5" aria-hidden="true">
+              {normalizedLanguages.map((lang, idx) => (
+                <LanguageCard
+                  key={`set2-${lang.code}-${idx}`}
+                  lang={lang}
+                  onSelect={handleLanguageSelect}
+                  isInteractive={false}
+                />
+              ))}
+            </div>
+
+            {/* Set 3 (buffer for fast arrow navigation / wide viewports) */}
+            <div className="flex gap-5 shrink-0 pr-5" aria-hidden="true">
+              {normalizedLanguages.map((lang, idx) => (
+                <LanguageCard
+                  key={`set3-${lang.code}-${idx}`}
+                  lang={lang}
+                  onSelect={handleLanguageSelect}
+                  isInteractive={false}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
