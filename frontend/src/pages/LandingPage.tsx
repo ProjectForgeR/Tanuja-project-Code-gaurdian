@@ -349,25 +349,25 @@ const LanguageCard: React.FC<LanguageCardProps> = ({ lang, onSelect, isInteracti
         }
       }}
       aria-label={`Open ${lang.name} in Code Workspace`}
-      className="w-[280px] sm:w-[320px] shrink-0 ui-hover-card rounded-2xl border border-slate-700/80 bg-slate-900/80 p-5 backdrop-blur-sm flex flex-col justify-between cursor-pointer group hover:border-cyan-400/80 hover:bg-slate-900 hover:shadow-xl hover:shadow-cyan-500/15 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 transition-all duration-200 select-none text-left"
+      className="language-card w-[280px] sm:w-[320px] shrink-0 rounded-2xl border border-slate-700/80 bg-slate-900/80 p-5 backdrop-blur-sm flex flex-col justify-between cursor-pointer group hover:border-cyan-400/80 hover:bg-slate-900 hover:shadow-xl hover:shadow-cyan-500/15 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 transition-all duration-200 select-none text-left"
     >
       <div>
         <div className="flex items-center justify-between mb-3">
           <span className="text-2xl transition-transform duration-200 group-hover:scale-110">{lang.icon}</span>
-          <span className="rounded-full bg-slate-800 border border-slate-700 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-cyan-300">
+          <span className="rounded-full bg-slate-800/90 border border-slate-700/80 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-cyan-300">
             {lang.category}
           </span>
         </div>
-        <h3 className="text-lg font-black text-white group-hover:text-cyan-300 transition-colors flex items-center justify-between drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+        <h3 className="text-lg font-black text-white group-hover:text-cyan-300 transition-colors flex items-center justify-between">
           <span>{lang.name}</span>
           <ArrowRight className="h-4 w-4 text-cyan-400 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0" />
         </h3>
         <p className="text-xs font-mono font-bold text-cyan-400 mt-1">{lang.version}</p>
-        <p className="text-xs text-slate-100 mt-2 leading-relaxed font-medium">{lang.capability}</p>
+        <p className="text-xs text-slate-200 mt-2 leading-relaxed font-normal">{lang.capability}</p>
       </div>
 
-      <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
-        <span className="text-[11px] font-semibold text-slate-300 group-hover:text-slate-100 transition">Click to Open Editor</span>
+      <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between">
+        <span className="text-[11px] font-medium text-slate-400 group-hover:text-slate-200 transition">Click to Open Editor</span>
         <span className="inline-flex items-center gap-1 text-xs font-bold text-cyan-400 group-hover:text-cyan-300 transition">
           <span>Test {lang.name}</span>
           <ChevronRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
@@ -838,7 +838,7 @@ export const LandingPage: React.FC = () => {
             </div>
 
             {/* Carousel Controls (Pause/Play, Left Arrow, Right Arrow) */}
-            <div className="flex items-center gap-2 self-start md:self-end shrink-0 bg-slate-900/90 border border-slate-800 p-1.5 rounded-xl shadow-lg backdrop-blur-md">
+            <div className="carousel-controls-box flex items-center gap-2 self-start md:self-end shrink-0 bg-slate-900/90 border border-slate-800 p-1.5 rounded-xl shadow-lg backdrop-blur-md">
               <button
                 type="button"
                 onClick={togglePlayPause}
@@ -892,7 +892,7 @@ export const LandingPage: React.FC = () => {
                 className={`rounded-xl px-4 py-2 text-xs font-semibold transition cursor-pointer select-none ${
                   languageFilter === filter
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
-                    : 'border border-slate-700/80 bg-slate-900/80 text-slate-200 hover:bg-slate-800 hover:text-white'
+                    : 'filter-tab-inactive border border-slate-700/80 bg-slate-900/80 text-slate-200 hover:bg-slate-800 hover:text-white'
                 }`}
               >
                 {filter === 'All' ? 'All Languages (12)' : filter}

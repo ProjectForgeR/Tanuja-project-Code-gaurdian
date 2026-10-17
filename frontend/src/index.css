@@ -335,11 +335,28 @@ html.light .landing-page-root code {
   color: inherit !important;
 }
 
+/* ==========================================================================
+   Landing Page Surfaces & Language Card Protection (Light & Dark Mode)
+   Prevents cards from turning into a glaring solid white block in Bright mode.
+   Renders a subtle, translucent frosted glass sheen ("lite white")
+   while preserving 100% crystal-clear readability for all text, versions, and icons.
+   ========================================================================== */
 .landing-page-root [class*="bg-slate-900"],
 html.light .landing-page-root [class*="bg-slate-900"],
+.landing-page-root .bg-slate-900,
+html.light .landing-page-root .bg-slate-900,
+.landing-page-root .bg-slate-900\/80,
+html.light .landing-page-root .bg-slate-900\/80,
+.landing-page-root .bg-slate-900\/70,
+html.light .landing-page-root .bg-slate-900\/70,
+.landing-page-root .bg-slate-900\/50,
+html.light .landing-page-root .bg-slate-900\/50 {
+  background-color: rgba(15, 23, 42, 0.82) !important;
+}
+
 .landing-page-root [class*="bg-slate-950"],
 html.light .landing-page-root [class*="bg-slate-950"] {
-  background-color: rgba(15, 23, 42, 0.75) !important;
+  background-color: #020617 !important;
 }
 
 .landing-page-root [class*="border-slate-800"],
@@ -347,6 +364,57 @@ html.light .landing-page-root [class*="border-slate-800"],
 .landing-page-root [class*="border-slate-700"],
 html.light .landing-page-root [class*="border-slate-700"] {
   border-color: rgba(51, 65, 85, 0.6) !important;
+}
+
+/* Language Carousel Card Styling (Light & Dark Mode) */
+.language-card,
+.landing-page-root .language-card,
+html.light .landing-page-root .language-card,
+html.light .language-card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(15, 23, 42, 0.88) 100%) !important;
+  border: 1px solid rgba(148, 163, 184, 0.25) !important;
+  color: #ffffff !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4) !important;
+}
+
+.language-card:hover,
+.landing-page-root .language-card:hover,
+html.light .landing-page-root .language-card:hover,
+html.light .language-card:hover {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.14) 0%, rgba(15, 23, 42, 0.94) 100%) !important;
+  border-color: rgba(34, 211, 238, 0.8) !important;
+  box-shadow: 0 12px 30px -5px rgba(6, 182, 212, 0.28) !important;
+  transform: translateY(-2px);
+}
+
+.language-card h3,
+.landing-page-root .language-card h3,
+html.light .landing-page-root .language-card h3 {
+  color: #ffffff !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+.language-card p,
+.landing-page-root .language-card p,
+html.light .landing-page-root .language-card p {
+  text-shadow: none !important;
+}
+
+/* Landing Page carousel controls and filters in Light Mode */
+.landing-page-root .carousel-controls-box,
+html.light .landing-page-root .carousel-controls-box {
+  background-color: rgba(15, 23, 42, 0.9) !important;
+  border-color: rgba(51, 65, 85, 0.8) !important;
+}
+
+.landing-page-root .filter-tab-inactive,
+html.light .landing-page-root .filter-tab-inactive {
+  background-color: rgba(15, 23, 42, 0.8) !important;
+  border-color: rgba(51, 65, 85, 0.8) !important;
+  color: #e2e8f0 !important;
 }
 
 /* ==========================================================================
