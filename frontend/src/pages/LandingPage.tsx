@@ -349,26 +349,26 @@ const LanguageCard: React.FC<LanguageCardProps> = ({ lang, onSelect, isInteracti
         }
       }}
       aria-label={`Open ${lang.name} in Code Workspace`}
-      className="language-card w-[280px] sm:w-[320px] shrink-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm flex flex-col justify-between cursor-pointer group hover:border-blue-500 hover:shadow-lg transition-all duration-200 select-none text-left"
+      className="language-card w-[280px] sm:w-[320px] shrink-0 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 p-5 shadow-sm flex flex-col justify-between cursor-pointer group hover:border-blue-500 hover:shadow-lg transition-all duration-200 select-none text-left"
     >
       <div>
         <div className="flex items-center justify-between mb-3">
           <span className="text-2xl transition-transform duration-200 group-hover:scale-110">{lang.icon}</span>
-          <span className="rounded-full bg-slate-100 border border-slate-200 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-blue-700">
+          <span className="rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-blue-700 dark:text-cyan-400">
             {lang.category}
           </span>
         </div>
-        <h3 className="text-lg font-black text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
+        <h3 className="text-lg font-black text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors flex items-center justify-between">
           <span>{lang.name}</span>
-          <ArrowRight className="h-4 w-4 text-blue-600 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0" />
+          <ArrowRight className="h-4 w-4 text-blue-600 dark:text-cyan-400 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0" />
         </h3>
-        <p className="text-xs font-mono font-bold text-blue-600 mt-1">{lang.version}</p>
-        <p className="text-xs text-slate-600 mt-2 leading-relaxed font-normal">{lang.capability}</p>
+        <p className="text-xs font-mono font-bold text-blue-600 dark:text-blue-400 mt-1">{lang.version}</p>
+        <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed font-normal">{lang.capability}</p>
       </div>
 
-      <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-        <span className="text-[11px] font-medium text-slate-500 group-hover:text-slate-700 transition">Click to Open Editor</span>
-        <span className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 group-hover:text-blue-700 transition">
+      <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-200 transition">Click to Open Editor</span>
+        <span className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-cyan-400 group-hover:text-blue-700 dark:group-hover:text-cyan-300 transition">
           <span>Test {lang.name}</span>
           <ChevronRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
         </span>
@@ -499,28 +499,28 @@ export const LandingPage: React.FC = () => {
   }
 
   return (
-    <div className="landing-page-root min-h-screen bg-white text-slate-900 flex flex-col selection:bg-blue-600 selection:text-white">
+    <div className="landing-page-root min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col selection:bg-blue-600 selection:text-white">
       {/* 1. Navigation Bar with CodeGuardian AI Logo */}
       <Navbar />
 
       {/* 2. Full-Screen Cinematic Hero Section (~100vh on Desktop) */}
-      <section className="hero-section relative w-full min-h-[calc(100vh-4rem)] lg:min-h-screen flex flex-col justify-center items-center overflow-hidden px-4 sm:px-6 lg:px-8 py-16 sm:py-24 bg-white">
-        {/* Hero Background Image with Clean White Lighting Overlays */}
+      <section className="hero-section relative w-full min-h-[calc(100vh-4rem)] lg:min-h-screen flex flex-col justify-center items-center overflow-hidden px-4 sm:px-6 lg:px-8 py-16 sm:py-24 bg-white dark:bg-slate-950">
+        {/* Hero Background Image with Responsive Overlays */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
           <img
             src="/hero-bg.png"
             alt="Futuristic developer workstation with holographic coding projection"
-            className="h-full w-full object-cover object-center md:object-[center_35%] scale-100 opacity-20 transition-all duration-1000"
+            className="h-full w-full object-cover object-center md:object-[center_35%] scale-100 opacity-20 dark:opacity-40 transition-all duration-1000"
           />
-          {/* Clean White Gradient Overlays replacing dark navy blue */}
-          <div className="absolute inset-0 bg-white/70" />
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-white/60" />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-transparent to-white" />
+          {/* Responsive Gradient Overlays */}
+          <div className="absolute inset-0 bg-white/70 dark:bg-slate-950/75" />
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-white/60 dark:from-slate-950 dark:via-slate-950/85 dark:to-slate-950/70" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-transparent to-white dark:from-slate-950/80 dark:via-transparent dark:to-slate-950" />
         </div>
 
         <div className="relative mx-auto max-w-5xl text-center flex flex-col items-center z-10">
           {/* Master Heading: Build Smarter. Ship Faster. */}
-          <h1 className="hero-animate-fade-in hero-delay-1 hero-bright-title mt-4 sm:mt-6 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-slate-950">
+          <h1 className="hero-animate-fade-in hero-delay-1 hero-bright-title mt-4 sm:mt-6 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-slate-950 dark:text-white">
             Build Smarter.{' '}
             <br className="hidden sm:inline" />
             <span className="hero-bright-gradient text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-600">
@@ -529,7 +529,7 @@ export const LandingPage: React.FC = () => {
           </h1>
 
           {/* Description */}
-          <p className="hero-animate-fade-in hero-delay-2 hero-bright-desc mx-auto mt-6 max-w-2xl text-base sm:text-lg md:text-xl text-slate-700 font-normal leading-relaxed">
+          <p className="hero-animate-fade-in hero-delay-2 hero-bright-desc mx-auto mt-6 max-w-2xl text-base sm:text-lg md:text-xl text-slate-700 dark:text-slate-300 font-normal leading-relaxed">
             Turn ambitious ideas into powerful digital experiences with modern tools, intelligent workflows, and technology built for what comes next.
           </p>
 
@@ -548,9 +548,9 @@ export const LandingPage: React.FC = () => {
             <button
               type="button"
               onClick={() => handleScrollToSection('features')}
-              className="ui-button-lift w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-8 py-4 text-sm font-semibold text-slate-800 shadow-md transition-all duration-200 hover:border-blue-400 hover:bg-slate-50 hover:text-blue-600 active:scale-[0.98] cursor-pointer"
+              className="ui-button-lift w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900/80 px-8 py-4 text-sm font-semibold text-slate-800 dark:text-slate-200 shadow-md transition-all duration-200 hover:border-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-cyan-400 active:scale-[0.98] cursor-pointer"
             >
-              <Sparkles className="h-4 w-4 text-blue-600" />
+              <Sparkles className="h-4 w-4 text-blue-600 dark:text-cyan-400" />
               <span>Explore Features</span>
             </button>
           </div>
@@ -558,21 +558,21 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* 3. Live Product Preview */}
-      <section className="relative border-t border-slate-900/80 bg-slate-950 py-16 sm:py-24">
+      <section className="relative border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Code-Editor-Inspired Product Preview */}
           <div className="text-left max-w-5xl mx-auto">
-            <div className="relative rounded-3xl border border-slate-200 bg-white shadow-xl overflow-hidden">
+            <div className="relative rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl overflow-hidden">
               {/* Window Title Bar */}
-              <div className="flex flex-wrap items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-3 sm:px-6">
+              <div className="flex flex-wrap items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/90 px-4 py-3 sm:px-6">
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-1.5">
                     <div className="h-3 w-3 rounded-full bg-rose-400" />
                     <div className="h-3 w-3 rounded-full bg-amber-400" />
                     <div className="h-3 w-3 rounded-full bg-emerald-400" />
                   </div>
-                  <div className="h-4 w-[1px] bg-slate-200" />
-                  <div className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-1 font-mono text-xs font-semibold text-blue-600 border border-slate-200 shadow-sm">
+                  <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800" />
+                  <div className="flex items-center gap-1.5 rounded-lg bg-white dark:bg-slate-900 px-3 py-1 font-mono text-xs font-semibold text-blue-600 dark:text-cyan-400 border border-slate-200 dark:border-slate-800 shadow-sm">
                     <FileCode className="h-3.5 w-3.5" />
                     <span>{activeSample.filename}</span>
                   </div>
@@ -590,7 +590,7 @@ export const LandingPage: React.FC = () => {
                       className={`rounded-lg px-3 py-1 text-xs font-medium transition cursor-pointer select-none ${
                         selectedSampleId === s.id
                           ? 'bg-blue-600 text-white shadow-sm font-semibold'
-                          : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                          : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
                       }`}
                     >
                       {s.lang}
@@ -599,25 +599,25 @@ export const LandingPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700">
-                    <CheckCircle2 className="h-3 w-3 text-emerald-600" />
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400">
+                    <CheckCircle2 className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
                     Interactive Kernel
                   </span>
                 </div>
               </div>
 
               {/* Status Header */}
-              <div className="flex flex-wrap items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-2 text-xs text-slate-600">
+              <div className="flex flex-wrap items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 px-4 py-2 text-xs text-slate-600 dark:text-slate-400">
                 <div className="flex items-center gap-2">
                   <span className="h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
-                  <span className="font-mono text-slate-700">Rule: {activeSample.rule}</span>
+                  <span className="font-mono text-slate-700 dark:text-slate-300">Rule: {activeSample.rule}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <span
                     className={`rounded px-2 py-0.5 font-bold text-[10px] ${
                       activeTab === 'fix' || activeTab === 'output'
-                        ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                        : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                        ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30'
+                        : 'bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30'
                     }`}
                   >
                     Quality Score: {activeTab === 'fix' || activeTab === 'output' ? `${activeSample.fixedScore}/100` : `${activeSample.initialScore}/100`}
@@ -626,21 +626,21 @@ export const LandingPage: React.FC = () => {
               </div>
 
               {/* Preview Body */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-slate-800/80">
+              <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-slate-200 dark:divide-slate-800/80 bg-white dark:bg-slate-950/50">
                 {/* Code View (Left 7 Cols) */}
                 <div className="lg:col-span-7 flex flex-col justify-between">
                   {/* Action Mode Tabs */}
-                  <div className="flex items-center justify-between border-b border-slate-800/60 bg-slate-900/40 px-4 py-2">
+                  <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800/60 bg-slate-50 dark:bg-slate-900/40 px-4 py-2">
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => setActiveTab('vuln')}
                         className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition ${
                           activeTab === 'vuln'
-                            ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
-                            : 'text-slate-400 hover:text-slate-200'
+                            ? 'bg-rose-500/20 text-rose-600 dark:text-rose-300 border border-rose-500/30'
+                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                         }`}
                       >
-                        <ShieldAlert className="h-3 w-3 text-rose-400" />
+                        <ShieldAlert className="h-3 w-3 text-rose-500 dark:text-rose-400" />
                         <span>Detected Vulnerability</span>
                       </button>
 
@@ -648,11 +648,11 @@ export const LandingPage: React.FC = () => {
                         onClick={() => setActiveTab('fix')}
                         className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition ${
                           activeTab === 'fix'
-                            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                            : 'text-slate-400 hover:text-slate-200'
+                            ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30'
+                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                         }`}
                       >
-                        <Sparkles className="h-3 w-3 text-emerald-400" />
+                        <Sparkles className="h-3 w-3 text-emerald-500 dark:text-emerald-400" />
                         <span>AI Auto-Fix Diff</span>
                       </button>
 
@@ -660,21 +660,21 @@ export const LandingPage: React.FC = () => {
                         onClick={() => setActiveTab('output')}
                         className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition ${
                           activeTab === 'output'
-                            ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
-                            : 'text-slate-400 hover:text-slate-200'
+                            ? 'bg-blue-500/20 text-blue-600 dark:text-blue-300 border border-blue-500/30'
+                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                         }`}
                       >
-                        <Terminal className="h-3 w-3 text-blue-400" />
+                        <Terminal className="h-3 w-3 text-blue-500 dark:text-blue-400" />
                         <span>Sandbox Output</span>
                       </button>
                     </div>
 
                     <button
                       onClick={handleCopyCode}
-                      className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-slate-200 transition"
+                      className="flex items-center gap-1 text-[11px] text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition"
                       title="Copy code"
                     >
-                      {copied ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
+                      {copied ? <Check className="h-3 w-3 text-emerald-500 dark:text-emerald-400" /> : <Copy className="h-3 w-3" />}
                       <span>{copied ? 'Copied' : 'Copy'}</span>
                     </button>
                   </div>
@@ -682,17 +682,17 @@ export const LandingPage: React.FC = () => {
                   {/* Code Block Container */}
                   <div className="p-4 sm:p-5 font-mono text-xs overflow-x-auto min-h-[280px]">
                     {activeTab === 'vuln' && (
-                      <pre className="text-slate-200 leading-relaxed font-mono">
+                      <pre className="text-slate-800 dark:text-slate-200 leading-relaxed font-mono">
                         <code>{activeSample.vulnCode}</code>
                       </pre>
                     )}
 
                     {activeTab === 'fix' && (
                       <div className="space-y-2">
-                        <div className="rounded-lg bg-emerald-500/10 border border-emerald-500/30 p-2.5 text-emerald-300 text-[11px]">
+                        <div className="rounded-lg bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-500/30 p-2.5 text-emerald-700 dark:text-emerald-300 text-[11px]">
                           <strong>AI Patch Remediation:</strong> {activeSample.fixLineComment}
                         </div>
-                        <pre className="text-emerald-300 leading-relaxed font-mono">
+                        <pre className="text-emerald-700 dark:text-emerald-300 leading-relaxed font-mono">
                           <code>{activeSample.fixCode}</code>
                         </pre>
                       </div>
@@ -700,10 +700,10 @@ export const LandingPage: React.FC = () => {
 
                     {activeTab === 'output' && (
                       <div className="space-y-2">
-                        <div className="rounded-lg bg-blue-500/10 border border-blue-500/30 p-2.5 text-blue-300 text-[11px]">
+                        <div className="rounded-lg bg-blue-50 dark:bg-blue-500/10 border border-blue-500/30 p-2.5 text-blue-700 dark:text-blue-300 text-[11px]">
                           <strong>Verified Execution Engine:</strong> Real stdout output & test comparison.
                         </div>
-                        <pre className="text-sky-300 leading-relaxed font-mono">
+                        <pre className="text-blue-700 dark:text-sky-300 leading-relaxed font-mono">
                           <code>{activeSample.outputPreview}</code>
                         </pre>
                       </div>
@@ -711,46 +711,46 @@ export const LandingPage: React.FC = () => {
                   </div>
 
                   {/* Editor Bottom Meta */}
-                  <div className="flex items-center justify-between border-t border-slate-800/60 bg-slate-900/30 px-4 py-2 text-[11px] text-slate-400">
+                  <div className="flex items-center justify-between border-t border-slate-200 dark:border-slate-800/60 bg-slate-50 dark:bg-slate-900/30 px-4 py-2 text-[11px] text-slate-500 dark:text-slate-400">
                     <span className="flex items-center gap-1.5">
-                      <Code2 className="h-3 w-3 text-blue-400" />
+                      <Code2 className="h-3 w-3 text-blue-500 dark:text-blue-400" />
                       <span>{activeSample.lang} Runtime Active</span>
                     </span>
-                    <span className="text-slate-500">Monaco Kernel • Sandboxed</span>
+                    <span className="text-slate-400 dark:text-slate-500">Monaco Kernel • Sandboxed</span>
                   </div>
                 </div>
 
                 {/* Finding & Diagnostic Panel (Right 5 Cols) */}
-                <div className="lg:col-span-5 p-5 flex flex-col justify-between bg-slate-900/30">
+                <div className="lg:col-span-5 p-5 flex flex-col justify-between bg-slate-50/60 dark:bg-slate-900/30">
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <div className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/10 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-rose-400">
+                      <div className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/10 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-rose-600 dark:text-rose-400">
                         <Flame className="h-3 w-3" />
                         <span>{activeSample.severity} Severity</span>
                       </div>
-                      <span className="rounded bg-slate-800 px-2 py-0.5 font-mono text-[10px] text-slate-400">
+                      <span className="rounded bg-slate-200 dark:bg-slate-800 px-2 py-0.5 font-mono text-[10px] text-slate-700 dark:text-slate-400">
                         100% Deterministic Match
                       </span>
                     </div>
 
                     <div>
-                      <h3 className="text-base font-bold text-white tracking-tight">
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white tracking-tight">
                         {activeSample.title}
                       </h3>
-                      <p className="font-mono text-[11px] text-cyan-400 mt-0.5">
+                      <p className="font-mono text-[11px] text-blue-600 dark:text-cyan-400 mt-0.5">
                         {activeSample.cwe}
                       </p>
                     </div>
 
                     {/* Health Impact Gauge */}
-                    <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-3.5 space-y-2">
+                    <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 p-3.5 space-y-2">
                       <div className="flex justify-between items-center text-xs">
-                        <span className="font-medium text-slate-400">Code Health Index</span>
-                        <span className="font-bold text-emerald-400">
+                        <span className="font-medium text-slate-600 dark:text-slate-400">Code Health Index</span>
+                        <span className="font-bold text-emerald-600 dark:text-emerald-400">
                           {activeTab === 'fix' || activeTab === 'output' ? `${activeSample.fixedScore}/100 (+56)` : `${activeSample.initialScore}/100 (-58)`}
                         </span>
                       </div>
-                      <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                      <div className="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
                         <div
                           className={`h-full transition-all duration-500 rounded-full ${
                             activeTab === 'fix' || activeTab === 'output'
@@ -820,51 +820,51 @@ export const LandingPage: React.FC = () => {
       {/* ============================================================== */}
       {/* 3. SUPPORTED LANGUAGES SECTION */}
       {/* ============================================================== */}
-      <section id="languages" className="relative border-t border-slate-200 bg-white py-20 sm:py-28 overflow-hidden">
+      <section id="languages" className="relative border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-20 sm:py-28 overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Section Header with Title & Carousel Controls at Top-Right */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="max-w-3xl">
-              <h2 className="text-3xl font-black tracking-tight text-slate-900 sm:text-5xl">
+              <h2 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white sm:text-5xl">
                 Supported Programming Languages & Technologies
               </h2>
-              <p className="mt-4 text-base text-slate-600 font-medium leading-relaxed">
+              <p className="mt-4 text-base text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
                 Native support for compiling, executing, and analyzing code across modern systems, web frontends, backend runtimes, and databases.
               </p>
             </div>
 
             {/* Carousel Controls (Pause/Play, Left Arrow, Right Arrow) */}
-            <div className="carousel-controls-box flex items-center gap-2 self-start md:self-end shrink-0 bg-white border border-slate-200 p-1.5 rounded-xl shadow-md">
+            <div className="carousel-controls-box flex items-center gap-2 self-start md:self-end shrink-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1.5 rounded-xl shadow-md">
               <button
                 type="button"
                 onClick={togglePlayPause}
                 aria-label={isPlaying ? 'Pause automatic scrolling' : 'Resume automatic scrolling'}
                 title={isPlaying ? 'Pause' : 'Play'}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 hover:text-blue-600 bg-slate-50 hover:bg-slate-100 border border-slate-200 transition cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-cyan-400 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition cursor-pointer"
               >
                 {isPlaying ? (
                   <>
-                    <Pause className="h-3.5 w-3.5 text-blue-600" />
+                    <Pause className="h-3.5 w-3.5 text-blue-600 dark:text-cyan-400" />
                     <span>Pause</span>
                   </>
                 ) : (
                   <>
-                    <Play className="h-3.5 w-3.5 text-blue-600 fill-blue-600" />
+                    <Play className="h-3.5 w-3.5 text-blue-600 dark:text-cyan-400 fill-blue-600 dark:fill-cyan-400" />
                     <span>Play</span>
                   </>
                 )}
               </button>
 
-              <div className="h-4 w-px bg-slate-200" />
+              <div className="h-4 w-px bg-slate-200 dark:bg-slate-700" />
 
               <button
                 type="button"
                 onClick={handleScrollLeft}
                 aria-label="Scroll carousel to the left"
                 title="Scroll Left"
-                className="p-1.5 rounded-lg text-slate-700 hover:text-blue-600 bg-slate-50 hover:bg-slate-100 border border-slate-200 transition cursor-pointer"
+                className="p-1.5 rounded-lg text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-cyan-400 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition cursor-pointer"
               >
-                <ChevronLeft className="h-4 w-4 text-blue-600" />
+                <ChevronLeft className="h-4 w-4 text-blue-600 dark:text-cyan-400" />
               </button>
 
               <button
@@ -872,9 +872,9 @@ export const LandingPage: React.FC = () => {
                 onClick={handleScrollRight}
                 aria-label="Scroll carousel to the right"
                 title="Scroll Right"
-                className="p-1.5 rounded-lg text-slate-700 hover:text-blue-600 bg-slate-50 hover:bg-slate-100 border border-slate-200 transition cursor-pointer"
+                className="p-1.5 rounded-lg text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-cyan-400 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition cursor-pointer"
               >
-                <ChevronRight className="h-4 w-4 text-blue-600" />
+                <ChevronRight className="h-4 w-4 text-blue-600 dark:text-cyan-400" />
               </button>
             </div>
           </div>
@@ -888,7 +888,7 @@ export const LandingPage: React.FC = () => {
                 className={`rounded-xl px-4 py-2 text-xs font-semibold transition cursor-pointer select-none ${
                   languageFilter === filter
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
-                    : 'filter-tab-inactive border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:text-blue-600'
+                    : 'filter-tab-inactive border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-cyan-400'
                 }`}
               >
                 {filter === 'All' ? 'All Languages (12)' : filter}
@@ -899,9 +899,9 @@ export const LandingPage: React.FC = () => {
 
         {/* Single-Line Horizontal Carousel */}
         <div className="relative mt-8 w-full">
-          {/* Edge fade overlays in clean white */}
-          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-white to-transparent z-10" />
-          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-white to-transparent z-10" />
+          {/* Edge fade overlays */}
+          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-white dark:from-slate-950 to-transparent z-10" />
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-white dark:from-slate-950 to-transparent z-10" />
 
           {/* Carousel Track Container */}
           <div

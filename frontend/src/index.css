@@ -72,20 +72,25 @@ body {
 }
 
 /* ========================================================================= */
-/* THEME ENGINE: CRISP WHITE BACKGROUND ACROSS LIGHT & DARK THEMES           */
+/* THEME ENGINE: DUAL THEME ENGINE (LIGHT & DARK MODES)                      */
 /* ========================================================================= */
 
-html.dark body,
-body.dark,
+/* Body & Base in Light Mode */
 html.light body,
 body.light {
   background-color: #ffffff !important;
   color: #0f172a !important;
 }
 
-/* Base surface overrides */
-html.light .bg-slate-950,
-html.dark .bg-slate-950 {
+/* Body & Base in Dark Mode */
+html.dark body,
+body.dark {
+  background-color: #020617 !important;
+  color: #f8fafc !important;
+}
+
+/* Base surface overrides in Light Mode */
+html.light .bg-slate-950 {
   background-color: #ffffff !important;
   color: #0f172a !important;
 }
@@ -122,6 +127,29 @@ html.light .bg-slate-950\/90 {
   background-color: rgba(255, 255, 255, 0.95) !important;
 }
 
+/* Base surface overrides in Dark Mode */
+html.dark .bg-slate-950 {
+  background-color: #020617 !important;
+  color: #f8fafc !important;
+}
+
+html.dark .bg-slate-900 {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+html.dark .bg-slate-800 {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+html.dark .bg-slate-950\/60,
+html.dark .bg-slate-950\/70,
+html.dark .bg-slate-950\/80,
+html.dark .bg-slate-950\/90 {
+  background-color: rgba(2, 6, 23, 0.85) !important;
+}
+
 /* Layout headers and sidebars in Light Mode */
 html.light header {
   background-color: rgba(255, 255, 255, 0.95) !important;
@@ -135,6 +163,114 @@ html.light aside {
   box-shadow: 1px 0 3px 0 rgba(0, 0, 0, 0.03) !important;
 }
 
+/* Layout headers, sidebars, and footers in Dark Mode */
+html.dark header {
+  background-color: rgba(2, 6, 23, 0.85) !important;
+  border-color: #1e293b !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark aside {
+  background-color: #020617 !important;
+  border-color: #1e293b !important;
+  box-shadow: 1px 0 3px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Layout footers in Light and Dark Mode */
+html.light footer {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #64748b !important;
+}
+
+html.light footer h4,
+html.light footer .text-slate-200 {
+  color: #0f172a !important;
+}
+
+html.light footer a {
+  color: #475569 !important;
+}
+
+html.light footer a:hover {
+  color: #2563eb !important;
+}
+
+html.light footer .bg-slate-900\/40 {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  color: #475569 !important;
+}
+
+html.dark footer {
+  background-color: #020617 !important;
+  border-color: #1e293b !important;
+  color: #94a3b8 !important;
+}
+
+html.dark footer h4,
+html.dark footer .text-slate-200 {
+  color: #f1f5f9 !important;
+}
+
+html.dark footer a {
+  color: #94a3b8 !important;
+}
+
+html.dark footer a:hover {
+  color: #38bdf8 !important;
+}
+
+html.dark footer .bg-slate-900\/40 {
+  background-color: rgba(15, 23, 42, 0.4) !important;
+  border-color: #1e293b !important;
+  color: #94a3b8 !important;
+}
+
+/* Sidebar Nav Links in Light Mode */
+html.light aside nav a {
+  color: #475569 !important;
+}
+
+html.light aside nav a:hover {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+html.light aside nav a.active,
+html.light aside nav a[aria-current="page"] {
+  background-color: #eff6ff !important;
+  color: #2563eb !important;
+  border-color: #bfdbfe !important;
+}
+
+html.light aside .bg-slate-900\/60 {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Sidebar Nav Links in Dark Mode */
+html.dark aside nav a {
+  color: #94a3b8 !important;
+}
+
+html.dark aside nav a:hover {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+html.dark aside nav a.active,
+html.dark aside nav a[aria-current="page"] {
+  background-color: rgba(37, 99, 235, 0.15) !important;
+  color: #60a5fa !important;
+  border-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+html.dark aside .bg-slate-900\/60 {
+  background-color: rgba(15, 23, 42, 0.6) !important;
+  border-color: #1e293b !important;
+}
+
 /* Borders in Light Mode */
 html.light [class*="border-slate-800"],
 html.light [class*="border-slate-900"],
@@ -143,6 +279,16 @@ html.light .border-slate-800,
 html.light .border-slate-700,
 html.light .border-slate-900 {
   border-color: #e2e8f0 !important;
+}
+
+/* Borders in Dark Mode */
+html.dark [class*="border-slate-800"],
+html.dark [class*="border-slate-900"],
+html.dark [class*="border-slate-700"],
+html.dark .border-slate-800,
+html.dark .border-slate-700,
+html.dark .border-slate-900 {
+  border-color: #1e293b !important;
 }
 
 /* Typography in Light Mode */
@@ -164,6 +310,31 @@ html.light .text-slate-500 {
   color: #64748b !important;
 }
 
+/* Typography in Dark Mode */
+html.dark .text-white {
+  color: #ffffff !important;
+}
+
+html.dark .text-slate-100 {
+  color: #f1f5f9 !important;
+}
+
+html.dark .text-slate-200 {
+  color: #e2e8f0 !important;
+}
+
+html.dark .text-slate-300 {
+  color: #cbd5e1 !important;
+}
+
+html.dark .text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+html.dark .text-slate-500 {
+  color: #64748b !important;
+}
+
 /* Accent status text contrast in Light Mode */
 html.light .text-red-400 { color: #dc2626 !important; }
 html.light .text-rose-400 { color: #e11d48 !important; }
@@ -177,180 +348,296 @@ html.light .text-indigo-400 { color: #4f46e5 !important; }
 html.light .text-violet-400 { color: #7c3aed !important; }
 html.light .text-violet-300 { color: #6d28d9 !important; }
 
+/* Accent status text in Dark Mode */
+html.dark .text-red-400 { color: #f87171 !important; }
+html.dark .text-rose-400 { color: #fb7185 !important; }
+html.dark .text-emerald-400 { color: #34d399 !important; }
+html.dark .text-blue-400 { color: #60a5fa !important; }
+html.dark .text-cyan-400 { color: #22d3ee !important; }
+html.dark .text-cyan-300 { color: #67e8f9 !important; }
+html.dark .text-amber-400 { color: #fbbf24 !important; }
+html.dark .text-purple-400 { color: #c084fc !important; }
+html.dark .text-indigo-400 { color: #818cf8 !important; }
+html.dark .text-violet-400 { color: #a78bfa !important; }
+html.dark .text-violet-300 { color: #c4b5fd !important; }
+
 /* ==========================================================================
-   Clean White Background Theme for Landing Page & All Surfaces
-   Changes site styling from dark blue to crisp, modern white background
-   with high-contrast dark typography in Times New Roman.
+   Landing Page Theme Styles: Light Mode & Dark Mode
    ========================================================================== */
-.landing-page-root,
-html.light .landing-page-root,
-html.dark .landing-page-root {
+
+/* Light Mode: Landing Page */
+html.light .landing-page-root {
   background-color: #ffffff !important;
   color: #0f172a !important;
 }
 
-.landing-page-root section,
-.landing-page-root .bg-slate-950,
-html.light .landing-page-root .bg-slate-950,
-html.dark .landing-page-root .bg-slate-950 {
+html.light .landing-page-root section,
+html.light .landing-page-root .bg-slate-950 {
   background-color: #ffffff !important;
   color: #0f172a !important;
   border-color: #e2e8f0 !important;
 }
 
-.landing-page-root .bg-slate-900,
-.landing-page-root [class*="bg-slate-900"],
-html.light .landing-page-root [class*="bg-slate-900"],
-html.dark .landing-page-root [class*="bg-slate-900"] {
+html.light .landing-page-root .bg-slate-900,
+html.light .landing-page-root [class*="bg-slate-900"] {
   background-color: #f8fafc !important;
   border-color: #e2e8f0 !important;
   color: #0f172a !important;
 }
 
-.landing-page-root header,
-html.light .landing-page-root header,
-html.dark .landing-page-root header {
+html.light .landing-page-root header {
   background-color: rgba(255, 255, 255, 0.95) !important;
   border-color: #e2e8f0 !important;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05) !important;
 }
 
-/* Navbar Navigation Pill on White Background */
-.navbar-pill-nav,
-html.light .navbar-pill-nav,
-html.dark .navbar-pill-nav {
+/* Dark Mode: Landing Page */
+html.dark .landing-page-root {
+  background-color: #020617 !important;
+  color: #f8fafc !important;
+}
+
+html.dark .landing-page-root section,
+html.dark .landing-page-root .bg-slate-950 {
+  background-color: #020617 !important;
+  color: #f8fafc !important;
+  border-color: #1e293b !important;
+}
+
+html.dark .landing-page-root .bg-slate-900,
+html.dark .landing-page-root [class*="bg-slate-900"] {
+  background-color: #0b0f19 !important;
+  border-color: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+html.dark .landing-page-root header {
+  background-color: rgba(2, 6, 23, 0.85) !important;
+  border-color: #1e293b !important;
+}
+
+/* Dark Mode: Hero Overlays */
+html.dark .hero-section {
+  background-color: #020617 !important;
+}
+
+html.dark .hero-section img {
+  opacity: 0.35 !important;
+}
+
+html.dark .hero-section .bg-white\/70 {
+  background-color: rgba(2, 6, 23, 0.75) !important;
+}
+
+html.dark .hero-section .bg-gradient-to-t {
+  background-image: linear-gradient(to top, #020617, rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.6)) !important;
+}
+
+html.dark .hero-section .bg-gradient-to-b {
+  background-image: linear-gradient(to bottom, rgba(2, 6, 23, 0.85), transparent, #020617) !important;
+}
+
+/* Light Mode: Navbar Pill */
+html.light .navbar-pill-nav {
   background-color: #f1f5f9 !important;
   border: 1px solid #e2e8f0 !important;
   box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.06) !important;
 }
 
-.navbar-pill-nav .nav-link-btn,
-.navbar-pill-nav button,
-.navbar-pill-nav a,
 html.light .navbar-pill-nav .nav-link-btn,
-html.dark .navbar-pill-nav .nav-link-btn {
+html.light .navbar-pill-nav button,
+html.light .navbar-pill-nav a {
   background-color: transparent !important;
   color: #334155 !important;
   border: none !important;
 }
 
-.navbar-pill-nav .nav-link-btn:hover,
-.navbar-pill-nav button:hover,
-.navbar-pill-nav a:hover,
 html.light .navbar-pill-nav .nav-link-btn:hover,
-html.dark .navbar-pill-nav .nav-link-btn:hover {
+html.light .navbar-pill-nav button:hover,
+html.light .navbar-pill-nav a:hover {
   background-color: #ffffff !important;
   color: #2563eb !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
 }
 
-/* High-Contrast Headings & Typography on White Background */
-.landing-page-root h1,
-.landing-page-root h2,
-.landing-page-root h3,
-.landing-page-root h4,
-.landing-page-root .hero-bright-title,
+/* Dark Mode: Navbar Pill */
+html.dark .navbar-pill-nav {
+  background-color: rgba(15, 23, 42, 0.85) !important;
+  border: 1px solid #1e293b !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark .navbar-pill-nav .nav-link-btn,
+html.dark .navbar-pill-nav button,
+html.dark .navbar-pill-nav a {
+  background-color: transparent !important;
+  color: #cbd5e1 !important;
+  border: none !important;
+}
+
+html.dark .navbar-pill-nav .nav-link-btn:hover,
+html.dark .navbar-pill-nav button:hover,
+html.dark .navbar-pill-nav a:hover {
+  background-color: #1e293b !important;
+  color: #38bdf8 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Light Mode: Headings & Typography */
 html.light .landing-page-root h1,
 html.light .landing-page-root h2,
 html.light .landing-page-root h3,
 html.light .landing-page-root h4,
-html.dark .landing-page-root h1,
-html.dark .landing-page-root h2,
-html.dark .landing-page-root h3,
-html.dark .landing-page-root h4 {
+html.light .landing-page-root .hero-bright-title {
   color: #0f172a !important;
   text-shadow: none !important;
 }
 
-.landing-page-root p,
-.landing-page-root .hero-bright-desc,
-.landing-page-root .text-slate-200,
-.landing-page-root .text-slate-300,
-.landing-page-root .text-slate-400,
 html.light .landing-page-root p,
-html.dark .landing-page-root p {
+html.light .landing-page-root .hero-bright-desc,
+html.light .landing-page-root .text-slate-200,
+html.light .landing-page-root .text-slate-300,
+html.light .landing-page-root .text-slate-400 {
   color: #334155 !important;
   text-shadow: none !important;
 }
 
-.landing-page-root .text-white,
-html.light .landing-page-root .text-white,
-html.dark .landing-page-root .text-white {
+html.light .landing-page-root .text-white {
   color: #0f172a !important;
 }
 
-.landing-page-root .text-slate-100,
-html.light .landing-page-root .text-slate-100,
-html.dark .landing-page-root .text-slate-100 {
+html.light .landing-page-root .text-slate-100 {
   color: #1e293b !important;
 }
 
-/* Language Carousel Cards on Clean White Background */
-.language-card,
-.landing-page-root .language-card,
-html.light .landing-page-root .language-card,
-html.dark .landing-page-root .language-card {
+/* Dark Mode: Headings & Typography */
+html.dark .landing-page-root h1,
+html.dark .landing-page-root h2,
+html.dark .landing-page-root h3,
+html.dark .landing-page-root h4,
+html.dark .landing-page-root .hero-bright-title {
+  color: #f8fafc !important;
+}
+
+html.dark .landing-page-root p,
+html.dark .landing-page-root .hero-bright-desc {
+  color: #cbd5e1 !important;
+}
+
+html.dark .landing-page-root .text-white {
+  color: #ffffff !important;
+}
+
+html.dark .landing-page-root .text-slate-100 {
+  color: #f1f5f9 !important;
+}
+
+html.dark .landing-page-root .text-slate-200 {
+  color: #e2e8f0 !important;
+}
+
+html.dark .landing-page-root .text-slate-300 {
+  color: #cbd5e1 !important;
+}
+
+html.dark .landing-page-root .text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+/* Light Mode: Language Carousel Cards */
+html.light .landing-page-root .language-card {
   background: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
   box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.05) !important;
   color: #0f172a !important;
 }
 
-.language-card:hover,
-.landing-page-root .language-card:hover,
-html.light .landing-page-root .language-card:hover,
-html.dark .landing-page-root .language-card:hover {
+html.light .landing-page-root .language-card:hover {
   background: #ffffff !important;
   border-color: #3b82f6 !important;
   box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.18) !important;
-  transform: translateY(-2px);
 }
 
-.language-card h3,
-.landing-page-root .language-card h3 {
+html.light .landing-page-root .language-card h3 {
   color: #0f172a !important;
   text-shadow: none !important;
 }
 
-.language-card p,
-.landing-page-root .language-card p {
+html.light .landing-page-root .language-card p {
   color: #475569 !important;
   text-shadow: none !important;
 }
 
-/* Landing Page Carousel Controls & Filters on White Background */
-.carousel-controls-box,
-.landing-page-root .carousel-controls-box,
-html.light .landing-page-root .carousel-controls-box,
-html.dark .landing-page-root .carousel-controls-box {
+html.light .landing-page-root .carousel-controls-box {
   background-color: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
 }
 
-.filter-tab-inactive,
-.landing-page-root .filter-tab-inactive,
-html.light .landing-page-root .filter-tab-inactive,
-html.dark .landing-page-root .filter-tab-inactive {
+html.light .landing-page-root .filter-tab-inactive {
   background-color: #ffffff !important;
   border: 1px solid #cbd5e1 !important;
   color: #334155 !important;
 }
 
-/* Interactive Demo and Feature Cards on White Background */
-.landing-page-root .ui-hover-card,
-html.light .landing-page-root .ui-hover-card,
-html.dark .landing-page-root .ui-hover-card {
+/* Dark Mode: Language Carousel Cards */
+html.dark .landing-page-root .language-card {
+  background: #0b0f19 !important;
+  border: 1px solid #1e293b !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.35) !important;
+  color: #f8fafc !important;
+}
+
+html.dark .landing-page-root .language-card:hover {
+  background: #0f172a !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.25) !important;
+}
+
+html.dark .landing-page-root .language-card h3 {
+  color: #ffffff !important;
+}
+
+html.dark .landing-page-root .language-card p {
+  color: #94a3b8 !important;
+}
+
+html.dark .landing-page-root .carousel-controls-box {
+  background-color: #0b0f19 !important;
+  border: 1px solid #1e293b !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark .landing-page-root .filter-tab-inactive {
+  background-color: #0f172a !important;
+  border: 1px solid #334155 !important;
+  color: #94a3b8 !important;
+}
+
+/* Light Mode: UI Hover Cards */
+html.light .landing-page-root .ui-hover-card {
   background-color: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
   box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.05) !important;
+  color: #0f172a !important;
 }
 
-.landing-page-root .ui-hover-card:hover,
-html.light .landing-page-root .ui-hover-card:hover,
-html.dark .landing-page-root .ui-hover-card:hover {
+html.light .landing-page-root .ui-hover-card:hover {
   border-color: #3b82f6 !important;
   box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.15) !important;
+}
+
+/* Dark Mode: UI Hover Cards */
+html.dark .landing-page-root .ui-hover-card {
+  background-color: rgba(15, 23, 42, 0.6) !important;
+  border: 1px solid #1e293b !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4) !important;
+  color: #f8fafc !important;
+}
+
+html.dark .landing-page-root .ui-hover-card:hover {
+  border-color: #38bdf8 !important;
+  box-shadow: 0 12px 30px -5px rgba(56, 189, 248, 0.2) !important;
 }
 
 /* ==========================================================================

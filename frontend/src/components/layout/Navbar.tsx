@@ -93,7 +93,7 @@ export const Navbar: React.FC = () => {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-800/40 bg-slate-950/60 backdrop-blur-xl transition-all duration-300">
+    <header className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800/40 bg-white/90 dark:bg-slate-950/60 backdrop-blur-xl transition-all duration-300">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand */}
         <a
@@ -102,27 +102,27 @@ export const Navbar: React.FC = () => {
           className="flex items-center gap-3 transition hover:opacity-95 group cursor-pointer"
         >
           <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-[1px] shadow-lg shadow-blue-500/25 group-hover:shadow-blue-500/40 transition-all">
-            <div className="flex h-full w-full items-center justify-center rounded-[11px] bg-slate-950/90">
-              <ShieldCheck className="h-5 w-5 text-cyan-400 group-hover:scale-110 transition-transform" />
+            <div className="flex h-full w-full items-center justify-center rounded-[11px] bg-white dark:bg-slate-950/90">
+              <ShieldCheck className="h-5 w-5 text-blue-600 dark:text-cyan-400 group-hover:scale-110 transition-transform" />
             </div>
-            <div className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-slate-950 bg-emerald-400 animate-pulse" />
+            <div className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-white dark:border-slate-950 bg-emerald-400 animate-pulse" />
           </div>
           <div className="flex flex-col">
-            <span className="text-base font-extrabold tracking-tight text-white">
-              CodeGuardian<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">AI</span>
+            <span className="text-base font-extrabold tracking-tight text-slate-900 dark:text-white">
+              CodeGuardian<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-cyan-400 dark:to-blue-500">AI</span>
             </span>
-            <span className="text-[10px] font-medium tracking-wider text-slate-400">
+            <span className="text-[10px] font-medium tracking-wider text-slate-500 dark:text-slate-400">
               Deterministic AST & Neural Security
             </span>
           </div>
         </a>
 
         {/* Desktop Navigation Links with Home and Back buttons */}
-        <nav className="navbar-pill-nav hidden items-center gap-1 rounded-full border border-slate-200 bg-slate-100/90 p-1 md:flex select-none backdrop-blur-md">
+        <nav className="navbar-pill-nav hidden items-center gap-1 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-100/90 dark:bg-slate-900/80 p-1 md:flex select-none backdrop-blur-md">
           {/* Home Button */}
           <Link
             to="/"
-            className="nav-link-btn flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:text-blue-600 cursor-pointer"
+            className="nav-link-btn flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors hover:text-blue-600 dark:hover:text-cyan-400 cursor-pointer"
             title="Go to Home page"
           >
             <Home className="h-3.5 w-3.5" />
@@ -134,7 +134,7 @@ export const Navbar: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="nav-link-btn flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:text-blue-600 cursor-pointer"
+              className="nav-link-btn flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors hover:text-blue-600 dark:hover:text-cyan-400 cursor-pointer"
               title="Go back to previous page"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
@@ -145,33 +145,33 @@ export const Navbar: React.FC = () => {
           <button
             type="button"
             onClick={(e) => handleSectionClick(e, 'features')}
-            className="nav-link-btn rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:text-blue-600 cursor-pointer"
+            className="nav-link-btn rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors hover:text-blue-600 dark:hover:text-cyan-400 cursor-pointer"
           >
             Features
           </button>
           <button
             type="button"
             onClick={(e) => handleSectionClick(e, 'languages')}
-            className="nav-link-btn rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:text-blue-600 cursor-pointer"
+            className="nav-link-btn rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors hover:text-blue-600 dark:hover:text-cyan-400 cursor-pointer"
           >
             Solutions
           </button>
           <button
             type="button"
             onClick={(e) => handleSectionClick(e, 'how-it-works')}
-            className="nav-link-btn rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:text-blue-600 cursor-pointer"
+            className="nav-link-btn rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors hover:text-blue-600 dark:hover:text-cyan-400 cursor-pointer"
           >
             About
           </button>
           <Link
             to="/docs"
-            className="nav-link-btn rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:text-blue-600 cursor-pointer"
+            className="nav-link-btn rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors hover:text-blue-600 dark:hover:text-cyan-400 cursor-pointer"
           >
             Docs
           </Link>
           <a
             href="mailto:support@codeguardian.ai"
-            className="nav-link-btn rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:text-blue-600 cursor-pointer"
+            className="nav-link-btn rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors hover:text-blue-600 dark:hover:text-cyan-400 cursor-pointer"
           >
             Contact
           </a>
