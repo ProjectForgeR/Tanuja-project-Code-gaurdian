@@ -174,6 +174,147 @@ html.light .text-indigo-400 { color: #4f46e5 !important; }
 html.light .text-violet-400 { color: #7c3aed !important; }
 html.light .text-violet-300 { color: #6d28d9 !important; }
 
+/* ==========================================================================
+   Protected High-Contrast Rules for Landing Page & Hero Section
+   Ensures headlines, descriptions, and language card names remain ultra-bright,
+   crisp, and clearly readable regardless of system or light/dark mode overrides.
+   ========================================================================== */
+.landing-page-root,
+html.light .landing-page-root {
+  background-color: #020617 !important;
+  color: #ffffff !important;
+}
+
+.landing-page-root header,
+html.light .landing-page-root header {
+  background-color: rgba(2, 6, 23, 0.92) !important;
+  border-color: rgba(30, 41, 59, 0.8) !important;
+}
+
+.landing-page-root .text-white,
+html.light .landing-page-root .text-white,
+.landing-page-root h1,
+html.light .landing-page-root h1,
+.landing-page-root h2,
+html.light .landing-page-root h2,
+.landing-page-root h3,
+html.light .landing-page-root h3,
+.hero-bright-title,
+html.light .hero-bright-title {
+  color: #ffffff !important;
+}
+
+.landing-page-root .text-slate-100,
+html.light .landing-page-root .text-slate-100 {
+  color: #f8fafc !important;
+}
+
+.landing-page-root .text-slate-200,
+html.light .landing-page-root .text-slate-200 {
+  color: #e2e8f0 !important;
+}
+
+.landing-page-root .text-slate-300,
+html.light .landing-page-root .text-slate-300,
+.hero-bright-desc,
+html.light .hero-bright-desc {
+  color: #cbd5e1 !important;
+}
+
+.landing-page-root .text-slate-400,
+html.light .landing-page-root .text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+/* High-contrast radiant color tokens on landing page */
+.landing-page-root .text-cyan-400,
+html.light .landing-page-root .text-cyan-400 {
+  color: #22d3ee !important;
+}
+
+.landing-page-root .text-cyan-300,
+html.light .landing-page-root .text-cyan-300 {
+  color: #67e8f9 !important;
+}
+
+.landing-page-root .text-blue-400,
+html.light .landing-page-root .text-blue-400 {
+  color: #60a5fa !important;
+}
+
+.landing-page-root .text-blue-300,
+html.light .landing-page-root .text-blue-300 {
+  color: #93c5fd !important;
+}
+
+.landing-page-root .text-purple-400,
+html.light .landing-page-root .text-purple-400 {
+  color: #c084fc !important;
+}
+
+.landing-page-root .text-emerald-400,
+html.light .landing-page-root .text-emerald-400 {
+  color: #34d399 !important;
+}
+
+.landing-page-root .text-amber-400,
+html.light .landing-page-root .text-amber-400 {
+  color: #fbbf24 !important;
+}
+
+.landing-page-root .text-amber-300,
+html.light .landing-page-root .text-amber-300 {
+  color: #fcd34d !important;
+}
+
+.landing-page-root .text-yellow-400,
+html.light .landing-page-root .text-yellow-400 {
+  color: #facc15 !important;
+}
+
+.landing-page-root .text-orange-400,
+html.light .landing-page-root .text-orange-400 {
+  color: #fb923c !important;
+}
+
+.landing-page-root .text-rose-400,
+html.light .landing-page-root .text-rose-400 {
+  color: #fb7185 !important;
+}
+
+.landing-page-root .text-indigo-400,
+html.light .landing-page-root .text-indigo-400 {
+  color: #818cf8 !important;
+}
+
+/* Preserve dark code preview and cards inside landing page */
+.landing-page-root pre,
+html.light .landing-page-root pre {
+  background-color: transparent !important;
+  color: inherit !important;
+  border-color: transparent !important;
+}
+
+.landing-page-root code,
+html.light .landing-page-root code {
+  color: inherit !important;
+}
+
+.landing-page-root [class*="bg-slate-900"],
+html.light .landing-page-root [class*="bg-slate-900"],
+.landing-page-root [class*="bg-slate-950"],
+html.light .landing-page-root [class*="bg-slate-950"] {
+  background-color: rgba(15, 23, 42, 0.75) !important;
+}
+
+.landing-page-root [class*="border-slate-800"],
+html.light .landing-page-root [class*="border-slate-800"],
+.landing-page-root [class*="border-slate-700"],
+html.light .landing-page-root [class*="border-slate-700"] {
+  border-color: rgba(51, 65, 85, 0.6) !important;
+}
+
+
 /* Status pill backgrounds in Light Mode */
 html.light .bg-red-500\/10,
 html.light .bg-red-500\/15 {

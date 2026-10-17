@@ -372,12 +372,12 @@ export const LandingPage: React.FC = () => {
       : SUPPORTED_LANGUAGES.filter((l) => l.category === languageFilter)
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-blue-600 selection:text-white">
+    <div className="landing-page-root min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-blue-600 selection:text-white">
       {/* 1. Navigation Bar with CodeGuardian AI Logo */}
       <Navbar />
 
       {/* 2. Hero Section */}
-      <section className="relative overflow-hidden pt-14 pb-20 md:pt-20 md:pb-28">
+      <section className="hero-section relative overflow-hidden pt-14 pb-20 md:pt-20 md:pb-28">
         {/* Hero Background Image with High-Tech Atmospheric Overlays */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
           <img
@@ -395,23 +395,24 @@ export const LandingPage: React.FC = () => {
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           {/* Platform Status Badge */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1.5 text-xs font-semibold text-blue-300 shadow-sm backdrop-blur-md">
+          <div className="inline-flex items-center gap-2 rounded-full border border-sky-400/40 bg-slate-900/80 px-4 py-1.5 text-xs font-bold text-cyan-300 shadow-lg shadow-cyan-950/40 backdrop-blur-md">
             <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
             <span>Code Review, Auto-Fix & Output Verification Platform</span>
           </div>
 
           {/* Master Heading: "Write Better Code. Find Bugs Faster." */}
-          <h1 className="mt-8 text-4xl font-extrabold tracking-tight text-white sm:text-6xl md:text-7xl lg:text-8xl">
+          <h1 className="hero-bright-title mt-8 text-4xl font-black tracking-tight text-white drop-shadow-[0_2px_25px_rgba(255,255,255,0.45)] sm:text-6xl md:text-7xl lg:text-8xl">
             Write Better Code.{' '}
             <br className="hidden sm:inline" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 drop-shadow-[0_0_35px_rgba(99,102,241,0.25)]">
+            <span className="hero-bright-gradient text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-sky-300 to-indigo-300 drop-shadow-[0_0_35px_rgba(56,189,248,0.6)] font-black">
               Find Bugs Faster.
             </span>
           </h1>
 
           {/* Master Supporting Description */}
-          <p className="mx-auto mt-6 max-w-3xl text-base text-slate-300 sm:text-lg md:text-xl leading-relaxed">
-            Analyze your code, detect errors, fix bugs, and verify program output with CodeGuardian AI.
+          <p className="hero-bright-desc mx-auto mt-6 max-w-3xl text-base text-slate-100 font-medium sm:text-lg md:text-xl leading-relaxed drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
+            Analyze your code, detect errors, fix bugs, and verify program output with{' '}
+            <span className="font-bold text-cyan-300">CodeGuardian AI</span>.
           </p>
 
           {/* Two Primary Action Buttons: Start Coding & Explore Features */}
@@ -439,21 +440,21 @@ export const LandingPage: React.FC = () => {
 
           {/* Verified Capabilities Strip */}
           <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4 max-w-4xl mx-auto">
-            <div className="flex items-center justify-center gap-2 rounded-xl border border-slate-800/80 bg-slate-900/40 py-2.5 px-3 backdrop-blur-sm">
-              <ShieldCheck className="h-4 w-4 text-blue-400" />
-              <span className="text-xs font-semibold text-slate-300">150+ AST & Security Rules</span>
+            <div className="flex items-center justify-center gap-2 rounded-xl border border-slate-700/80 bg-slate-900/80 py-2.5 px-3 backdrop-blur-sm shadow-md">
+              <ShieldCheck className="h-4 w-4 text-cyan-400" />
+              <span className="text-xs font-bold text-slate-100">150+ AST & Security Rules</span>
             </div>
-            <div className="flex items-center justify-center gap-2 rounded-xl border border-slate-800/80 bg-slate-900/40 py-2.5 px-3 backdrop-blur-sm">
-              <Zap className="h-4 w-4 text-amber-400" />
-              <span className="text-xs font-semibold text-slate-300">&lt; 50ms Real-Time Analysis</span>
+            <div className="flex items-center justify-center gap-2 rounded-xl border border-slate-700/80 bg-slate-900/80 py-2.5 px-3 backdrop-blur-sm shadow-md">
+              <Zap className="h-4 w-4 text-amber-300" />
+              <span className="text-xs font-bold text-slate-100">&lt; 50ms Real-Time Analysis</span>
             </div>
-            <div className="flex items-center justify-center gap-2 rounded-xl border border-slate-800/80 bg-slate-900/40 py-2.5 px-3 backdrop-blur-sm">
-              <Server className="h-4 w-4 text-emerald-400" />
-              <span className="text-xs font-semibold text-slate-300">Judge0 & SQLite Sandboxes</span>
+            <div className="flex items-center justify-center gap-2 rounded-xl border border-slate-700/80 bg-slate-900/80 py-2.5 px-3 backdrop-blur-sm shadow-md">
+              <Server className="h-4 w-4 text-emerald-300" />
+              <span className="text-xs font-bold text-slate-100">Judge0 & SQLite Sandboxes</span>
             </div>
-            <div className="flex items-center justify-center gap-2 rounded-xl border border-slate-800/80 bg-slate-900/40 py-2.5 px-3 backdrop-blur-sm">
-              <Code2 className="h-4 w-4 text-purple-400" />
-              <span className="text-xs font-semibold text-slate-300">12 Polyglot Runtimes</span>
+            <div className="flex items-center justify-center gap-2 rounded-xl border border-slate-700/80 bg-slate-900/80 py-2.5 px-3 backdrop-blur-sm shadow-md">
+              <Code2 className="h-4 w-4 text-purple-300" />
+              <span className="text-xs font-bold text-slate-100">12 Polyglot Runtimes</span>
             </div>
           </div>
 
@@ -724,10 +725,10 @@ export const LandingPage: React.FC = () => {
               <Globe className="h-3.5 w-3.5" />
               <span>Multi-Language Polyglot Ecosystem</span>
             </div>
-            <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
+            <h2 className="text-3xl font-black tracking-tight text-white sm:text-5xl drop-shadow-[0_2px_15px_rgba(255,255,255,0.3)]">
               Supported Programming Languages & Technologies
             </h2>
-            <p className="mt-4 text-base text-slate-400">
+            <p className="mt-4 text-base text-slate-200 font-medium leading-relaxed">
               Native support for compiling, executing, and analyzing code across modern systems, web frontends, backend runtimes, and databases.
             </p>
 
@@ -740,7 +741,7 @@ export const LandingPage: React.FC = () => {
                   className={`rounded-xl px-4 py-2 text-xs font-semibold transition cursor-pointer select-none ${
                     languageFilter === filter
                       ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
-                      : 'border border-slate-800 bg-slate-900/60 text-slate-400 hover:bg-slate-800 hover:text-white'
+                      : 'border border-slate-700/80 bg-slate-900/80 text-slate-200 hover:bg-slate-800 hover:text-white'
                   }`}
                 >
                   {filter === 'All' ? 'All Languages (12)' : filter}
@@ -764,27 +765,27 @@ export const LandingPage: React.FC = () => {
                   }
                 }}
                 aria-label={`Open ${lang.name} in Code Workspace`}
-                className="ui-hover-card rounded-2xl border border-slate-800/80 bg-slate-900/50 p-5 backdrop-blur-sm flex flex-col justify-between cursor-pointer group hover:border-blue-500/60 hover:bg-slate-900/80 hover:shadow-xl hover:shadow-blue-500/10 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-200"
+                className="ui-hover-card rounded-2xl border border-slate-700/80 bg-slate-900/80 p-5 backdrop-blur-sm flex flex-col justify-between cursor-pointer group hover:border-cyan-400/80 hover:bg-slate-900 hover:shadow-xl hover:shadow-cyan-500/15 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 transition-all duration-200"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-2xl transition-transform duration-200 group-hover:scale-110">{lang.icon}</span>
-                    <span className="rounded-full bg-slate-800/80 border border-slate-700/60 px-2 py-0.5 font-mono text-[10px] text-slate-400">
+                    <span className="rounded-full bg-slate-800 border border-slate-700 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-cyan-300">
                       {lang.category}
                     </span>
                   </div>
-                  <h3 className="text-base font-bold text-white group-hover:text-blue-300 transition-colors flex items-center justify-between">
+                  <h3 className="text-lg font-black text-white group-hover:text-cyan-300 transition-colors flex items-center justify-between drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
                     <span>{lang.name}</span>
-                    <ArrowRight className="h-4 w-4 text-blue-400 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0" />
+                    <ArrowRight className="h-4 w-4 text-cyan-400 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0" />
                   </h3>
-                  <p className="text-xs font-mono text-blue-400 mt-0.5">{lang.version}</p>
-                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">{lang.capability}</p>
+                  <p className="text-xs font-mono font-bold text-cyan-400 mt-1">{lang.version}</p>
+                  <p className="text-xs text-slate-100 mt-2 leading-relaxed font-medium">{lang.capability}</p>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-slate-800/60 flex items-center justify-between">
-                  <span className="text-[11px] font-medium text-slate-500 group-hover:text-slate-400 transition">Click to Open Editor</span>
+                <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
+                  <span className="text-[11px] font-semibold text-slate-300 group-hover:text-slate-100 transition">Click to Open Editor</span>
                   <span
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-blue-400 group-hover:text-blue-300 transition"
+                    className="inline-flex items-center gap-1 text-xs font-bold text-cyan-400 group-hover:text-cyan-300 transition"
                   >
                     <span>Test {lang.name}</span>
                     <ChevronRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
