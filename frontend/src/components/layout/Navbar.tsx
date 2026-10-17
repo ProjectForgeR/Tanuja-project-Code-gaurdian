@@ -11,6 +11,7 @@ import {
   X,
   Settings,
   History,
+  ArrowRight,
 } from 'lucide-react'
 import { useAuth } from '@/features/auth/AuthContext'
 import { useTheme } from '@/features/theme/ThemeContext'
@@ -90,7 +91,7 @@ export const Navbar: React.FC = () => {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full border-b border-slate-800/40 bg-slate-950/60 backdrop-blur-xl transition-all duration-300">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand */}
         <a
@@ -123,20 +124,6 @@ export const Navbar: React.FC = () => {
         <nav className="hidden items-center gap-1 rounded-full border border-slate-800/60 bg-slate-900/60 p-1 md:flex select-none">
           <button
             type="button"
-            onClick={handleHomeClick}
-            className="rounded-full px-3.5 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white cursor-pointer"
-          >
-            Home
-          </button>
-          <button
-            type="button"
-            onClick={(e) => handleSectionClick(e, 'languages')}
-            className="rounded-full px-3.5 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white cursor-pointer"
-          >
-            Languages
-          </button>
-          <button
-            type="button"
             onClick={(e) => handleSectionClick(e, 'features')}
             className="rounded-full px-3.5 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white cursor-pointer"
           >
@@ -144,10 +131,17 @@ export const Navbar: React.FC = () => {
           </button>
           <button
             type="button"
+            onClick={(e) => handleSectionClick(e, 'languages')}
+            className="rounded-full px-3.5 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white cursor-pointer"
+          >
+            Solutions
+          </button>
+          <button
+            type="button"
             onClick={(e) => handleSectionClick(e, 'how-it-works')}
             className="rounded-full px-3.5 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white cursor-pointer"
           >
-            How It Works
+            About
           </button>
           <Link
             to="/docs"
@@ -155,6 +149,12 @@ export const Navbar: React.FC = () => {
           >
             Docs
           </Link>
+          <a
+            href="mailto:support@codeguardian.ai"
+            className="rounded-full px-3.5 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white cursor-pointer"
+          >
+            Contact
+          </a>
         </nav>
 
         {/* Actions */}
@@ -271,10 +271,10 @@ export const Navbar: React.FC = () => {
               </Link>
               <Link
                 to="/workspace"
-                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 px-3.5 py-2 text-xs font-semibold text-white shadow-lg shadow-blue-500/25 transition hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98]"
+                className="ui-button-lift inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 px-4 py-2 text-xs font-bold text-white shadow-md shadow-blue-500/25 transition hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98]"
               >
-                <Terminal className="h-3.5 w-3.5" />
-                <span>Analyze Code</span>
+                <span>Get Started</span>
+                <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
           )}
@@ -292,49 +292,68 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Dropdown Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-800/80 bg-slate-950 px-4 py-4 space-y-2">
+        <div className="md:hidden border-t border-slate-800/80 bg-slate-950/95 backdrop-blur-xl px-4 py-4 space-y-2">
           <button
             type="button"
-            onClick={handleHomeClick}
-            className="w-full text-left rounded-xl px-3.5 py-2 text-sm font-medium text-slate-300 transition hover:bg-slate-900 hover:text-white"
-          >
-            Home
-          </button>
-          <button
-            type="button"
-            onClick={(e) => handleSectionClick(e, 'languages')}
-            className="w-full text-left rounded-xl px-3.5 py-2 text-sm font-medium text-slate-300 transition hover:bg-slate-900 hover:text-white"
-          >
-            Languages
-          </button>
-          <button
-            type="button"
-            onClick={(e) => handleSectionClick(e, 'features')}
+            onClick={(e) => {
+              setMobileMenuOpen(false)
+              handleSectionClick(e, 'features')
+            }}
             className="w-full text-left rounded-xl px-3.5 py-2 text-sm font-medium text-slate-300 transition hover:bg-slate-900 hover:text-white"
           >
             Features
           </button>
           <button
             type="button"
-            onClick={(e) => handleSectionClick(e, 'how-it-works')}
+            onClick={(e) => {
+              setMobileMenuOpen(false)
+              handleSectionClick(e, 'languages')
+            }}
             className="w-full text-left rounded-xl px-3.5 py-2 text-sm font-medium text-slate-300 transition hover:bg-slate-900 hover:text-white"
           >
-            How It Works
+            Solutions
+          </button>
+          <button
+            type="button"
+            onClick={(e) => {
+              setMobileMenuOpen(false)
+              handleSectionClick(e, 'how-it-works')
+            }}
+            className="w-full text-left rounded-xl px-3.5 py-2 text-sm font-medium text-slate-300 transition hover:bg-slate-900 hover:text-white"
+          >
+            About
           </button>
           <Link
             to="/docs"
             onClick={() => setMobileMenuOpen(false)}
             className="block rounded-xl px-3.5 py-2 text-sm font-medium text-slate-300 transition hover:bg-slate-900 hover:text-white"
           >
-            Documentation
+            Docs
           </Link>
-          <Link
-            to="/signin"
+          <a
+            href="mailto:support@codeguardian.ai"
             onClick={() => setMobileMenuOpen(false)}
-            className="block rounded-xl px-3.5 py-2 text-sm font-medium text-cyan-400 transition hover:bg-slate-900"
+            className="block rounded-xl px-3.5 py-2 text-sm font-medium text-slate-300 transition hover:bg-slate-900 hover:text-white"
           >
-            Sign In
-          </Link>
+            Contact
+          </a>
+          <div className="pt-2 border-t border-slate-800/80 flex flex-col gap-2">
+            <Link
+              to="/workspace"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 px-4 py-2.5 text-xs font-bold text-white shadow-md shadow-blue-500/25"
+            >
+              <span>Get Started</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+            <Link
+              to="/signin"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-center rounded-xl px-3.5 py-2 text-xs font-medium text-cyan-400 transition hover:bg-slate-900"
+            >
+              Sign In
+            </Link>
+          </div>
           <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between px-3.5 py-1">
             <span className="text-xs text-slate-400">Appearance</span>
             <button

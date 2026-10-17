@@ -376,70 +376,91 @@ export const LandingPage: React.FC = () => {
       {/* 1. Navigation Bar with CodeGuardian AI Logo */}
       <Navbar />
 
-      {/* 2. Hero Section */}
-      <section className="hero-section relative overflow-hidden pt-14 pb-20 md:pt-20 md:pb-28">
+      {/* 2. Full-Screen Cinematic Hero Section (~100vh on Desktop) */}
+      <section className="hero-section relative w-full min-h-[calc(100vh-4rem)] lg:min-h-screen flex flex-col justify-center items-center overflow-hidden px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         {/* Hero Background Image with High-Tech Atmospheric Overlays */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
           <img
             src="/hero-bg.png"
-            alt=""
-            className="h-full w-full object-cover object-center opacity-30 scale-105 transform-gpu blur-[0.5px]"
+            alt="Futuristic developer workstation with holographic coding projection"
+            className="h-full w-full object-cover object-center md:object-[center_35%] scale-100 transition-all duration-1000"
           />
-          {/* Subtle Deep Navy & Dark Vignette Overlays for Maximum Text Legibility */}
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-slate-950/70 to-slate-950" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(15,23,42,0.35),rgba(2,6,23,0.92))]" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[500px] w-full max-w-6xl bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.2),transparent_70%)]" />
-          <div className="absolute top-1/4 left-1/5 h-80 w-80 rounded-full bg-purple-600/15 blur-3xl" />
-          <div className="absolute top-1/3 right-1/5 h-80 w-80 rounded-full bg-blue-500/15 blur-3xl" />
+          {/* Subtle Dark Navy Gradient Overlays: preserves clear view of laptop and holographic visuals */}
+          <div className="absolute inset-0 bg-slate-950/65" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/70" />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-transparent to-slate-950" />
+          {/* Cool Blue Ambient Lighting Depth */}
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 h-[500px] w-full max-w-5xl bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.18),transparent_70%)] pointer-events-none" />
+          <div className="absolute top-1/3 left-1/6 h-72 w-72 rounded-full bg-blue-600/15 blur-3xl pointer-events-none" />
+          <div className="absolute bottom-1/4 right-1/6 h-72 w-72 rounded-full bg-cyan-500/12 blur-3xl pointer-events-none" />
         </div>
 
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          {/* Platform Status Badge */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-sky-400/40 bg-slate-900/80 px-4 py-1.5 text-xs font-bold text-cyan-300 shadow-lg shadow-cyan-950/40 backdrop-blur-md">
-            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Code Review, Auto-Fix & Output Verification Platform</span>
+        <div className="relative mx-auto max-w-5xl text-center flex flex-col items-center z-10">
+          {/* Eyebrow */}
+          <div className="hero-animate-fade-in inline-flex items-center gap-2 rounded-full border border-sky-400/35 bg-slate-900/70 px-4 py-1.5 text-[11px] sm:text-xs font-bold tracking-widest uppercase text-cyan-300 shadow-md backdrop-blur-md">
+            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
+            <span>Built for the Next Generation of Developers</span>
           </div>
 
-          {/* Master Heading: "Write Better Code. Find Bugs Faster." */}
-          <h1 className="hero-bright-title mt-8 text-4xl font-black tracking-tight text-white drop-shadow-[0_2px_25px_rgba(255,255,255,0.45)] sm:text-6xl md:text-7xl lg:text-8xl">
-            Write Better Code.{' '}
+          {/* Master Heading: Build Smarter. Ship Faster. */}
+          <h1 className="hero-animate-fade-in hero-delay-1 hero-bright-title mt-6 sm:mt-8 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-white drop-shadow-[0_2px_25px_rgba(0,0,0,0.95)]">
+            Build Smarter.{' '}
             <br className="hidden sm:inline" />
-            <span className="hero-bright-gradient text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-sky-300 to-indigo-300 drop-shadow-[0_0_35px_rgba(56,189,248,0.6)] font-black">
-              Find Bugs Faster.
+            <span className="hero-bright-gradient text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-300 to-indigo-300 drop-shadow-[0_0_35px_rgba(56,189,248,0.55)]">
+              Ship Faster.
             </span>
           </h1>
 
-          {/* Master Supporting Description */}
-          <p className="hero-bright-desc mx-auto mt-6 max-w-3xl text-base text-slate-100 font-medium sm:text-lg md:text-xl leading-relaxed drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
-            Analyze your code, detect errors, fix bugs, and verify program output with{' '}
-            <span className="font-bold text-cyan-300">CodeGuardian AI</span>.
+          {/* Description */}
+          <p className="hero-animate-fade-in hero-delay-2 hero-bright-desc mx-auto mt-6 max-w-2xl text-base sm:text-lg md:text-xl text-slate-200 font-normal leading-relaxed drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+            Turn ambitious ideas into powerful digital experiences with modern tools, intelligent workflows, and technology built for what comes next.
           </p>
 
-          {/* Two Primary Action Buttons: Start Coding & Explore Features */}
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            {/* Start Coding -> Navigate to existing workspace */}
+          {/* CTA Buttons */}
+          <div className="hero-animate-fade-in hero-delay-3 mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
+            {/* Primary CTA: Get Started */}
             <Link
               to="/workspace"
-              className="ui-button-lift inline-flex items-center gap-2.5 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-8 py-4 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition-all hover:from-blue-500 hover:to-purple-500 active:scale-95"
+              className="ui-button-lift group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 px-8 py-4 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition-all duration-200 hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98]"
             >
-              <Terminal className="h-4 w-4 text-blue-200" />
-              <span>Start Coding</span>
-              <ArrowRight className="h-4 w-4" />
+              <span>Get Started</span>
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
 
-            {/* Explore Features -> Smoothly scroll to features section */}
+            {/* Secondary CTA: Explore Features */}
             <button
               type="button"
               onClick={() => handleScrollToSection('features')}
-              className="ui-button-lift inline-flex items-center gap-2 rounded-2xl border border-slate-700/80 bg-slate-900/80 px-8 py-4 text-sm font-semibold text-slate-200 shadow-md backdrop-blur-md transition hover:border-slate-600 hover:bg-slate-800/80 hover:text-white active:scale-95 cursor-pointer"
+              className="ui-button-lift w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-slate-700/80 bg-slate-900/70 px-8 py-4 text-sm font-semibold text-slate-200 shadow-md backdrop-blur-md transition-all duration-200 hover:border-slate-500 hover:bg-slate-800/80 hover:text-white active:scale-[0.98] cursor-pointer"
             >
-              <Sparkles className="h-4 w-4 text-purple-400" />
+              <Sparkles className="h-4 w-4 text-cyan-400" />
               <span>Explore Features</span>
             </button>
           </div>
 
+          {/* Trust Indicators */}
+          <div className="hero-animate-fade-in hero-delay-4 mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2.5 text-xs font-medium text-slate-300">
+            <span className="flex items-center gap-1.5">
+              <Check className="h-3.5 w-3.5 text-cyan-400" />
+              <span>Real-time AST security analysis</span>
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Check className="h-3.5 w-3.5 text-cyan-400" />
+              <span>12+ language runtimes</span>
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Check className="h-3.5 w-3.5 text-cyan-400" />
+              <span>Zero configuration required</span>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Verified Capabilities & Live Product Preview */}
+      <section className="relative border-t border-slate-900/80 bg-slate-950 py-16 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Verified Capabilities Strip */}
-          <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 max-w-4xl mx-auto mb-16">
             <div className="flex items-center justify-center gap-2 rounded-xl border border-slate-700/80 bg-slate-900/80 py-2.5 px-3 backdrop-blur-sm shadow-md">
               <ShieldCheck className="h-4 w-4 text-cyan-400" />
               <span className="text-xs font-bold text-slate-100">150+ AST & Security Rules</span>
@@ -459,7 +480,7 @@ export const LandingPage: React.FC = () => {
           </div>
 
           {/* Code-Editor-Inspired Product Preview */}
-          <div className="mt-16 text-left max-w-5xl mx-auto">
+          <div className="text-left max-w-5xl mx-auto">
             <div className="relative rounded-3xl border border-slate-800/90 bg-slate-950/90 shadow-2xl overflow-hidden backdrop-blur-xl">
               {/* Window Title Bar */}
               <div className="flex flex-wrap items-center justify-between border-b border-slate-800/80 bg-slate-900/70 px-4 py-3 sm:px-6">
