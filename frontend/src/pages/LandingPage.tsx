@@ -980,49 +980,6 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ============================================================== */}
-      {/* 6. CALL-TO-ACTION (CTA) SECTION */}
-      {/* ============================================================== */}
-      <section className="relative overflow-hidden border-t border-slate-900 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 py-20 sm:py-28">
-        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-80 w-80 rounded-full bg-blue-500/15 blur-3xl" />
-        </div>
-
-        <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6">
-          <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
-            Ready to Test and Secure Your Code?
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-base text-slate-300">
-            Open the interactive workspace to write, analyze, execute, and verify your code in seconds.
-          </p>
-
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <Link
-              to="/workspace"
-              className="ui-button-lift inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-8 py-4 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition hover:from-blue-500 hover:to-purple-500 active:scale-95"
-            >
-              <Terminal className="h-4 w-4" />
-              <span>Start Coding in Workspace</span>
-            </Link>
-
-            <Link
-              to="/signup"
-              className="ui-button-lift inline-flex items-center gap-2 rounded-2xl border border-slate-700 bg-slate-900/90 px-8 py-4 text-sm font-semibold text-slate-200 transition hover:bg-slate-800 hover:text-white active:scale-95"
-            >
-              <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-              <span>Create Free Account</span>
-            </Link>
-
-            <Link
-              to="/docs"
-              className="ui-button-lift inline-flex items-center gap-2 rounded-2xl border border-transparent px-6 py-4 text-sm font-semibold text-slate-400 hover:text-slate-200 transition"
-            >
-              <span>Explore Docs</span>
-              <ExternalLink className="h-3.5 w-3.5" />
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* 7. Professional Footer with Working Navigation Links */}
       <Footer />

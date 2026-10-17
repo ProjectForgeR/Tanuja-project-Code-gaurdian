@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { ShieldCheck, ShieldAlert, Cpu } from 'lucide-react'
+import { ShieldCheck, ShieldAlert, Mail, FileText, LifeBuoy } from 'lucide-react'
 
 export const Footer: React.FC = () => {
   return (
@@ -33,14 +33,45 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Technology */}
+          {/* Contact & Support */}
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-200">Intelligence</h4>
-            <ul className="mt-3 space-y-2 text-xs">
-              <li><Link to="/docs" className="transition hover:text-blue-400">Python AST Parser</Link></li>
-              <li><Link to="/docs" className="transition hover:text-blue-400">Bandit Security Checks</Link></li>
-              <li><Link to="/docs" className="transition hover:text-blue-400">CodeBERT Embeddings</Link></li>
-              <li><Link to="/docs" className="transition hover:text-blue-400">Explainable Severity Scoring</Link></li>
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-200">Contact & Support</h4>
+            <ul className="mt-3 space-y-2.5 text-xs">
+              <li>
+                <a
+                  href="mailto:support@codeguardian.ai"
+                  className="inline-flex items-center gap-2 transition hover:text-blue-400"
+                >
+                  <Mail className="h-3.5 w-3.5 text-blue-400" />
+                  <span>support@codeguardian.ai</span>
+                </a>
+              </li>
+              <li>
+                <Link
+                  to="/docs"
+                  className="inline-flex items-center gap-2 transition hover:text-blue-400"
+                >
+                  <FileText className="h-3.5 w-3.5 text-blue-400" />
+                  <span>Developer Docs & Guides</span>
+                </Link>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/ganeshbabu999905-maker/Project-1/issues"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 transition hover:text-blue-400"
+                >
+                  <LifeBuoy className="h-3.5 w-3.5 text-blue-400" />
+                  <span>Help Center & Bug Reports</span>
+                </a>
+              </li>
+              <li className="pt-1">
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-emerald-400">
+                  <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>Live Support: Monitored</span>
+                </span>
+              </li>
             </ul>
           </div>
 
