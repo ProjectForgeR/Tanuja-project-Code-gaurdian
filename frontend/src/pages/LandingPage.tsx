@@ -378,11 +378,19 @@ export const LandingPage: React.FC = () => {
 
       {/* 2. Hero Section */}
       <section className="relative overflow-hidden pt-14 pb-20 md:pt-20 md:pb-28">
-        {/* Ambient Dark Navy, Blue & Purple Glows */}
+        {/* Hero Background Image with High-Tech Atmospheric Overlays */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[500px] w-full max-w-6xl bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.15),transparent_70%)]" />
-          <div className="absolute top-1/4 left-1/5 h-80 w-80 rounded-full bg-purple-600/10 blur-3xl" />
-          <div className="absolute top-1/3 right-1/5 h-80 w-80 rounded-full bg-blue-500/10 blur-3xl" />
+          <img
+            src="/hero-bg.png"
+            alt=""
+            className="h-full w-full object-cover object-center opacity-30 scale-105 transform-gpu blur-[0.5px]"
+          />
+          {/* Subtle Deep Navy & Dark Vignette Overlays for Maximum Text Legibility */}
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-slate-950/70 to-slate-950" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(15,23,42,0.35),rgba(2,6,23,0.92))]" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[500px] w-full max-w-6xl bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.2),transparent_70%)]" />
+          <div className="absolute top-1/4 left-1/5 h-80 w-80 rounded-full bg-purple-600/15 blur-3xl" />
+          <div className="absolute top-1/3 right-1/5 h-80 w-80 rounded-full bg-blue-500/15 blur-3xl" />
         </div>
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
