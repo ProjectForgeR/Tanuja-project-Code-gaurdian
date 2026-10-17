@@ -93,9 +93,9 @@ export const Footer: React.FC = () => {
             &copy; {new Date().getFullYear()} CodeGuardian AI. All rights reserved.
           </div>
           <div className="mt-2 flex gap-6 sm:mt-0">
-            <Link to="/docs" className="hover:text-blue-400">Privacy Policy</Link>
-            <Link to="/docs" className="hover:text-blue-400">Security Practices</Link>
-            <Link to="/docs" className="hover:text-blue-400">API Documentation</Link>
+            <Link to="/privacy" className="transition hover:text-cyan-400">Privacy Policy</Link>
+            <Link to="/security" className="transition hover:text-cyan-400">Security Practices</Link>
+            <Link to="/api-docs" className="transition hover:text-cyan-400">API Documentation</Link>
           </div>
         </div>
       </div>

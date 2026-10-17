@@ -10,6 +10,9 @@ import { VulnerabilitiesPage } from '@/pages/VulnerabilitiesPage'
 import { TestGeneratorPage } from '@/pages/TestGeneratorPage'
 import { SettingsPage } from '@/pages/SettingsPage'
 import { DocumentationPage } from '@/pages/DocumentationPage'
+import { PrivacyPolicyPage } from '@/pages/PrivacyPolicyPage'
+import { SecurityPracticesPage } from '@/pages/SecurityPracticesPage'
+import { ApiDocsPage } from '@/pages/ApiDocsPage'
 import { SignInPage } from '@/pages/SignInPage'
 import { SignUpPage } from '@/pages/SignUpPage'
 import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage'
@@ -84,6 +87,10 @@ const AnimatedRoutes: React.FC = () => {
           }
         />
         <Route path="/docs" element={<DocumentationPage />} />
+        <Route path="/privacy" element={<PrivacyPolicyPage />} />
+        <Route path="/security" element={<SecurityPracticesPage />} />
+        <Route path="/api-docs" element={<ApiDocsPage />} />
+        <Route path="/api-documentation" element={<Navigate to="/api-docs" replace />} />
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
