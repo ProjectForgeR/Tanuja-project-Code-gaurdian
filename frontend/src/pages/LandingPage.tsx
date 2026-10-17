@@ -821,8 +821,20 @@ export const LandingPage: React.FC = () => {
       {/* ============================================================== */}
       {/* 3. SUPPORTED LANGUAGES SECTION */}
       {/* ============================================================== */}
-      <section id="languages" className="relative border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-20 sm:py-28 overflow-hidden">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section id="languages" className="languages-section relative border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-20 sm:py-28 overflow-hidden">
+        {/* Background Image with Transparent Overlays */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+          <img
+            src="/languages-bg.png"
+            alt="Developer coding on laptop with code on screen"
+            className="h-full w-full object-cover object-center scale-100 opacity-25 dark:opacity-45 transition-all duration-700"
+          />
+          {/* Transparent Gradient Overlays for High Card Contrast & Visual Depth */}
+          <div className="absolute inset-0 bg-white/75 dark:bg-slate-950/75" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-white dark:from-slate-950 dark:via-transparent dark:to-slate-950" />
+        </div>
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
           {/* Section Header with Title & Carousel Controls at Top-Right */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="max-w-3xl">
