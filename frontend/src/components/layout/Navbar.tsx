@@ -121,37 +121,37 @@ export const Navbar: React.FC = () => {
         </a>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden items-center gap-1 rounded-full border border-slate-800/60 bg-slate-900/60 p-1 md:flex select-none">
+        <nav className="navbar-pill-nav hidden items-center gap-1 rounded-full border border-slate-800/80 bg-slate-950/80 p-1 md:flex select-none backdrop-blur-md">
           <button
             type="button"
             onClick={(e) => handleSectionClick(e, 'features')}
-            className="rounded-full px-3.5 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white cursor-pointer"
+            className="nav-link-btn rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-300 transition-colors hover:text-white cursor-pointer"
           >
             Features
           </button>
           <button
             type="button"
             onClick={(e) => handleSectionClick(e, 'languages')}
-            className="rounded-full px-3.5 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white cursor-pointer"
+            className="nav-link-btn rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-300 transition-colors hover:text-white cursor-pointer"
           >
             Solutions
           </button>
           <button
             type="button"
             onClick={(e) => handleSectionClick(e, 'how-it-works')}
-            className="rounded-full px-3.5 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white cursor-pointer"
+            className="nav-link-btn rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-300 transition-colors hover:text-white cursor-pointer"
           >
             About
           </button>
           <Link
             to="/docs"
-            className="rounded-full px-3.5 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white cursor-pointer"
+            className="nav-link-btn rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-300 transition-colors hover:text-white cursor-pointer"
           >
             Docs
           </Link>
           <a
             href="mailto:support@codeguardian.ai"
-            className="rounded-full px-3.5 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white cursor-pointer"
+            className="nav-link-btn rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-300 transition-colors hover:text-white cursor-pointer"
           >
             Contact
           </a>
