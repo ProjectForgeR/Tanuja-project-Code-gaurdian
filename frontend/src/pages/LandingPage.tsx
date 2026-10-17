@@ -510,11 +510,11 @@ export const LandingPage: React.FC = () => {
           <img
             src="/hero-bg.png"
             alt="Futuristic developer workstation with holographic coding projection"
-            className="h-full w-full object-cover object-right md:object-center scale-100 opacity-70 dark:opacity-90 transition-all duration-700"
+            className="h-full w-full object-cover object-right md:object-center scale-100 opacity-90 dark:opacity-100 transition-all duration-700"
           />
-          {/* Responsive Directional Gradient Overlays for Left-Aligned Text */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-white/20 dark:from-slate-950/95 dark:via-slate-950/70 dark:to-slate-950/20" />
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-white/40 dark:from-slate-950 via-transparent dark:to-slate-950/50" />
+          {/* Transparent Directional Gradient: subtle shadow on left for typography, crystal clear on right */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/50 to-transparent dark:from-slate-950/80 dark:via-slate-950/30 dark:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-white/40 via-transparent to-transparent dark:from-slate-950/40 dark:via-transparent dark:to-transparent" />
         </div>
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full z-10">
