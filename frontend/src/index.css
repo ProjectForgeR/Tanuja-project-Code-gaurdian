@@ -470,19 +470,11 @@ html.dark .hero-section {
 }
 
 html.dark .hero-section img {
+  opacity: 0.85 !important;
+}
+
+html.light .hero-section img {
   opacity: 0.35 !important;
-}
-
-html.dark .hero-section .bg-white\/70 {
-  background-color: rgba(2, 6, 23, 0.75) !important;
-}
-
-html.dark .hero-section .bg-gradient-to-t {
-  background-image: linear-gradient(to top, #020617, rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.6)) !important;
-}
-
-html.dark .hero-section .bg-gradient-to-b {
-  background-image: linear-gradient(to bottom, rgba(2, 6, 23, 0.85), transparent, #020617) !important;
 }
 
 /* Light Mode: Navbar Pill */

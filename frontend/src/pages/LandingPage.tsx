@@ -504,55 +504,56 @@ export const LandingPage: React.FC = () => {
       <Navbar />
 
       {/* 2. Full-Screen Cinematic Hero Section (~100vh on Desktop) */}
-      <section className="hero-section relative w-full min-h-[calc(100vh-4rem)] lg:min-h-screen flex flex-col justify-center items-center overflow-hidden px-4 sm:px-6 lg:px-8 py-16 sm:py-24 bg-white dark:bg-slate-950">
+      <section className="hero-section relative w-full min-h-[calc(100vh-4rem)] lg:min-h-screen flex flex-col justify-center items-start overflow-hidden px-4 sm:px-6 lg:px-8 py-16 sm:py-24 bg-white dark:bg-slate-950">
         {/* Hero Background Image with Responsive Overlays */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
           <img
             src="/hero-bg.png"
             alt="Futuristic developer workstation with holographic coding projection"
-            className="h-full w-full object-cover object-center md:object-[center_35%] scale-100 opacity-20 dark:opacity-40 transition-all duration-1000"
+            className="h-full w-full object-cover object-right md:object-center scale-100 opacity-70 dark:opacity-90 transition-all duration-700"
           />
-          {/* Responsive Gradient Overlays */}
-          <div className="absolute inset-0 bg-white/70 dark:bg-slate-950/75" />
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-white/60 dark:from-slate-950 dark:via-slate-950/85 dark:to-slate-950/70" />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-transparent to-white dark:from-slate-950/80 dark:via-transparent dark:to-slate-950" />
+          {/* Responsive Directional Gradient Overlays for Left-Aligned Text */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-white/20 dark:from-slate-950/95 dark:via-slate-950/70 dark:to-slate-950/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-white/40 dark:from-slate-950 via-transparent dark:to-slate-950/50" />
         </div>
 
-        <div className="relative mx-auto max-w-5xl text-center flex flex-col items-center z-10">
-          {/* Master Heading: Build Smarter. Ship Faster. */}
-          <h1 className="hero-animate-fade-in hero-delay-1 hero-bright-title mt-4 sm:mt-6 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-slate-950 dark:text-white">
-            Build Smarter.{' '}
-            <br className="hidden sm:inline" />
-            <span className="hero-bright-gradient text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-600">
-              Ship Faster.
-            </span>
-          </h1>
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full z-10">
+          <div className="max-w-2xl text-left flex flex-col items-start">
+            {/* Master Heading: Build Smarter. Ship Faster. */}
+            <h1 className="hero-animate-fade-in hero-delay-1 hero-bright-title mt-4 sm:mt-6 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-slate-950 dark:text-white leading-[1.08]">
+              Build Smarter.{' '}
+              <br />
+              <span className="hero-bright-gradient text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500">
+                Ship Faster.
+              </span>
+            </h1>
 
-          {/* Description */}
-          <p className="hero-animate-fade-in hero-delay-2 hero-bright-desc mx-auto mt-6 max-w-2xl text-base sm:text-lg md:text-xl text-slate-700 dark:text-slate-300 font-normal leading-relaxed">
-            Turn ambitious ideas into powerful digital experiences with modern tools, intelligent workflows, and technology built for what comes next.
-          </p>
+            {/* Description */}
+            <p className="hero-animate-fade-in hero-delay-2 hero-bright-desc mt-6 max-w-xl text-base sm:text-lg md:text-xl text-slate-700 dark:text-slate-300 font-normal leading-relaxed">
+              Turn ambitious ideas into powerful digital experiences with modern tools, intelligent workflows, and technology built for what comes next.
+            </p>
 
-          {/* CTA Buttons */}
-          <div className="hero-animate-fade-in hero-delay-3 mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
-            {/* Primary CTA: Get Started */}
-            <Link
-              to="/workspace"
-              className="ui-button-lift group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 px-8 py-4 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition-all duration-200 hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98]"
-            >
-              <span>Get Started</span>
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
+            {/* CTA Buttons on Left Side */}
+            <div className="hero-animate-fade-in hero-delay-3 mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-start gap-4 w-full sm:w-auto">
+              {/* Primary CTA: Get Started */}
+              <Link
+                to="/workspace"
+                className="ui-button-lift group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 px-8 py-4 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition-all duration-200 hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98]"
+              >
+                <span>Get Started</span>
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
 
-            {/* Secondary CTA: Explore Features */}
-            <button
-              type="button"
-              onClick={() => handleScrollToSection('features')}
-              className="ui-button-lift w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900/80 px-8 py-4 text-sm font-semibold text-slate-800 dark:text-slate-200 shadow-md transition-all duration-200 hover:border-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-cyan-400 active:scale-[0.98] cursor-pointer"
-            >
-              <Sparkles className="h-4 w-4 text-blue-600 dark:text-cyan-400" />
-              <span>Explore Features</span>
-            </button>
+              {/* Secondary CTA: Explore Features */}
+              <button
+                type="button"
+                onClick={() => handleScrollToSection('features')}
+                className="ui-button-lift w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900/80 px-8 py-4 text-sm font-semibold text-slate-800 dark:text-slate-200 shadow-md transition-all duration-200 hover:border-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-cyan-400 active:scale-[0.98] cursor-pointer"
+              >
+                <Sparkles className="h-4 w-4 text-blue-600 dark:text-cyan-400" />
+                <span>Explore Features</span>
+              </button>
+            </div>
           </div>
         </div>
       </section>
