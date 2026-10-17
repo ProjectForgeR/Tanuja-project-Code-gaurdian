@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   BookOpen,
   Cpu,
@@ -10,11 +11,14 @@ import {
   Key,
   ShieldAlert,
   FileCode,
+  ArrowLeft,
+  Home,
 } from 'lucide-react'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 
 export const DocumentationPage: React.FC = () => {
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('overview')
 
   const tabs = [
@@ -31,7 +35,33 @@ export const DocumentationPage: React.FC = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
       <Navbar />
 
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-12 sm:px-6 lg:px-8">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
+        {/* Breadcrumb / Back & Home Bar */}
+        <div className="mb-6 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer shadow-sm"
+              title="Go back to previous page"
+            >
+              <ArrowLeft className="h-3.5 w-3.5 text-blue-500" />
+              <span>Back</span>
+            </button>
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer shadow-sm"
+              title="Go to Home page"
+            >
+              <Home className="h-3.5 w-3.5 text-blue-500" />
+              <span>Home</span>
+            </Link>
+          </div>
+          <div className="text-xs text-slate-400">
+            <span>Documentation</span> / <span className="font-semibold text-slate-700 dark:text-slate-200">Technical Specs</span>
+          </div>
+        </div>
+
         <div className="border-b border-slate-800 pb-8">
           <h1 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
             Documentation & Technical Specifications

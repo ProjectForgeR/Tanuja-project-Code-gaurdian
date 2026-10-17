@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   TestTube2,
   Sparkles,
@@ -8,6 +9,8 @@ import {
   Terminal,
   FileCode,
   ShieldCheck,
+  ArrowLeft,
+  Home,
 } from 'lucide-react'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { CodeEditor } from '@/features/analysis/CodeEditor'
@@ -15,6 +18,7 @@ import { analysisService } from '@/services/analysisService'
 import { TestResult } from '@/types/analysis'
 
 export const TestGeneratorPage: React.FC = () => {
+  const navigate = useNavigate()
   const [language, setLanguage] = useState('python')
   const [framework, setFramework] = useState('pytest')
   const [code, setCode] = useState(
@@ -68,13 +72,40 @@ export const TestGeneratorPage: React.FC = () => {
 
       <main className="flex-1 flex flex-col h-full overflow-y-auto">
         <div className="border-b border-slate-800 bg-slate-950/80 px-8 py-5 backdrop-blur-md">
-          <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2.5">
-            <TestTube2 className="h-5 w-5 text-purple-400" />
-            Automatic Unit Test Generator
-          </h1>
-          <p className="text-xs text-slate-400">
-            Synthesize unit tests, boundary conditions, edge cases, and security regression guards.
-          </p>
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              {/* Back & Home Navigation Buttons */}
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => navigate(-1)}
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer shadow-sm"
+                  title="Go back to previous page"
+                >
+                  <ArrowLeft className="h-3.5 w-3.5 text-blue-500" />
+                  <span>Back</span>
+                </button>
+                <Link
+                  to="/"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer shadow-sm"
+                  title="Go to Home page"
+                >
+                  <Home className="h-3.5 w-3.5 text-blue-500" />
+                  <span>Home</span>
+                </Link>
+              </div>
+
+              <div>
+                <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2.5">
+                  <TestTube2 className="h-5 w-5 text-purple-400" />
+                  Automatic Unit Test Generator
+                </h1>
+                <p className="text-xs text-slate-400">
+                  Synthesize unit tests, boundary conditions, edge cases, and security regression guards.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="p-8 space-y-6">

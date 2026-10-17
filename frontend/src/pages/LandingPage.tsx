@@ -349,26 +349,26 @@ const LanguageCard: React.FC<LanguageCardProps> = ({ lang, onSelect, isInteracti
         }
       }}
       aria-label={`Open ${lang.name} in Code Workspace`}
-      className="language-card w-[280px] sm:w-[320px] shrink-0 rounded-2xl border border-slate-700/80 bg-slate-900/80 p-5 backdrop-blur-sm flex flex-col justify-between cursor-pointer group hover:border-cyan-400/80 hover:bg-slate-900 hover:shadow-xl hover:shadow-cyan-500/15 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 transition-all duration-200 select-none text-left"
+      className="language-card w-[280px] sm:w-[320px] shrink-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm flex flex-col justify-between cursor-pointer group hover:border-blue-500 hover:shadow-lg transition-all duration-200 select-none text-left"
     >
       <div>
         <div className="flex items-center justify-between mb-3">
           <span className="text-2xl transition-transform duration-200 group-hover:scale-110">{lang.icon}</span>
-          <span className="rounded-full bg-slate-800/90 border border-slate-700/80 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-cyan-300">
+          <span className="rounded-full bg-slate-100 border border-slate-200 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-blue-700">
             {lang.category}
           </span>
         </div>
-        <h3 className="text-lg font-black text-white group-hover:text-cyan-300 transition-colors flex items-center justify-between">
+        <h3 className="text-lg font-black text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
           <span>{lang.name}</span>
-          <ArrowRight className="h-4 w-4 text-cyan-400 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0" />
+          <ArrowRight className="h-4 w-4 text-blue-600 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0" />
         </h3>
-        <p className="text-xs font-mono font-bold text-cyan-400 mt-1">{lang.version}</p>
-        <p className="text-xs text-slate-200 mt-2 leading-relaxed font-normal">{lang.capability}</p>
+        <p className="text-xs font-mono font-bold text-blue-600 mt-1">{lang.version}</p>
+        <p className="text-xs text-slate-600 mt-2 leading-relaxed font-normal">{lang.capability}</p>
       </div>
 
-      <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between">
-        <span className="text-[11px] font-medium text-slate-400 group-hover:text-slate-200 transition">Click to Open Editor</span>
-        <span className="inline-flex items-center gap-1 text-xs font-bold text-cyan-400 group-hover:text-cyan-300 transition">
+      <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+        <span className="text-[11px] font-medium text-slate-500 group-hover:text-slate-700 transition">Click to Open Editor</span>
+        <span className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 group-hover:text-blue-700 transition">
           <span>Test {lang.name}</span>
           <ChevronRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
         </span>
@@ -499,41 +499,37 @@ export const LandingPage: React.FC = () => {
   }
 
   return (
-    <div className="landing-page-root min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-blue-600 selection:text-white">
+    <div className="landing-page-root min-h-screen bg-white text-slate-900 flex flex-col selection:bg-blue-600 selection:text-white">
       {/* 1. Navigation Bar with CodeGuardian AI Logo */}
       <Navbar />
 
       {/* 2. Full-Screen Cinematic Hero Section (~100vh on Desktop) */}
-      <section className="hero-section relative w-full min-h-[calc(100vh-4rem)] lg:min-h-screen flex flex-col justify-center items-center overflow-hidden px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        {/* Hero Background Image with High-Tech Atmospheric Overlays */}
+      <section className="hero-section relative w-full min-h-[calc(100vh-4rem)] lg:min-h-screen flex flex-col justify-center items-center overflow-hidden px-4 sm:px-6 lg:px-8 py-16 sm:py-24 bg-white">
+        {/* Hero Background Image with Clean White Lighting Overlays */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
           <img
             src="/hero-bg.png"
             alt="Futuristic developer workstation with holographic coding projection"
-            className="h-full w-full object-cover object-center md:object-[center_35%] scale-100 transition-all duration-1000"
+            className="h-full w-full object-cover object-center md:object-[center_35%] scale-100 opacity-20 transition-all duration-1000"
           />
-          {/* Subtle Dark Navy Gradient Overlays: preserves clear view of laptop and holographic visuals */}
-          <div className="absolute inset-0 bg-slate-950/65" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/70" />
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-transparent to-slate-950" />
-          {/* Cool Blue Ambient Lighting Depth */}
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 h-[500px] w-full max-w-5xl bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.18),transparent_70%)] pointer-events-none" />
-          <div className="absolute top-1/3 left-1/6 h-72 w-72 rounded-full bg-blue-600/15 blur-3xl pointer-events-none" />
-          <div className="absolute bottom-1/4 right-1/6 h-72 w-72 rounded-full bg-cyan-500/12 blur-3xl pointer-events-none" />
+          {/* Clean White Gradient Overlays replacing dark navy blue */}
+          <div className="absolute inset-0 bg-white/70" />
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-white/60" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-transparent to-white" />
         </div>
 
         <div className="relative mx-auto max-w-5xl text-center flex flex-col items-center z-10">
           {/* Master Heading: Build Smarter. Ship Faster. */}
-          <h1 className="hero-animate-fade-in hero-delay-1 hero-bright-title mt-4 sm:mt-6 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-white drop-shadow-[0_2px_25px_rgba(0,0,0,0.95)]">
+          <h1 className="hero-animate-fade-in hero-delay-1 hero-bright-title mt-4 sm:mt-6 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-slate-950">
             Build Smarter.{' '}
             <br className="hidden sm:inline" />
-            <span className="hero-bright-gradient text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-300 to-indigo-300 drop-shadow-[0_0_35px_rgba(56,189,248,0.55)]">
+            <span className="hero-bright-gradient text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-600">
               Ship Faster.
             </span>
           </h1>
 
           {/* Description */}
-          <p className="hero-animate-fade-in hero-delay-2 hero-bright-desc mx-auto mt-6 max-w-2xl text-base sm:text-lg md:text-xl text-slate-200 font-normal leading-relaxed drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+          <p className="hero-animate-fade-in hero-delay-2 hero-bright-desc mx-auto mt-6 max-w-2xl text-base sm:text-lg md:text-xl text-slate-700 font-normal leading-relaxed">
             Turn ambitious ideas into powerful digital experiences with modern tools, intelligent workflows, and technology built for what comes next.
           </p>
 
@@ -552,9 +548,9 @@ export const LandingPage: React.FC = () => {
             <button
               type="button"
               onClick={() => handleScrollToSection('features')}
-              className="ui-button-lift w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-slate-700/80 bg-slate-900/70 px-8 py-4 text-sm font-semibold text-slate-200 shadow-md backdrop-blur-md transition-all duration-200 hover:border-slate-500 hover:bg-slate-800/80 hover:text-white active:scale-[0.98] cursor-pointer"
+              className="ui-button-lift w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-8 py-4 text-sm font-semibold text-slate-800 shadow-md transition-all duration-200 hover:border-blue-400 hover:bg-slate-50 hover:text-blue-600 active:scale-[0.98] cursor-pointer"
             >
-              <Sparkles className="h-4 w-4 text-cyan-400" />
+              <Sparkles className="h-4 w-4 text-blue-600" />
               <span>Explore Features</span>
             </button>
           </div>
@@ -566,17 +562,17 @@ export const LandingPage: React.FC = () => {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Code-Editor-Inspired Product Preview */}
           <div className="text-left max-w-5xl mx-auto">
-            <div className="relative rounded-3xl border border-slate-800/90 bg-slate-950/90 shadow-2xl overflow-hidden backdrop-blur-xl">
+            <div className="relative rounded-3xl border border-slate-200 bg-white shadow-xl overflow-hidden">
               {/* Window Title Bar */}
-              <div className="flex flex-wrap items-center justify-between border-b border-slate-800/80 bg-slate-900/70 px-4 py-3 sm:px-6">
+              <div className="flex flex-wrap items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-3 sm:px-6">
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-1.5">
-                    <div className="h-3 w-3 rounded-full bg-rose-500/80" />
-                    <div className="h-3 w-3 rounded-full bg-amber-500/80" />
-                    <div className="h-3 w-3 rounded-full bg-emerald-500/80" />
+                    <div className="h-3 w-3 rounded-full bg-rose-400" />
+                    <div className="h-3 w-3 rounded-full bg-amber-400" />
+                    <div className="h-3 w-3 rounded-full bg-emerald-400" />
                   </div>
-                  <div className="h-4 w-[1px] bg-slate-800" />
-                  <div className="flex items-center gap-1.5 rounded-lg bg-slate-950 px-3 py-1 font-mono text-xs font-medium text-cyan-400 border border-slate-800">
+                  <div className="h-4 w-[1px] bg-slate-200" />
+                  <div className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-1 font-mono text-xs font-semibold text-blue-600 border border-slate-200 shadow-sm">
                     <FileCode className="h-3.5 w-3.5" />
                     <span>{activeSample.filename}</span>
                   </div>
@@ -594,7 +590,7 @@ export const LandingPage: React.FC = () => {
                       className={`rounded-lg px-3 py-1 text-xs font-medium transition cursor-pointer select-none ${
                         selectedSampleId === s.id
                           ? 'bg-blue-600 text-white shadow-sm font-semibold'
-                          : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                          : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                       }`}
                     >
                       {s.lang}
@@ -603,18 +599,18 @@ export const LandingPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-400">
-                    <CheckCircle2 className="h-3 w-3" />
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700">
+                    <CheckCircle2 className="h-3 w-3 text-emerald-600" />
                     Interactive Kernel
                   </span>
                 </div>
               </div>
 
               {/* Status Header */}
-              <div className="flex flex-wrap items-center justify-between border-b border-slate-800/60 bg-slate-950 px-4 py-2 text-xs text-slate-400">
+              <div className="flex flex-wrap items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-2 text-xs text-slate-600">
                 <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-blue-400 animate-pulse" />
-                  <span className="font-mono text-slate-300">Rule: {activeSample.rule}</span>
+                  <span className="h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
+                  <span className="font-mono text-slate-700">Rule: {activeSample.rule}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <span
@@ -824,51 +820,51 @@ export const LandingPage: React.FC = () => {
       {/* ============================================================== */}
       {/* 3. SUPPORTED LANGUAGES SECTION */}
       {/* ============================================================== */}
-      <section id="languages" className="relative border-t border-slate-900 bg-slate-950 py-20 sm:py-28 overflow-hidden">
+      <section id="languages" className="relative border-t border-slate-200 bg-white py-20 sm:py-28 overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Section Header with Title & Carousel Controls at Top-Right */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="max-w-3xl">
-              <h2 className="text-3xl font-black tracking-tight text-white sm:text-5xl drop-shadow-[0_2px_15px_rgba(255,255,255,0.3)]">
+              <h2 className="text-3xl font-black tracking-tight text-slate-900 sm:text-5xl">
                 Supported Programming Languages & Technologies
               </h2>
-              <p className="mt-4 text-base text-slate-200 font-medium leading-relaxed">
+              <p className="mt-4 text-base text-slate-600 font-medium leading-relaxed">
                 Native support for compiling, executing, and analyzing code across modern systems, web frontends, backend runtimes, and databases.
               </p>
             </div>
 
             {/* Carousel Controls (Pause/Play, Left Arrow, Right Arrow) */}
-            <div className="carousel-controls-box flex items-center gap-2 self-start md:self-end shrink-0 bg-slate-900/90 border border-slate-800 p-1.5 rounded-xl shadow-lg backdrop-blur-md">
+            <div className="carousel-controls-box flex items-center gap-2 self-start md:self-end shrink-0 bg-white border border-slate-200 p-1.5 rounded-xl shadow-md">
               <button
                 type="button"
                 onClick={togglePlayPause}
                 aria-label={isPlaying ? 'Pause automatic scrolling' : 'Resume automatic scrolling'}
                 title={isPlaying ? 'Pause' : 'Play'}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 hover:border-cyan-400/50 transition cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 hover:text-blue-600 bg-slate-50 hover:bg-slate-100 border border-slate-200 transition cursor-pointer"
               >
                 {isPlaying ? (
                   <>
-                    <Pause className="h-3.5 w-3.5 text-cyan-400" />
+                    <Pause className="h-3.5 w-3.5 text-blue-600" />
                     <span>Pause</span>
                   </>
                 ) : (
                   <>
-                    <Play className="h-3.5 w-3.5 text-cyan-400 fill-cyan-400" />
+                    <Play className="h-3.5 w-3.5 text-blue-600 fill-blue-600" />
                     <span>Play</span>
                   </>
                 )}
               </button>
 
-              <div className="h-4 w-px bg-slate-800" />
+              <div className="h-4 w-px bg-slate-200" />
 
               <button
                 type="button"
                 onClick={handleScrollLeft}
                 aria-label="Scroll carousel to the left"
                 title="Scroll Left"
-                className="p-1.5 rounded-lg text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 hover:border-cyan-400/50 transition cursor-pointer"
+                className="p-1.5 rounded-lg text-slate-700 hover:text-blue-600 bg-slate-50 hover:bg-slate-100 border border-slate-200 transition cursor-pointer"
               >
-                <ChevronLeft className="h-4 w-4 text-cyan-400" />
+                <ChevronLeft className="h-4 w-4 text-blue-600" />
               </button>
 
               <button
@@ -876,9 +872,9 @@ export const LandingPage: React.FC = () => {
                 onClick={handleScrollRight}
                 aria-label="Scroll carousel to the right"
                 title="Scroll Right"
-                className="p-1.5 rounded-lg text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 hover:border-cyan-400/50 transition cursor-pointer"
+                className="p-1.5 rounded-lg text-slate-700 hover:text-blue-600 bg-slate-50 hover:bg-slate-100 border border-slate-200 transition cursor-pointer"
               >
-                <ChevronRight className="h-4 w-4 text-cyan-400" />
+                <ChevronRight className="h-4 w-4 text-blue-600" />
               </button>
             </div>
           </div>
@@ -892,7 +888,7 @@ export const LandingPage: React.FC = () => {
                 className={`rounded-xl px-4 py-2 text-xs font-semibold transition cursor-pointer select-none ${
                   languageFilter === filter
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
-                    : 'filter-tab-inactive border border-slate-700/80 bg-slate-900/80 text-slate-200 hover:bg-slate-800 hover:text-white'
+                    : 'filter-tab-inactive border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:text-blue-600'
                 }`}
               >
                 {filter === 'All' ? 'All Languages (12)' : filter}
@@ -903,9 +899,9 @@ export const LandingPage: React.FC = () => {
 
         {/* Single-Line Horizontal Carousel */}
         <div className="relative mt-8 w-full">
-          {/* Subtle edge fade overlays for a sleek high-end aesthetic */}
-          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-slate-950 to-transparent z-10" />
-          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-slate-950 to-transparent z-10" />
+          {/* Edge fade overlays in clean white */}
+          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-white to-transparent z-10" />
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-white to-transparent z-10" />
 
           {/* Carousel Track Container */}
           <div

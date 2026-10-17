@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   History,
   Search,
@@ -12,6 +12,8 @@ import {
   AlertTriangle,
   X,
   Terminal,
+  ArrowLeft,
+  Home,
 } from 'lucide-react'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { analysisService } from '@/services/analysisService'
@@ -19,6 +21,7 @@ import { AnalysisResult, CompareResult } from '@/types/analysis'
 import { formatDate, getScoreColor } from '@/lib/utils'
 
 export const HistoryPage: React.FC = () => {
+  const navigate = useNavigate()
   const [analyses, setAnalyses] = useState<AnalysisResult[]>([])
   const [search, setSearch] = useState('')
   const [selectedLang, setSelectedLang] = useState('all')
@@ -121,14 +124,37 @@ export const HistoryPage: React.FC = () => {
       <main className="flex-1 flex flex-col h-full overflow-y-auto">
         <div className="border-b border-slate-800 bg-slate-950/80 px-8 py-5 backdrop-blur-md">
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2.5">
-                <History className="h-5 w-5 text-blue-400" />
-                Analysis History & Diff Comparison
-              </h1>
-              <p className="text-xs text-slate-400">
-                Inspect past scans, export archived reports, and compare regression diffs.
-              </p>
+            <div className="flex items-center gap-3">
+              {/* Back & Home Navigation Buttons */}
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => navigate(-1)}
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer shadow-sm"
+                  title="Go back to previous page"
+                >
+                  <ArrowLeft className="h-3.5 w-3.5 text-blue-500" />
+                  <span>Back</span>
+                </button>
+                <Link
+                  to="/"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer shadow-sm"
+                  title="Go to Home page"
+                >
+                  <Home className="h-3.5 w-3.5 text-blue-500" />
+                  <span>Home</span>
+                </Link>
+              </div>
+
+              <div>
+                <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2.5">
+                  <History className="h-5 w-5 text-blue-400" />
+                  Analysis History & Diff Comparison
+                </h1>
+                <p className="text-xs text-slate-400">
+                  Inspect past scans, export archived reports, and compare regression diffs.
+                </p>
+              </div>
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   Terminal,
   Code2,
@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   ExternalLink,
   Layers,
+  Home,
 } from 'lucide-react'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
@@ -182,6 +183,7 @@ const ENDPOINTS: Endpoint[] = [
 ]
 
 export const ApiDocsPage: React.FC = () => {
+  const navigate = useNavigate()
   const [copiedSnippet, setCopiedSnippet] = useState<string | null>(null)
 
   const copyToClipboard = (text: string, id: string) => {
@@ -194,15 +196,31 @@ export const ApiDocsPage: React.FC = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-blue-600 selection:text-white">
       <Navbar />
 
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-12 sm:px-6 lg:px-8">
-        {/* Breadcrumb / Back Link */}
-        <div className="mb-6 flex items-center gap-2 text-xs text-slate-400">
-          <Link to="/" className="inline-flex items-center gap-1 hover:text-cyan-400 transition">
-            <ArrowLeft className="h-3.5 w-3.5" />
-            <span>Back to Home</span>
-          </Link>
-          <span>/</span>
-          <span className="text-slate-200 font-medium">API Documentation</span>
+      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
+        {/* Breadcrumb / Back & Home Bar */}
+        <div className="mb-6 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer shadow-sm"
+              title="Go back to previous page"
+            >
+              <ArrowLeft className="h-3.5 w-3.5 text-blue-500" />
+              <span>Back</span>
+            </button>
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer shadow-sm"
+              title="Go to Home page"
+            >
+              <Home className="h-3.5 w-3.5 text-blue-500" />
+              <span>Home</span>
+            </Link>
+          </div>
+          <div className="text-xs text-slate-400">
+            <span>Home</span> / <span className="font-semibold text-slate-700 dark:text-slate-200">API Documentation</span>
+          </div>
         </div>
 
         {/* Page Header */}
