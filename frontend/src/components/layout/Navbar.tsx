@@ -25,7 +25,18 @@ export const Navbar: React.FC = () => {
   const location = useLocation()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
   const userMenuRef = useRef<HTMLDivElement>(null)
+
+  // Track scroll position to ensure flush top fitting on scroll down
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 4)
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   // Close user menu on outside click
   useEffect(() => {
@@ -93,7 +104,13 @@ export const Navbar: React.FC = () => {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800/40 bg-white/90 dark:bg-slate-950/60 backdrop-blur-xl transition-all duration-300">
+    <header
+      className={`sticky top-0 left-0 right-0 z-50 w-full transition-all duration-200 ${
+        isScrolled
+          ? 'border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 shadow-sm backdrop-blur-xl'
+          : 'border-b border-slate-200/80 dark:border-slate-800/40 bg-white/90 dark:bg-slate-950/70 backdrop-blur-md'
+      }`}
+    >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand */}
         <a
