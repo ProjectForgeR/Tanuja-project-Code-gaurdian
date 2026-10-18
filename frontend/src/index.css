@@ -419,15 +419,15 @@ html.light .landing-page-root {
   color: #0f172a !important;
 }
 
-html.light .landing-page-root section,
-html.light .landing-page-root .bg-slate-950 {
+html.light .landing-page-root section:not(.languages-section),
+html.light .landing-page-root .bg-slate-950:not(.languages-section):not(.languages-section *) {
   background-color: #ffffff !important;
   color: #0f172a !important;
   border-color: #e2e8f0 !important;
 }
 
-html.light .landing-page-root .bg-slate-900,
-html.light .landing-page-root [class*="bg-slate-900"] {
+html.light .landing-page-root .bg-slate-900:not(.languages-section *),
+html.light .landing-page-root [class*="bg-slate-900"]:not(.languages-section *) {
   background-color: #f8fafc !important;
   border-color: #e2e8f0 !important;
   color: #0f172a !important;
@@ -586,123 +586,196 @@ html.dark .landing-page-root .text-slate-400 {
   color: #94a3b8 !important;
 }
 
-/* Light Mode: Language Carousel Cards */
-html.light .landing-page-root .language-card {
-  background: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.05) !important;
-  color: #0f172a !important;
+/* ========================================================================= */
+/* SUPPORTED LANGUAGES SECTION & CARDS: PERMANENT DARK MODE THEME            */
+/* ========================================================================= */
+.languages-section,
+html.light .landing-page-root .languages-section,
+html.dark .landing-page-root .languages-section {
+  background-color: #020617 !important;
+  color: #f8fafc !important;
+  border-top-color: #1e293b !important;
+  position: relative !important;
 }
 
-html.light .landing-page-root .language-card:hover {
-  background: #ffffff !important;
-  border-color: #3b82f6 !important;
-  box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.18) !important;
-}
-
-html.light .landing-page-root .language-card h3 {
-  color: #0f172a !important;
-  text-shadow: none !important;
-}
-
-html.light .landing-page-root .language-card p {
-  color: #475569 !important;
-  text-shadow: none !important;
-}
-
-html.light .landing-page-root .carousel-controls-box {
-  background-color: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
-}
-
-html.light .landing-page-root .filter-tab-inactive {
-  background-color: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
-  color: #334155 !important;
-}
-
-/* Languages Section Background Image & Overlays */
+.languages-section img,
+.languages-section .languages-bg-img,
+html.light .languages-section img,
 html.dark .languages-section img {
   opacity: 0.95 !important;
   filter: contrast(1.08) brightness(1.06) !important;
+  display: block !important;
 }
 
-html.light .languages-section img {
-  opacity: 0.80 !important;
-  filter: contrast(1.05) brightness(1.02) !important;
+.languages-section .languages-bg-overlay,
+html.light .languages-section .languages-bg-overlay,
+html.dark .languages-section .languages-bg-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  background-color: rgba(2, 6, 23, 0.40) !important;
+  pointer-events: none !important;
 }
 
+.languages-section .languages-edge-top,
+html.light .languages-section .languages-edge-top,
+html.dark .languages-section .languages-edge-top {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 4rem !important;
+  background: linear-gradient(to bottom, #020617, transparent) !important;
+  pointer-events: none !important;
+}
+
+.languages-section .languages-edge-bottom,
+html.light .languages-section .languages-edge-bottom,
+html.dark .languages-section .languages-edge-bottom {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 4rem !important;
+  background: linear-gradient(to top, #020617, transparent) !important;
+  pointer-events: none !important;
+}
+
+.languages-section .carousel-edge-left,
+html.light .languages-section .carousel-edge-left,
+html.dark .languages-section .carousel-edge-left {
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  background: linear-gradient(to right, #020617, transparent) !important;
+  pointer-events: none !important;
+}
+
+.languages-section .carousel-edge-right,
+html.light .languages-section .carousel-edge-right,
+html.dark .languages-section .carousel-edge-right {
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  background: linear-gradient(to left, #020617, transparent) !important;
+  pointer-events: none !important;
+}
+
+/* Titles and Text in Languages Section */
+.languages-section h2,
+html.light .languages-section h2,
 html.dark .languages-section h2 {
   color: #ffffff !important;
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.9) !important;
 }
 
+.languages-section p,
+html.light .languages-section p,
 html.dark .languages-section p {
   color: #cbd5e1 !important;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.75) !important;
 }
 
-html.light .languages-section h2 {
-  color: #0f172a !important;
-  text-shadow: 0 1px 8px rgba(255, 255, 255, 0.9) !important;
+/* Carousel Controls Box */
+.languages-section .carousel-controls-box,
+html.light .landing-page-root .languages-section .carousel-controls-box,
+html.dark .landing-page-root .languages-section .carousel-controls-box {
+  background-color: #0b0f19 !important;
+  border: 1px solid #1e293b !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
 }
 
-html.light .languages-section p {
-  color: #334155 !important;
-  text-shadow: 0 1px 6px rgba(255, 255, 255, 0.85) !important;
+.languages-section .carousel-controls-box button,
+html.light .landing-page-root .languages-section .carousel-controls-box button,
+html.dark .landing-page-root .languages-section .carousel-controls-box button {
+  background-color: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
 }
 
-/* Light Mode: Language Carousel Cards */
-html.light .landing-page-root .language-card {
-  background: rgba(255, 255, 255, 0.92) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-  border: 1px solid rgba(226, 232, 240, 0.95) !important;
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.08) !important;
-  color: #0f172a !important;
+.languages-section .carousel-controls-box button:hover,
+html.light .landing-page-root .languages-section .carousel-controls-box button:hover,
+html.dark .landing-page-root .languages-section .carousel-controls-box button:hover {
+  background-color: #334155 !important;
+  color: #38bdf8 !important;
 }
 
-html.light .landing-page-root .language-card:hover {
-  background: rgba(255, 255, 255, 0.98) !important;
-  border-color: #3b82f6 !important;
-  box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.2) !important;
+.languages-section .carousel-controls-box .h-4.w-px,
+html.light .landing-page-root .languages-section .carousel-controls-box .h-4.w-px,
+html.dark .landing-page-root .languages-section .carousel-controls-box .h-4.w-px {
+  background-color: #334155 !important;
 }
 
-/* Dark Mode: Language Carousel Cards */
+/* Filter Tabs */
+.languages-section .filter-tab-inactive,
+html.light .landing-page-root .languages-section .filter-tab-inactive,
+html.dark .landing-page-root .languages-section .filter-tab-inactive {
+  background-color: #0f172a !important;
+  border: 1px solid #334155 !important;
+  color: #cbd5e1 !important;
+}
+
+.languages-section .filter-tab-inactive:hover,
+html.light .landing-page-root .languages-section .filter-tab-inactive:hover,
+html.dark .landing-page-root .languages-section .filter-tab-inactive:hover {
+  background-color: #1e293b !important;
+  color: #38bdf8 !important;
+  border-color: #475569 !important;
+}
+
+/* Language Cards (Dark Glassmorphism) */
+.languages-section .language-card,
+.language-card,
+html.light .landing-page-root .language-card,
 html.dark .landing-page-root .language-card {
   background: rgba(11, 15, 25, 0.88) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
   border: 1px solid rgba(30, 41, 59, 0.8) !important;
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.35) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4) !important;
   color: #f8fafc !important;
 }
 
+.languages-section .language-card:hover,
+.language-card:hover,
+html.light .landing-page-root .language-card:hover,
 html.dark .landing-page-root .language-card:hover {
   background: rgba(15, 23, 42, 0.95) !important;
   border-color: #38bdf8 !important;
-  box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.25) !important;
+  box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.28) !important;
 }
 
+.languages-section .language-card h3,
+.language-card h3,
+html.light .landing-page-root .language-card h3,
 html.dark .landing-page-root .language-card h3 {
   color: #ffffff !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6) !important;
 }
 
+.languages-section .language-card p,
+.language-card p,
+html.light .landing-page-root .language-card p,
 html.dark .landing-page-root .language-card p {
   color: #94a3b8 !important;
+  text-shadow: none !important;
 }
 
-html.dark .landing-page-root .carousel-controls-box {
-  background-color: #0b0f19 !important;
-  border: 1px solid #1e293b !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4) !important;
-}
-
-html.dark .landing-page-root .filter-tab-inactive {
-  background-color: #0f172a !important;
+.languages-section .language-card span.rounded-full,
+.language-card span.rounded-full,
+html.light .landing-page-root .language-card span.rounded-full,
+html.dark .landing-page-root .language-card span.rounded-full {
+  background-color: #1e293b !important;
   border: 1px solid #334155 !important;
-  color: #94a3b8 !important;
+  color: #38bdf8 !important;
+}
+
+.languages-section .language-card .border-t,
+.language-card .border-t,
+html.light .landing-page-root .language-card .border-t,
+html.dark .landing-page-root .language-card .border-t {
+  border-color: rgba(30, 41, 59, 0.8) !important;
 }
 
 /* Light Mode: UI Hover Cards */
