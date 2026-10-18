@@ -1106,12 +1106,6 @@ export const LandingPage: React.FC = () => {
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
           <div className="text-center max-w-3xl mx-auto">
-            {/* Elegant glowing badge */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1.5 text-xs font-semibold text-blue-400 mb-4 backdrop-blur-md shadow-lg shadow-blue-500/10">
-              <Sparkles className="h-3.5 w-3.5 text-blue-400" />
-              <span>Intelligent Workflow Engine</span>
-            </div>
-
             <h2 className="how-it-works-title text-3xl font-black tracking-tight text-white sm:text-5xl">
               How CodeGuardian AI Works
             </h2>
