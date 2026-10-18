@@ -464,17 +464,19 @@ html.dark .landing-page-root header {
   border-color: #1e293b !important;
 }
 
-/* Dark Mode: Hero Overlays */
+/* Dark Mode & Light Mode: Hero Section Background Image */
 html.dark .hero-section {
   background-color: #020617 !important;
 }
 
 html.dark .hero-section img {
-  opacity: 0.85 !important;
+  opacity: 1 !important;
+  filter: contrast(1.06) brightness(1.03) !important;
 }
 
 html.light .hero-section img {
-  opacity: 0.35 !important;
+  opacity: 0.88 !important;
+  filter: contrast(1.05) brightness(1.02) !important;
 }
 
 /* Light Mode: Navbar Pill */

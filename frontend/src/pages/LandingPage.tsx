@@ -509,12 +509,14 @@ export const LandingPage: React.FC = () => {
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
           <img
             src="/hero-bg.png"
-            alt="Futuristic developer workstation with holographic coding projection"
-            className="h-full w-full object-cover object-right md:object-center scale-100 opacity-70 dark:opacity-90 transition-all duration-700"
+            alt="Magnifying glass inspecting source code with glowing red cyber bug"
+            className="h-full w-full object-cover object-[70%_center] md:object-[65%_center] scale-100 transition-all duration-700"
           />
-          {/* Responsive Directional Gradient Overlays for Left-Aligned Text */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-white/20 dark:from-slate-950/95 dark:via-slate-950/70 dark:to-slate-950/20" />
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-white/40 dark:from-slate-950 via-transparent dark:to-slate-950/50" />
+          {/* Directional gradient overlay: covers only the left side for crisp text, leaving the magnifying glass & bug 100% visible on the right */}
+          <div className="absolute inset-y-0 left-0 w-full md:w-[65%] lg:w-[58%] bg-gradient-to-r from-white via-white/85 to-transparent dark:from-slate-950 dark:via-slate-950/85 dark:to-transparent" />
+          {/* Subtle top & bottom edge blend */}
+          <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white/70 to-transparent dark:from-slate-950/70 dark:to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white to-transparent dark:from-slate-950 dark:to-transparent" />
         </div>
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full z-10">
