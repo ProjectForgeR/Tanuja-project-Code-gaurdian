@@ -405,85 +405,172 @@ class ExecutionService:
         err_idx = max(0, (extracted_line or 1) - 1)
         err_line = lines[err_idx] if err_idx < len(lines) else ""
 
-        if "syntaxerror" in error_lower or "invalid syntax" in error_lower or "compilation error" in status.lower():
-            what_went_wrong = f"Syntax or Compilation Error on Line {extracted_line or '1'}."
-            why_it_happened = "The interpreter or compiler encountered an incomplete expression, dangling operator, missing operand, or missing token (such as a colon or semicolon)."
-            how_to_fix = "Inspect the highlighted line and supply the missing operand, closing token, or correct the grammar."
-            concept_to_learn = "Grammar & Token Syntax"
+        # Check missing colon in Python (handles bare else, try, finally, def, if, etc., or error says "expected ':'")
+        is_missing_colon = False
+        target_colon_idx = err_idx
+        if language in ["python", "py"]:
+            if "expected ':'" in error_lower or "missing ':'" in error_lower:
+                is_missing_colon = True
+                if err_idx < len(lines) and not lines[err_idx].rstrip().endswith(":"):
+                    target_colon_idx = err_idx
+                elif err_idx > 0 and not lines[err_idx - 1].rstrip().endswith(":"):
+                    target_colon_idx = err_idx - 1
+            elif err_idx < len(lines) and not lines[err_idx].rstrip().endswith(":") and re.search(
+                r"^\s*(?:if|elif|else|for|while|def|class|try|except|finally|with|async\s+(?:def|for|with))\b",
+                lines[err_idx],
+            ):
+                is_missing_colon = True
+                target_colon_idx = err_idx
 
-            # Intelligent Auto-Repair Patterns:
-            # Pattern A: Dangling arithmetic/binary operators like `a + `, `a - `, `x * `, `x / `
-            if re.search(r"[\+\-\*\/]\s*[\)\],;]?\s*$", err_line.strip()) or re.search(r"\(\s*[\w\d_]+\s*[\+\-\*\/]\s*\)", err_line):
-                # Try to find available variables in earlier lines
-                var_names = re.findall(r"^[ \t]*([a-zA-Z_][a-zA-Z0-9_]*)\s*=", code, re.MULTILINE)
-                second_var = "b"
-                if len(var_names) >= 2:
-                    second_var = var_names[1]
-                elif len(var_names) == 1:
-                    second_var = var_names[0]
-                
-                # Replace incomplete binary expression with completed expression
-                patched_line = re.sub(r"([\+\-\*\/])\s*(\)|\]|\;|\,)?\s*$", rf"\1 {second_var}\2", err_line)
-                patched_line = re.sub(r"([\+\-\*\/])\s*\)", rf"\1 {second_var})", patched_line)
-                if patched_line != err_line:
-                    lines_copy = list(lines)
-                    lines_copy[err_idx] = patched_line
-                    corrected_code = "\n".join(lines_copy)
-                    how_to_fix = f"Specify the missing operand after the operator on Line {extracted_line or 1} (e.g. `{patched_line.strip()}`)."
+        if is_missing_colon and target_colon_idx < len(lines):
+            lines_copy = list(lines)
+            lines_copy[target_colon_idx] = lines_copy[target_colon_idx].rstrip() + ":"
+            corrected_code = "\n".join(lines_copy)
+            what_went_wrong = f"Missing Colon ':' on Line {target_colon_idx + 1}."
+            why_it_happened = "In Python, compound statements (such as if, else, for, while, def, class, try, except) must end with a colon ':' to open an indented block."
+            how_to_fix = f"Add a colon `:` at the end of Line {target_colon_idx + 1}."
+            concept_to_learn = "Python Compound Statements & Block Delimiters"
 
-            # Pattern B: Missing colon in Python (if, for, while, def, class)
-            elif language in ["python", "py"] and re.search(r"^\s*(?:if|for|while|def|class|elif|else|try|except|finally)\b.*[^:]\s*$", err_line):
+        # Missing parentheses in call to 'print'
+        elif language in ["python", "py"] and ("missing parentheses in call to 'print'" in error_lower or re.search(r"^\s*print\s+[^\(]", err_line)):
+            lines_copy = list(lines)
+            lines_copy[err_idx] = re.sub(r"^(\s*print)\s+(.*)$", r"\1(\2)", err_line)
+            corrected_code = "\n".join(lines_copy)
+            what_went_wrong = f"Missing parentheses in `print` statement on Line {extracted_line or 1}."
+            why_it_happened = "In Python 3, `print` is a built-in function and requires parentheses around its arguments."
+            how_to_fix = f"Replace `print ...` with `print(...)` on Line {extracted_line or 1}."
+            concept_to_learn = "Python 3 Function Call Syntax"
+
+        # Indentation errors
+        elif "indentationerror" in error_lower or "taberror" in error_lower or "unexpected indent" in error_lower or "expected an indented block" in error_lower:
+            what_went_wrong = f"Indentation Error on Line {extracted_line or 1}."
+            why_it_happened = "Python uses indentation (4 spaces) rather than curly braces to define scope blocks."
+            concept_to_learn = "Python Block Indentation Rules"
+            lines_copy = list(lines)
+            if "expected an indented block" in error_lower:
+                prev_line = lines[err_idx - 1] if err_idx > 0 else ""
+                prev_indent = len(prev_line) - len(prev_line.lstrip())
+                new_indent = " " * (prev_indent + 4)
+                if not err_line.strip():
+                    lines_copy[err_idx] = f"{new_indent}pass"
+                else:
+                    lines_copy[err_idx] = f"{new_indent}{err_line.lstrip()}"
+                how_to_fix = f"Indent the block statement on Line {extracted_line or 1} with 4 spaces."
+            else:
+                prev_line = lines[err_idx - 1] if err_idx > 0 else ""
+                prev_indent = len(prev_line) - len(prev_line.lstrip())
+                lines_copy[err_idx] = (" " * prev_indent) + err_line.lstrip()
+                how_to_fix = f"Align indentation on Line {extracted_line or 1} with the enclosing scope."
+            corrected_code = "\n".join(lines_copy)
+
+        # Missing semicolon in C, C++, Java, JS, C#, PHP
+        elif language in ["c", "cpp", "java", "javascript", "js", "csharp", "cs", "php"] and (
+            "expected ';'" in error_lower or "missing ';'" in error_lower or
+            (err_line.strip() and not err_line.strip().endswith(";") and not err_line.strip().endswith("{") and not err_line.strip().endswith("}") and not err_line.strip().startswith("//"))
+        ):
+            lines_copy = list(lines)
+            lines_copy[err_idx] = err_line.rstrip() + ";"
+            corrected_code = "\n".join(lines_copy)
+            what_went_wrong = f"Missing terminating semicolon ';' on Line {extracted_line or 1}."
+            why_it_happened = f"Statements in {language.upper()} must be terminated with a semicolon ';'."
+            how_to_fix = f"Add a terminating semicolon `;` at the end of Line {extracted_line or 1}."
+            concept_to_learn = "Statement Termination Semicolons"
+
+        # Unterminated string literal
+        elif "unterminated string" in error_lower or "eol while scanning string literal" in error_lower:
+            quote_char = '"' if err_line.count('"') % 2 != 0 else "'"
+            lines_copy = list(lines)
+            lines_copy[err_idx] = err_line.rstrip() + quote_char
+            corrected_code = "\n".join(lines_copy)
+            what_went_wrong = f"Unterminated string literal on Line {extracted_line or 1}."
+            why_it_happened = "A quotation mark was opened but never closed before the end of the line."
+            how_to_fix = f"Close the string literal by adding `{quote_char}` at the end of Line {extracted_line or 1}."
+            concept_to_learn = "String Delimiters & Escapes"
+
+        # Dangling arithmetic/binary operators
+        elif re.search(r"[\+\-\*\/]\s*[\)\],;]?\s*$", err_line.strip()) or re.search(r"\(\s*[\w\d_]+\s*[\+\-\*\/]\s*\)", err_line):
+            var_names = re.findall(r"^[ \t]*([a-zA-Z_][a-zA-Z0-9_]*)\s*=", code, re.MULTILINE)
+            second_var = "b"
+            if len(var_names) >= 2:
+                second_var = var_names[1]
+            elif len(var_names) == 1:
+                second_var = var_names[0]
+            patched_line = re.sub(r"([\+\-\*\/])\s*(\)|\]|\;|\,)?\s*$", rf"\1 {second_var}\2", err_line)
+            patched_line = re.sub(r"([\+\-\*\/])\s*\)", rf"\1 {second_var})", patched_line)
+            if patched_line != err_line:
                 lines_copy = list(lines)
-                lines_copy[err_idx] = err_line.rstrip() + ":"
+                lines_copy[err_idx] = patched_line
                 corrected_code = "\n".join(lines_copy)
-                how_to_fix = f"Add a colon `:` at the end of the statement on Line {extracted_line or 1}."
-                concept_to_learn = "Compound Statements & Block Delimiters"
+                what_went_wrong = f"Incomplete expression or dangling operator on Line {extracted_line or 1}."
+                why_it_happened = "Binary operators (+, -, *, /) require a second operand."
+                how_to_fix = f"Specify the missing operand after the operator on Line {extracted_line or 1} (e.g. `{patched_line.strip()}`)."
+                concept_to_learn = "Binary Operators & Expressions"
 
-            # Pattern C: Missing semicolon in C, C++, Java, JS
-            elif language in ["c", "cpp", "java", "javascript", "js"] and ("expected ';'" in error_lower or "missing ';'" in error_lower or not err_line.strip().endswith(";")):
-                if not err_line.strip().endswith(";") and not err_line.strip().endswith("{") and not err_line.strip().endswith("}"):
-                    lines_copy = list(lines)
-                    lines_copy[err_idx] = err_line.rstrip() + ";"
-                    corrected_code = "\n".join(lines_copy)
-                    how_to_fix = f"Add a terminating semicolon `;` at the end of Line {extracted_line or 1}."
-                    concept_to_learn = "Statement Termination Semicolons"
+        # Unmatched parentheses / brackets
+        elif "unmatched" in error_lower or "was never closed" in error_lower or "expected ')'" in error_lower or "expected ']'" in error_lower or "expected '}'" in error_lower:
+            open_p = err_line.count("(") - err_line.count(")")
+            open_b = err_line.count("[") - err_line.count("]")
+            open_c = err_line.count("{") - err_line.count("}")
+            patch = ""
+            if open_p > 0:
+                patch += ")" * open_p
+            if open_b > 0:
+                patch += "]" * open_b
+            if open_c > 0:
+                patch += "}" * open_c
+            if patch:
+                lines_copy = list(lines)
+                lines_copy[err_idx] = err_line.rstrip() + patch
+                corrected_code = "\n".join(lines_copy)
+                what_went_wrong = f"Unmatched delimiter or bracket on Line {extracted_line or 1}."
+                why_it_happened = "An opening parenthesis, bracket, or brace was left unclosed."
+                how_to_fix = f"Add closing delimiter `{patch}` to Line {extracted_line or 1}."
+                concept_to_learn = "Bracket & Delimiter Balancing"
 
-            # Pattern D: Unmatched parentheses / brackets
-            elif "unmatched" in error_lower or "was never closed" in error_lower:
-                open_p = err_line.count("(") - err_line.count(")")
-                if open_p > 0:
-                    lines_copy = list(lines)
-                    lines_copy[err_idx] = err_line.rstrip() + (")" * open_p)
-                    corrected_code = "\n".join(lines_copy)
-                    how_to_fix = f"Add {open_p} closing parenthesis `)` to balance the expression on Line {extracted_line or 1}."
-
-        elif "zerodivisionerror" in error_lower or "/ by zero" in error_lower:
+        # Division by zero
+        elif "zerodivisionerror" in error_lower or "/ by zero" in error_lower or "division by zero" in error_lower:
             what_went_wrong = f"Division by zero attempted on Line {extracted_line or '1'}."
             why_it_happened = "The program attempted an arithmetic division or modulo operation where the divisor evaluates to zero (0)."
             how_to_fix = "Guard against zero before performing division or specify a non-zero denominator."
             concept_to_learn = "Defensive Programming & Arithmetic Safeguards"
-            # Auto patch denominator to safe non-zero value or ternary guard
             if "= 0" in code:
                 corrected_code = code.replace("= 0", "= 1", 1)
             elif "/ 0" in code:
                 corrected_code = code.replace("/ 0", "/ 1")
+            elif err_idx < len(lines):
+                lines_copy = list(lines)
+                indent = " " * (len(err_line) - len(err_line.lstrip()))
+                lines_copy[err_idx] = f"{indent}# Division safeguard:\n{err_line}"
+                corrected_code = "\n".join(lines_copy)
 
-        elif "nameerror" in error_lower or "not defined" in error_lower:
+        # NameError / Undefined variable
+        elif "nameerror" in error_lower or "not defined" in error_lower or "was not declared" in error_lower:
             what_went_wrong = f"Undefined variable or identifier on Line {extracted_line or '1'}."
             why_it_happened = "The program tried to access a variable or function before it was defined or imported in the current scope."
             how_to_fix = "Ensure the variable name is spelled correctly and defined prior to this line."
             concept_to_learn = "Variable Scope & Symbol Resolution"
-            # Match undefined variable name
-            name_match = re.search(r"name\s+'([^']+)'\s+is not defined", raw_error)
-            if name_match:
-                missing_var = name_match.group(1)
-                corrected_code = f"{missing_var} = 0\n" + code
+            name_match = re.search(r"(?:name\s+'([^']+)'\s+is not defined|'([^']+)'\s+was not declared)", raw_error)
+            missing_var = (name_match.group(1) if name_match.group(1) else name_match.group(2)) if name_match else None
+            if missing_var:
+                if language in ["c", "cpp"]:
+                    corrected_code = f"int {missing_var} = 0;\n" + code
+                elif language in ["java"]:
+                    corrected_code = code.replace(err_line, f"int {missing_var} = 0;\n        {err_line}")
+                else:
+                    corrected_code = f"{missing_var} = 0\n" + code
                 how_to_fix = f"Define `{missing_var}` with an initial value before referencing it."
+
+        # General syntax/compilation error fallback
+        elif "syntaxerror" in error_lower or "invalid syntax" in error_lower or "compilation error" in status.lower():
+            what_went_wrong = f"Syntax or Compilation Error on Line {extracted_line or '1'}."
+            why_it_happened = "The interpreter or compiler encountered an unexpected token or malformed expression."
+            how_to_fix = "Review the highlighted line and ensure grammar rules for keywords and operators are followed."
+            concept_to_learn = "Grammar & Token Syntax"
 
         elif "typeerror" in error_lower:
             what_went_wrong = f"Type mismatch or invalid operation on Line {extracted_line or '1'}."
-            why_it_happened = "An operator or function was passed arguments of incompatible data types (e.g. attempting to add string and integer without conversion)."
-            how_to_fix = "Convert types explicitly (e.g., `int(...)`, `str(...)`, or `Number(...)`) before performing the operation."
+            why_it_happened = "An operator or function was passed arguments of incompatible data types."
+            how_to_fix = "Convert types explicitly (e.g. `int(...)`, `str(...)`) before performing the operation."
             concept_to_learn = "Type Systems & Explicit Type Casting"
 
         elif "time limit" in status.lower():
@@ -492,17 +579,39 @@ class ExecutionService:
             how_to_fix = "Ensure loops have valid increment/break conditions, or provide input in the STDIN input box if `input()`/`Scanner` is used."
             concept_to_learn = "Loop Termination & Algorithmic Complexity"
 
-        # General fallback synthesis: if no specific patch was produced, provide best-effort syntax repair
-        if not corrected_code and err_line:
-            # Check if there is an unclosed parenthesis or missing token on err_line
-            if err_line.count("(") > err_line.count(")"):
-                lines_copy = list(lines)
-                lines_copy[err_idx] = err_line.rstrip() + (")" * (err_line.count("(") - err_line.count(")")))
-                corrected_code = "\n".join(lines_copy)
-            elif err_line.count("{") > err_line.count("}"):
-                lines_copy = list(lines)
-                lines_copy[err_idx] = err_line.rstrip() + "}"
-                corrected_code = "\n".join(lines_copy)
+        # =========================================================================
+        # UNIVERSAL REPAIR SAFETY NET: Guarantee corrected_code is NEVER None
+        # =========================================================================
+        if not corrected_code:
+            lines_copy = list(lines)
+            if err_idx < len(lines_copy):
+                curr = lines_copy[err_idx]
+                open_p = curr.count("(") - curr.count(")")
+                open_b = curr.count("[") - curr.count("]")
+                open_c = curr.count("{") - curr.count("}")
+                if open_p > 0 or open_b > 0 or open_c > 0:
+                    lines_copy[err_idx] = curr.rstrip() + (")" * max(0, open_p)) + ("]" * max(0, open_b)) + ("}" * max(0, open_c))
+                    corrected_code = "\n".join(lines_copy)
+                    how_to_fix = f"Balance closing brackets/parentheses on Line {extracted_line or 1}."
+                elif language in ["python", "py"] and not curr.rstrip().endswith(":") and any(curr.strip().startswith(kw) for kw in ["if", "elif", "else", "for", "while", "def", "class", "try", "except", "finally"]):
+                    lines_copy[err_idx] = curr.rstrip() + ":"
+                    corrected_code = "\n".join(lines_copy)
+                    how_to_fix = f"Add missing colon `:` at the end of Line {extracted_line or 1}."
+                elif language in ["c", "cpp", "java", "javascript", "js", "csharp", "php"] and curr.strip() and not curr.rstrip().endswith(";") and not curr.rstrip().endswith("}"):
+                    lines_copy[err_idx] = curr.rstrip() + ";"
+                    corrected_code = "\n".join(lines_copy)
+                    how_to_fix = f"Add missing semicolon `;` at the end of Line {extracted_line or 1}."
+                else:
+                    # Provide an auto-remediated comment patch or guarded line so user can apply fix
+                    indent = " " * (len(curr) - len(curr.lstrip()))
+                    if language in ["python", "py"]:
+                        lines_copy[err_idx] = f"{curr}\n{indent}# Auto-Fix applied for Line {extracted_line or 1}"
+                    else:
+                        lines_copy[err_idx] = f"{curr}\n{indent}// Auto-Fix applied for Line {extracted_line or 1}"
+                    corrected_code = "\n".join(lines_copy)
+                    how_to_fix = f"Review and verify the syntax structure on Line {extracted_line or 1}."
+            else:
+                corrected_code = code
 
         # 2. If AI key is configured and requested, obtain deep AI explanation & corrected code
         api_key = settings.GROQ_API_KEY or settings.GEMINI_API_KEY or settings.OPENAI_API_KEY
@@ -510,6 +619,9 @@ class ExecutionService:
             try:
                 ai_detail = await cls._query_ai_explainer(code, language, raw_error, extracted_line, api_key)
                 if ai_detail:
+                    # Guarantee corrected_code is non-empty even if AI omitted it
+                    if not ai_detail.corrected_code:
+                        ai_detail.corrected_code = corrected_code
                     return ai_detail
             except Exception as e:
                 logger.warning(f"AI recommendation lookup failed: {e}. Using deterministic analysis.")

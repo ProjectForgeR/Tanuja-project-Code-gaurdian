@@ -26,6 +26,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     async function loadUser() {
       const storedToken = localStorage.getItem('codeguardian_token')
       if (storedToken) {
+        if (storedToken.startsWith('demo-session-token')) {
+          setUser({
+            id: 'demo-guest-user',
+            email: 'demo@codeguardian.ai',
+            full_name: 'Demo Engineer',
+            role: 'developer',
+            is_active: true,
+          })
+          setIsDemoUser(true)
+          setIsLoading(false)
+          return
+        }
         try {
           const me = await authService.getMe()
           setUser(me)
@@ -65,13 +77,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
   const activateDemoUser = () => {
-    setUser({
-      id: 'guest-demo-user',
-      email: 'guest@codeguardian.ai',
-      full_name: 'Guest Developer',
-      role: 'guest',
+    const demoToken = 'demo-session-token-' + Date.now()
+    const demoUser: User = {
+      id: 'demo-guest-user',
+      email: 'demo@codeguardian.ai',
+      full_name: 'Demo Engineer',
+      role: 'developer',
       is_active: true,
-    })
+    }
+    localStorage.setItem('codeguardian_token', demoToken)
+    setToken(demoToken)
+    setUser(demoUser)
     setIsDemoUser(true)
   }
 
@@ -82,11 +98,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         token,
         isAuthenticated: !!token && !!user,
         isLoading,
-        isDemoUser: false,
+        isDemoUser,
         login,
         register,
         logout,
-        activateDemoUser: () => {},
+        activateDemoUser,
       }}
     >
       {children}

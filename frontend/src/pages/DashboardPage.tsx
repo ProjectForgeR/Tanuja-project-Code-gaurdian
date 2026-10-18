@@ -28,56 +28,107 @@ import { formatDate, getScoreColor } from '@/lib/utils'
 export const DashboardPage: React.FC = () => {
   const { theme, toggleTheme } = useTheme()
   const [analyses, setAnalyses] = useState<AnalysisResult[]>([])
+  const [stats, setStats] = useState<{
+    total_analyses: number
+    bugs_detected: number
+    security_issues: number
+    critical_findings: number
+    avg_quality_score: number
+    language_breakdown: { language: string; count: number }[]
+    severity_breakdown: { critical: number; high: number; medium: number; low: number }
+  } | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date())
   const navigate = useNavigate()
 
-  useEffect(() => {
-    loadAnalyses()
-  }, [])
-
-  const loadAnalyses = async () => {
+  const loadData = async (showLoading: boolean = false) => {
+    if (showLoading) setIsLoading(true)
     try {
-      const data = await analysisService.listAnalyses(50)
-      setAnalyses(data)
+      const [analysesData, statsData] = await Promise.all([
+        analysisService.listAnalyses(100),
+        analysisService.getDashboardStats().catch(() => null),
+      ])
+      setAnalyses(analysesData)
+      if (statsData) setStats(statsData)
+      setLastRefreshed(new Date())
     } catch (err) {
-      console.error('Failed to load analyses:', err)
+      console.error('Failed to load dashboard data:', err)
     } finally {
-      setIsLoading(false)
+      if (showLoading) setIsLoading(false)
     }
   }
 
-  // Calculate aggregates
-  const totalAnalyses = analyses.length
-  const criticalFindings = analyses.reduce((acc, a) => acc + a.critical_count, 0)
-  const highFindings = analyses.reduce((acc, a) => acc + a.high_count, 0)
-  const mediumFindings = analyses.reduce((acc, a) => acc + a.medium_count, 0)
-  const lowFindings = analyses.reduce((acc, a) => acc + a.low_count, 0)
+  useEffect(() => {
+    // Initial load
+    loadData(true)
 
-  const bugsDetected = analyses.reduce(
-    (acc, a) => acc + a.findings.filter((f) => f.category === 'Bug').length,
-    0
-  )
-  const securityIssues = analyses.reduce(
-    (acc, a) => acc + a.findings.filter((f) => f.category === 'Security').length,
-    0
-  )
+    // 1. Real-time background polling every 3.5 seconds
+    const interval = setInterval(() => {
+      loadData(false)
+    }, 3500)
 
-  const avgQualityScore =
-    totalAnalyses > 0
-      ? analyses.reduce((acc, a) => acc + a.quality_score, 0) / totalAnalyses
-      : 100.0
+    // 2. Immediate refresh when switching back to this window/tab
+    const onFocus = () => loadData(false)
+    window.addEventListener('focus', onFocus)
 
-  // Language counts
-  const langMap: Record<string, number> = {}
-  analyses.forEach((a) => {
-    langMap[a.language] = (langMap[a.language] || 0) + 1
-  })
-  const languageData = Object.entries(langMap).map(([lang, count]) => ({
-    language: lang.toUpperCase(),
-    count,
-  }))
+    // 3. Custom event dispatched when code execution / analysis finishes
+    const onAnalysisUpdated = () => loadData(false)
+    window.addEventListener('codeguardian_analysis_updated', onAnalysisUpdated)
 
-  // Weekly Trend mock/historical calculation
+    // 4. Cross-tab storage change listener
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'cg_last_analysis_ts') {
+        loadData(false)
+      }
+    }
+    window.addEventListener('storage', onStorage)
+
+    return () => {
+      clearInterval(interval)
+      window.removeEventListener('focus', onFocus)
+      window.removeEventListener('codeguardian_analysis_updated', onAnalysisUpdated)
+      window.removeEventListener('storage', onStorage)
+    }
+  }, [])
+
+  // Calculate aggregates with backend stats fallback
+  const totalAnalyses = stats ? stats.total_analyses : analyses.length
+  const criticalFindings = stats ? stats.critical_findings : analyses.reduce((acc, a) => acc + a.critical_count, 0)
+  const highFindings = stats ? stats.severity_breakdown.high : analyses.reduce((acc, a) => acc + a.high_count, 0)
+  const mediumFindings = stats ? stats.severity_breakdown.medium : analyses.reduce((acc, a) => acc + a.medium_count, 0)
+  const lowFindings = stats ? stats.severity_breakdown.low : analyses.reduce((acc, a) => acc + a.low_count, 0)
+
+  const bugsDetected = stats
+    ? stats.bugs_detected
+    : analyses.reduce((acc, a) => acc + a.findings.filter((f) => f.category === 'Bug').length, 0)
+
+  const securityIssues = stats
+    ? stats.security_issues
+    : analyses.reduce((acc, a) => acc + a.findings.filter((f) => f.category === 'Security').length, 0)
+
+  const avgQualityScore = stats
+    ? stats.avg_quality_score
+    : totalAnalyses > 0
+    ? analyses.reduce((acc, a) => acc + a.quality_score, 0) / totalAnalyses
+    : 100.0
+
+  // Language counts from stats (supports any language: python, java, c, cpp, js, ts, go, rust, php, csharp, etc.)
+  let languageData: { language: string; count: number }[] = []
+  if (stats && stats.language_breakdown && stats.language_breakdown.length > 0) {
+    languageData = stats.language_breakdown
+  } else {
+    const langMap: Record<string, number> = {}
+    analyses.forEach((a) => {
+      const l = (a.language || 'other').toUpperCase()
+      langMap[l] = (langMap[l] || 0) + 1
+    })
+    languageData = Object.entries(langMap).map(([lang, count]) => ({
+      language: lang,
+      count,
+    }))
+  }
+
+  // Weekly Trend historical calculation
   const trendData = [
     { date: 'Mon', analyses: 2, avgScore: 85 },
     { date: 'Tue', analyses: 5, avgScore: 78 },
@@ -94,6 +145,7 @@ export const DashboardPage: React.FC = () => {
     try {
       await analysisService.deleteAnalysis(id)
       setAnalyses(analyses.filter((a) => a.id !== id))
+      loadData(false)
     } catch (err) {
       console.error('Delete failed:', err)
     }
@@ -108,34 +160,27 @@ export const DashboardPage: React.FC = () => {
         <div className="border-b border-slate-800 bg-slate-950/80 px-8 py-5 backdrop-blur-md">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              {/* Back & Home Navigation Buttons */}
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => navigate(-1)}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer shadow-sm"
-                  title="Go back to previous page"
-                >
-                  <ArrowLeft className="h-3.5 w-3.5 text-blue-500" />
-                  <span>Back</span>
-                </button>
-                <Link
-                  to="/"
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer shadow-sm"
-                  title="Go to Home page"
-                >
-                  <Home className="h-3.5 w-3.5 text-blue-500" />
-                  <span>Home</span>
-                </Link>
-              </div>
-
               <div>
-                <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2.5">
-                  <LayoutDashboard className="h-5 w-5 text-blue-400" />
-                  Security & Code Health Dashboard
-                </h1>
-                <p className="text-xs text-slate-400">
-                  Live metrics, bug distributions, and security posture monitoring.
+                <div className="flex items-center gap-3">
+                  <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2.5">
+                    <LayoutDashboard className="h-5 w-5 text-blue-400" />
+                    Security &amp; Code Health Dashboard
+                  </h1>
+
+                  {/* Real-Time Live Status Pulse */}
+                  <div
+                    className="flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[11px] font-semibold text-emerald-400 shadow-sm shadow-emerald-500/10"
+                    title={`Real-Time Telemetry Active — Last synced at ${lastRefreshed.toLocaleTimeString()}`}
+                  >
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span>Live Sync Active</span>
+                  </div>
+                </div>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Real-time multi-language execution metrics, defect distributions, and security posture monitoring.
                 </p>
               </div>
             </div>

@@ -419,15 +419,15 @@ html.light .landing-page-root {
   color: #0f172a !important;
 }
 
-html.light .landing-page-root section:not(.languages-section),
-html.light .landing-page-root .bg-slate-950:not(.languages-section):not(.languages-section *) {
+html.light .landing-page-root section:not(.languages-section):not(.hero-section):not(.how-it-works-section),
+html.light .landing-page-root .bg-slate-950:not(.languages-section):not(.languages-section *):not(.hero-section):not(.hero-section *):not(.how-it-works-section):not(.how-it-works-section *) {
   background-color: #ffffff !important;
   color: #0f172a !important;
   border-color: #e2e8f0 !important;
 }
 
-html.light .landing-page-root .bg-slate-900:not(.languages-section *),
-html.light .landing-page-root [class*="bg-slate-900"]:not(.languages-section *) {
+html.light .landing-page-root .bg-slate-900:not(.languages-section *):not(.hero-section *):not(.how-it-works-section *),
+html.light .landing-page-root [class*="bg-slate-900"]:not(.languages-section *):not(.hero-section *):not(.how-it-works-section *) {
   background-color: #f8fafc !important;
   border-color: #e2e8f0 !important;
   color: #0f172a !important;
@@ -464,19 +464,108 @@ html.dark .landing-page-root header {
   border-color: #1e293b !important;
 }
 
-/* Dark Mode & Light Mode: Hero Section Background Image */
-html.dark .hero-section {
+/* Hero Section: Permanent Dark Mode Theme */
+.hero-section,
+html.dark .hero-section,
+html.light .hero-section {
   background-color: #020617 !important;
+  color: #f8fafc !important;
+  position: relative !important;
 }
 
-html.dark .hero-section img {
+.hero-section img,
+html.dark .hero-section img,
+html.light .hero-section img {
   opacity: 1 !important;
   filter: contrast(1.06) brightness(1.03) !important;
+  display: block !important;
 }
 
-html.light .hero-section img {
-  opacity: 0.88 !important;
-  filter: contrast(1.05) brightness(1.02) !important;
+.hero-overlay-left,
+html.light .hero-overlay-left,
+html.dark .hero-overlay-left {
+  background: linear-gradient(to right, #020617 0%, rgba(2, 6, 23, 0.92) 50%, rgba(2, 6, 23, 0.5) 75%, transparent 100%) !important;
+}
+
+.hero-edge-top,
+html.light .hero-edge-top,
+html.dark .hero-edge-top {
+  background: linear-gradient(to bottom, #020617, transparent) !important;
+}
+
+.hero-edge-bottom,
+html.light .hero-edge-bottom,
+html.dark .hero-edge-bottom {
+  background: linear-gradient(to top, #020617, transparent) !important;
+}
+
+.hero-section h1,
+.hero-section .hero-title,
+.hero-section .hero-title-text,
+.hero-section .hero-bright-title,
+.landing-page-root .hero-section h1,
+.landing-page-root .hero-section .hero-title,
+.landing-page-root .hero-section .hero-title-text,
+html.light .landing-page-root .hero-section h1,
+html.light .landing-page-root .hero-section .hero-title,
+html.light .landing-page-root .hero-section .hero-title-text,
+html.light .landing-page-root .hero-section .hero-bright-title,
+html.light .landing-page-root .hero-section .text-white,
+html.dark .landing-page-root .hero-section h1,
+html.dark .landing-page-root .hero-section .hero-title,
+html.dark .landing-page-root .hero-section .hero-title-text {
+  color: #ffffff !important;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.95), 0 1px 3px rgba(0, 0, 0, 0.9) !important;
+}
+
+.hero-section p,
+.hero-section .hero-desc,
+.hero-section .hero-bright-desc,
+.landing-page-root .hero-section p,
+.landing-page-root .hero-section .hero-desc,
+html.light .landing-page-root .hero-section p,
+html.light .landing-page-root .hero-section .hero-desc,
+html.light .landing-page-root .hero-section .hero-bright-desc,
+html.light .landing-page-root .hero-section .text-slate-100,
+html.light .landing-page-root .hero-section .text-slate-200,
+html.light .landing-page-root .hero-section .text-slate-300,
+html.dark .landing-page-root .hero-section p,
+html.dark .landing-page-root .hero-section .hero-desc {
+  color: #f1f5f9 !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85) !important;
+}
+
+/* Hero "Ship Faster." Gradient: 100% Identical in both Bright Mode & Dark Mode */
+.hero-ship-faster,
+html.light .hero-ship-faster,
+html.dark .hero-ship-faster,
+html.light .landing-page-root .hero-ship-faster,
+html.dark .landing-page-root .hero-ship-faster {
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #06b6d4 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  display: inline-block !important;
+  text-shadow: none !important;
+  filter: drop-shadow(0 2px 12px rgba(37, 99, 235, 0.4)) !important;
+}
+
+.hero-secondary-btn,
+html.light .hero-section .hero-secondary-btn,
+html.dark .hero-section .hero-secondary-btn {
+  background-color: rgba(15, 23, 42, 0.85) !important;
+  border: 1px solid rgba(51, 65, 85, 0.8) !important;
+  color: #e2e8f0 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+}
+
+.hero-secondary-btn:hover,
+html.light .hero-section .hero-secondary-btn:hover,
+html.dark .hero-section .hero-secondary-btn:hover {
+  background-color: #1e293b !important;
+  color: #38bdf8 !important;
+  border-color: #38bdf8 !important;
 }
 
 /* Light Mode: Navbar Pill */
@@ -526,29 +615,27 @@ html.dark .navbar-pill-nav a:hover {
 }
 
 /* Light Mode: Headings & Typography */
-html.light .landing-page-root h1,
-html.light .landing-page-root h2,
-html.light .landing-page-root h3,
-html.light .landing-page-root h4,
-html.light .landing-page-root .hero-bright-title {
+html.light .landing-page-root h1:not(.languages-section *):not(.hero-section *):not(.how-it-works-section *),
+html.light .landing-page-root h2:not(.languages-section *):not(.hero-section *):not(.how-it-works-section *),
+html.light .landing-page-root h3:not(.languages-section *):not(.hero-section *):not(.how-it-works-section *),
+html.light .landing-page-root h4:not(.languages-section *):not(.hero-section *):not(.how-it-works-section *) {
   color: #0f172a !important;
   text-shadow: none !important;
 }
 
-html.light .landing-page-root p,
-html.light .landing-page-root .hero-bright-desc,
-html.light .landing-page-root .text-slate-200,
-html.light .landing-page-root .text-slate-300,
-html.light .landing-page-root .text-slate-400 {
+html.light .landing-page-root p:not(.languages-section *):not(.hero-section *):not(.how-it-works-section *),
+html.light .landing-page-root .text-slate-200:not(.languages-section *):not(.hero-section *):not(.how-it-works-section *),
+html.light .landing-page-root .text-slate-300:not(.languages-section *):not(.hero-section *):not(.how-it-works-section *),
+html.light .landing-page-root .text-slate-400:not(.languages-section *):not(.hero-section *):not(.how-it-works-section *) {
   color: #334155 !important;
   text-shadow: none !important;
 }
 
-html.light .landing-page-root .text-white {
+html.light .landing-page-root .text-white:not(.languages-section *):not(.hero-section *):not(.hero-title *):not(.hero-title-text):not(.how-it-works-section *) {
   color: #0f172a !important;
 }
 
-html.light .landing-page-root .text-slate-100 {
+html.light .landing-page-root .text-slate-100:not(.languages-section *):not(.hero-section *):not(.hero-desc):not(.how-it-works-section *) {
   color: #1e293b !important;
 }
 
@@ -664,17 +751,27 @@ html.dark .languages-section .carousel-edge-right {
 
 /* Titles and Text in Languages Section */
 .languages-section h2,
-html.light .languages-section h2,
-html.dark .languages-section h2 {
+.languages-section .languages-title,
+.landing-page-root .languages-section h2,
+.landing-page-root .languages-section .languages-title,
+html.light .landing-page-root .languages-section h2,
+html.light .landing-page-root .languages-section .languages-title,
+html.dark .landing-page-root .languages-section h2,
+html.dark .landing-page-root .languages-section .languages-title {
   color: #ffffff !important;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.9) !important;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.95), 0 1px 4px rgba(0, 0, 0, 0.9) !important;
 }
 
 .languages-section p,
-html.light .languages-section p,
-html.dark .languages-section p {
+.languages-section .languages-desc,
+.landing-page-root .languages-section p,
+.landing-page-root .languages-section .languages-desc,
+html.light .landing-page-root .languages-section p,
+html.light .landing-page-root .languages-section .languages-desc,
+html.dark .landing-page-root .languages-section p,
+html.dark .landing-page-root .languages-section .languages-desc {
   color: #cbd5e1 !important;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.75) !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85) !important;
 }
 
 /* Carousel Controls Box */
@@ -769,6 +866,119 @@ html.dark .landing-page-root .language-card span.rounded-full {
   background-color: #1e293b !important;
   border: 1px solid #334155 !important;
   color: #38bdf8 !important;
+}
+
+/* ========================================================================= */
+/* HOW IT WORKS SECTION: PERMANENT DARK MODE THEME & TRANSPARENT AI BG      */
+/* ========================================================================= */
+.how-it-works-section,
+html.light .landing-page-root .how-it-works-section,
+html.dark .landing-page-root .how-it-works-section {
+  background-color: #020617 !important;
+  color: #f8fafc !important;
+  border-top-color: #1e293b !important;
+  position: relative !important;
+}
+
+.how-it-works-section img,
+.how-it-works-section .how-it-works-bg-img,
+html.light .how-it-works-section img,
+html.dark .how-it-works-section img {
+  opacity: 0.38 !important;
+  filter: contrast(1.15) brightness(1.08) !important;
+  display: block !important;
+}
+
+.how-it-works-section .how-it-works-overlay,
+html.light .how-it-works-section .how-it-works-overlay,
+html.dark .how-it-works-section .how-it-works-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  background-color: rgba(2, 6, 23, 0.72) !important;
+  pointer-events: none !important;
+}
+
+.how-it-works-section .how-it-works-edge-top,
+html.light .how-it-works-section .how-it-works-edge-top,
+html.dark .how-it-works-section .how-it-works-edge-top {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 5rem !important;
+  background: linear-gradient(to bottom, #020617, transparent) !important;
+  pointer-events: none !important;
+}
+
+.how-it-works-section .how-it-works-edge-bottom,
+html.light .how-it-works-section .how-it-works-edge-bottom,
+html.dark .how-it-works-section .how-it-works-edge-bottom {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 5rem !important;
+  background: linear-gradient(to top, #020617, transparent) !important;
+  pointer-events: none !important;
+}
+
+/* Titles and Text in How It Works Section */
+.how-it-works-section h2,
+.how-it-works-section .how-it-works-title,
+.landing-page-root .how-it-works-section h2,
+.landing-page-root .how-it-works-section .how-it-works-title,
+html.light .landing-page-root .how-it-works-section h2,
+html.light .landing-page-root .how-it-works-section .how-it-works-title,
+html.dark .landing-page-root .how-it-works-section h2,
+html.dark .landing-page-root .how-it-works-section .how-it-works-title {
+  color: #ffffff !important;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.95), 0 1px 4px rgba(0, 0, 0, 0.9) !important;
+}
+
+.how-it-works-section p,
+.how-it-works-section .how-it-works-desc,
+.landing-page-root .how-it-works-section p,
+.landing-page-root .how-it-works-section .how-it-works-desc,
+html.light .landing-page-root .how-it-works-section p,
+html.light .landing-page-root .how-it-works-section .how-it-works-desc,
+html.dark .landing-page-root .how-it-works-section p,
+html.dark .landing-page-root .how-it-works-section .how-it-works-desc {
+  color: #cbd5e1 !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85) !important;
+}
+
+/* Workflow Cards in How It Works Section */
+.how-it-works-section .how-it-works-card,
+html.light .landing-page-root .how-it-works-section .how-it-works-card,
+html.dark .landing-page-root .how-it-works-section .how-it-works-card {
+  background: rgba(15, 23, 42, 0.78) !important;
+  border: 1px solid rgba(51, 65, 85, 0.7) !important;
+  color: #f8fafc !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6) !important;
+}
+
+.how-it-works-section .how-it-works-card:hover,
+html.light .landing-page-root .how-it-works-section .how-it-works-card:hover,
+html.dark .landing-page-root .how-it-works-section .how-it-works-card:hover {
+  background: rgba(15, 23, 42, 0.92) !important;
+  border-color: rgba(59, 130, 246, 0.6) !important;
+  box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.25) !important;
+}
+
+.how-it-works-section .how-it-works-card h3,
+html.light .landing-page-root .how-it-works-section .how-it-works-card h3,
+html.dark .landing-page-root .how-it-works-section .how-it-works-card h3 {
+  color: #ffffff !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+.how-it-works-section .how-it-works-card p,
+html.light .landing-page-root .how-it-works-section .how-it-works-card p,
+html.dark .landing-page-root .how-it-works-section .how-it-works-card p {
+  color: #cbd5e1 !important;
+  text-shadow: none !important;
 }
 
 .languages-section .language-card .border-t,

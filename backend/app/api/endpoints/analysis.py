@@ -225,9 +225,85 @@ async def generate_tests(
     return await TestGenerator.generate_tests(req.code, req.language, req.finding, req.framework)
 
 
+@router.get("/stats")
+async def get_dashboard_stats(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Returns real-time aggregated metrics for the Security & Health Dashboard.
+    Calculates stats across all language executions and analyses in real time.
+    """
+    query = (
+        select(Analysis)
+        .options(selectinload(Analysis.findings))
+        .where(Analysis.user_id == current_user.id)
+        .order_by(desc(Analysis.created_at))
+    )
+    result = await db.execute(query)
+    all_analyses = result.scalars().all()
+
+    total_count = len(all_analyses)
+    if total_count == 0:
+        return {
+            "total_analyses": 0,
+            "bugs_detected": 0,
+            "security_issues": 0,
+            "critical_findings": 0,
+            "avg_quality_score": 100.0,
+            "language_breakdown": [],
+            "severity_breakdown": {"critical": 0, "high": 0, "medium": 0, "low": 0},
+        }
+
+    bugs_count = 0
+    security_count = 0
+    critical_count = 0
+    high_count = 0
+    medium_count = 0
+    low_count = 0
+    total_score = 0.0
+    lang_map: dict = {}
+
+    for a in all_analyses:
+        total_score += a.quality_score
+        lang_key = (a.language or "other").upper().strip()
+        lang_map[lang_key] = lang_map.get(lang_key, 0) + 1
+        critical_count += a.critical_count
+        high_count += a.high_count
+        medium_count += a.medium_count
+        low_count += a.low_count
+
+        for f in a.findings:
+            cat = (f.category or "").lower()
+            if "bug" in cat or "defect" in cat or "syntax" in cat or "runtime" in cat:
+                bugs_count += 1
+            elif "security" in cat or "vulnerability" in cat or "cwe" in cat:
+                security_count += 1
+
+    language_breakdown = [
+        {"language": lang, "count": count}
+        for lang, count in sorted(lang_map.items(), key=lambda x: x[1], reverse=True)
+    ]
+
+    return {
+        "total_analyses": total_count,
+        "bugs_detected": bugs_count,
+        "security_issues": security_count,
+        "critical_findings": critical_count,
+        "avg_quality_score": round(total_score / total_count, 1),
+        "language_breakdown": language_breakdown,
+        "severity_breakdown": {
+            "critical": critical_count,
+            "high": high_count,
+            "medium": medium_count,
+            "low": low_count,
+        },
+    }
+
+
 @router.get("", response_model=List[AnalyzeResponse])
 async def list_analyses(
-    limit: int = 50,
+    limit: int = 500,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):

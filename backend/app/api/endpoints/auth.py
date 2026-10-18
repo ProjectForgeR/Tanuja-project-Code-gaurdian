@@ -1,6 +1,6 @@
 from datetime import timedelta
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
@@ -26,7 +26,8 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 @router.post("/register", response_model=Token)
 async def register(user_in: UserCreate, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(User).where(User.email == user_in.email))
+    clean_email = user_in.email.strip().lower()
+    result = await db.execute(select(User).where(func.lower(User.email) == clean_email))
     existing_user = result.scalars().first()
     if existing_user:
         raise HTTPException(
@@ -35,9 +36,9 @@ async def register(user_in: UserCreate, db: AsyncSession = Depends(get_db)):
         )
 
     user = User(
-        email=user_in.email,
+        email=clean_email,
         hashed_password=get_password_hash(user_in.password),
-        full_name=user_in.full_name or user_in.email.split("@")[0].capitalize(),
+        full_name=user_in.full_name or clean_email.split("@")[0].capitalize(),
     )
     db.add(user)
     await db.flush()
@@ -57,7 +58,8 @@ async def register(user_in: UserCreate, db: AsyncSession = Depends(get_db)):
 
 @router.post("/login", response_model=Token)
 async def login(credentials: UserLogin, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(User).where(User.email == credentials.email))
+    clean_email = credentials.email.strip().lower()
+    result = await db.execute(select(User).where(func.lower(User.email) == clean_email))
     user = result.scalars().first()
     if not user or not verify_password(credentials.password, user.hashed_password):
         raise HTTPException(
@@ -82,7 +84,8 @@ async def get_me(current_user: User = Depends(get_current_user)):
 
 @router.post("/forgot-password")
 async def forgot_password(req: PasswordResetRequest, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(User).where(User.email == req.email))
+    clean_email = req.email.strip().lower()
+    result = await db.execute(select(User).where(func.lower(User.email) == clean_email))
     user = result.scalars().first()
     # Always return consistent message to prevent email enumeration
     return {

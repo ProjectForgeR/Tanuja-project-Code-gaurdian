@@ -257,6 +257,13 @@ export const WorkspacePage: React.FC = () => {
         memory_usage_kb: 0,
         exit_code: 0,
       })
+      // Trigger background analysis to update real-time dashboard for web languages
+      analysisService.analyzeCode({ code, language, filename, run_ai: false })
+        .then(() => {
+          window.dispatchEvent(new CustomEvent('codeguardian_analysis_updated', { detail: { language } }))
+          localStorage.setItem('cg_last_analysis_ts', Date.now().toString())
+        })
+        .catch(() => {})
       return
     }
 
@@ -303,10 +310,29 @@ export const WorkspacePage: React.FC = () => {
       setActiveWorkspaceMode('compiler')
       setExecutionResult(res)
 
+      if (!res.success) {
+        setCompilerTab('errors')
+      } else {
+        setCompilerTab('output')
+      }
+
       // If an error line was identified, scroll/highlight it
       if (res.error_detail?.line_number) {
         setTargetLine(res.error_detail.line_number)
       }
+
+      // Notify dashboard across all tabs in real-time
+      window.dispatchEvent(new CustomEvent('codeguardian_analysis_updated', { detail: { language, status: res.status } }))
+      localStorage.setItem('cg_last_analysis_ts', Date.now().toString())
+
+      // Also refresh static findings in the background for complete telemetry
+      analysisService.analyzeCode({ code, language, filename, run_ai: false })
+        .then((analysisRes) => {
+          setAnalysisResult(analysisRes)
+          window.dispatchEvent(new CustomEvent('codeguardian_analysis_updated', { detail: { language } }))
+          localStorage.setItem('cg_last_analysis_ts', Date.now().toString())
+        })
+        .catch(() => {})
 
     } catch (err: unknown) {
       console.error('Execution request failed:', err)
@@ -1446,6 +1472,7 @@ export const WorkspacePage: React.FC = () => {
               {currentMode === 'compiler' && (
                 <CompilerOutputPanel
                   result={executionResult}
+                  code={code}
                   isExecuting={isExecuting}
                   stdin={programStdin}
                   onStdinChange={setProgramStdin}

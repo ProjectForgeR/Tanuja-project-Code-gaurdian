@@ -56,8 +56,20 @@ export const analysisService = {
     })
   },
 
-  async listAnalyses(limit: number = 50): Promise<AnalysisResult[]> {
+  async listAnalyses(limit: number = 100): Promise<AnalysisResult[]> {
     return apiRequest<AnalysisResult[]>(`/analyses?limit=${limit}`)
+  },
+
+  async getDashboardStats(): Promise<{
+    total_analyses: number
+    bugs_detected: number
+    security_issues: number
+    critical_findings: number
+    avg_quality_score: number
+    language_breakdown: { language: string; count: number }[]
+    severity_breakdown: { critical: number; high: number; medium: number; low: number }
+  }> {
+    return apiRequest('/analyses/stats')
   },
 
   async getAnalysis(id: string): Promise<AnalysisResult> {

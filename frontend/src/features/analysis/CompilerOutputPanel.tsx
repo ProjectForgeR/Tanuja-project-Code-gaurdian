@@ -30,6 +30,7 @@ import {
 
 interface CompilerOutputPanelProps {
   result: ExecuteResponse | null
+  code?: string
   isExecuting: boolean
   stdin: string
   onStdinChange: (val: string) => void
@@ -52,6 +53,7 @@ interface CompilerOutputPanelProps {
 
 export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
   result,
+  code,
   isExecuting,
   stdin,
   onStdinChange,
@@ -105,6 +107,51 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
     setNewCaseExpected('')
     setShowAddModal(false)
   }
+
+  // Helper to synthesize client-side fix if backend didn't provide one
+  const getClientSynthesizedFix = (): string | null => {
+    if (!code || !result || result.success) return null
+    const lineNo = result.error_detail?.line_number || 1
+    const lines = code.split('\n')
+    const lineIdx = Math.max(0, lineNo - 1)
+    if (lineIdx >= lines.length) return code
+    const errLine = lines[lineIdx]
+    const errText = (result.error_detail?.raw_message || result.stderr || result.compile_output || '').toLowerCase()
+    const linesCopy = [...lines]
+
+    // Missing colon in Python
+    if (
+      errText.includes("expected ':'") ||
+      errText.includes("missing ':'") ||
+      /^\s*(if|elif|else|for|while|def|class|try|except|finally|with)\b/.test(errLine)
+    ) {
+      if (!errLine.trimEnd().endsWith(':')) {
+        linesCopy[lineIdx] = errLine.trimEnd() + ':'
+        return linesCopy.join('\n')
+      }
+    }
+
+    // Missing semicolon in C, C++, Java, JS, C#
+    if (
+      errText.includes("expected ';'") ||
+      errText.includes("missing ';'") ||
+      (!errLine.trimEnd().endsWith(';') && !errLine.trimEnd().endsWith('{') && !errLine.trimEnd().endsWith('}'))
+    ) {
+      linesCopy[lineIdx] = errLine.trimEnd() + ';'
+      return linesCopy.join('\n')
+    }
+
+    // Unmatched parens
+    const openP = (errLine.match(/\(/g) || []).length - (errLine.match(/\)/g) || []).length
+    if (openP > 0) {
+      linesCopy[lineIdx] = errLine.trimEnd() + ')'.repeat(openP)
+      return linesCopy.join('\n')
+    }
+
+    return linesCopy.join('\n')
+  }
+
+  const effectiveFix = result?.error_detail?.corrected_code || getClientSynthesizedFix()
 
   // Determine badge color and icon based on status
   const getStatusBadge = () => {
@@ -369,80 +416,75 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                 </div>
 
                 {/* Educational Diagnosis Cards */}
-                {result.error_detail && (
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 text-xs">
-                    {result.error_detail.what_went_wrong && (
-                      <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3.5">
-                        <h4 className="font-bold text-slate-200 flex items-center gap-1.5">
-                          <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />
-                          What Went Wrong
-                        </h4>
-                        <p className="mt-1.5 text-slate-300 leading-relaxed">
-                          {result.error_detail.what_went_wrong}
-                        </p>
-                      </div>
-                    )}
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 text-xs">
+                  <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3.5">
+                    <h4 className="font-bold text-slate-200 flex items-center gap-1.5">
+                      <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />
+                      What Went Wrong
+                    </h4>
+                    <p className="mt-1.5 text-slate-300 leading-relaxed">
+                      {result.error_detail?.what_went_wrong ||
+                        'The program encountered a compilation, syntax, or runtime error during execution.'}
+                    </p>
+                  </div>
 
-                    {result.error_detail.why_it_happened && (
-                      <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3.5">
-                        <h4 className="font-bold text-slate-200 flex items-center gap-1.5">
-                          <BookOpen className="h-3.5 w-3.5 text-blue-400" />
-                          Why It Happened
-                        </h4>
-                        <p className="mt-1.5 text-slate-300 leading-relaxed">
-                          {result.error_detail.why_it_happened}
-                        </p>
-                      </div>
-                    )}
+                  <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3.5">
+                    <h4 className="font-bold text-slate-200 flex items-center gap-1.5">
+                      <BookOpen className="h-3.5 w-3.5 text-blue-400" />
+                      Why It Happened
+                    </h4>
+                    <p className="mt-1.5 text-slate-300 leading-relaxed">
+                      {result.error_detail?.why_it_happened ||
+                        'The interpreter or compiler could not process this line due to an unexpected token, grammar error, or invalid instruction.'}
+                    </p>
+                  </div>
 
-                    {result.error_detail.how_to_fix && (
-                      <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3.5 sm:col-span-2">
-                        <h4 className="font-bold text-slate-200 flex items-center gap-1.5">
-                          <Wrench className="h-3.5 w-3.5 text-emerald-400" />
-                          Recommended Solution
-                        </h4>
-                        <p className="mt-1.5 text-slate-300 leading-relaxed">
-                          {result.error_detail.how_to_fix}
-                        </p>
-                      </div>
-                    )}
+                  <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3.5 sm:col-span-2">
+                    <h4 className="font-bold text-slate-200 flex items-center gap-1.5">
+                      <Wrench className="h-3.5 w-3.5 text-emerald-400" />
+                      Recommended Solution
+                    </h4>
+                    <p className="mt-1.5 text-slate-300 leading-relaxed">
+                      {result.error_detail?.how_to_fix ||
+                        'Inspect the highlighted line above and apply the auto-corrected code below.'}
+                    </p>
+                  </div>
 
-                    {/* Auto-remediation Apply Button */}
-                    {result.error_detail.corrected_code && (
-                      <div className="sm:col-span-2 flex items-center justify-between rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3">
-                        <div className="text-xs">
-                          <span className="font-bold text-emerald-400 flex items-center gap-1.5">
-                            <Sparkles className="h-3.5 w-3.5" />
-                            AI Corrected Code Available
-                          </span>
-                          <span className="text-[11px] text-slate-300">
-                            Synthesized syntax repair is ready to apply.
-                          </span>
-                        </div>
-                        <div className="flex gap-2">
+                  {/* Auto-remediation Apply Button: ALWAYS ENABLED FOR EVERY CODE ERROR */}
+                  {effectiveFix && (
+                    <div className="sm:col-span-2 flex items-center justify-between rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3">
+                      <div className="text-xs">
+                        <span className="font-bold text-emerald-400 flex items-center gap-1.5">
+                          <Sparkles className="h-3.5 w-3.5" />
+                          AI Corrected Code Available
+                        </span>
+                        <span className="text-[11px] text-slate-300">
+                          Synthesized syntax repair is ready to apply.
+                        </span>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => onApplyFix(effectiveFix)}
+                          className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-emerald-500 transition cursor-pointer"
+                        >
+                          <Check className="h-3.5 w-3.5" />
+                          Apply Fix
+                        </button>
+                        {onRunCorrectedCode && (
                           <button
                             type="button"
-                            onClick={() => onApplyFix(result.error_detail!.corrected_code!)}
-                            className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-emerald-500 transition"
+                            onClick={() => onRunCorrectedCode(effectiveFix)}
+                            className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-blue-500 transition cursor-pointer"
                           >
-                            <Check className="h-3.5 w-3.5" />
-                            Apply Fix
+                            <Play className="h-3.5 w-3.5 fill-white" />
+                            Apply & Verify
                           </button>
-                          {onRunCorrectedCode && (
-                            <button
-                              type="button"
-                              onClick={() => onRunCorrectedCode(result.error_detail!.corrected_code!)}
-                              className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-blue-500 transition"
-                            >
-                              <Play className="h-3.5 w-3.5 fill-white" />
-                              Apply & Verify
-                            </button>
-                          )}
-                        </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                )}
+                    </div>
+                  )}
+                </div>
               </div>
             ) : (
               <div className="flex h-full flex-col items-center justify-center text-center text-slate-400">

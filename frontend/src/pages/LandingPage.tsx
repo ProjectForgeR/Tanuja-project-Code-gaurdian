@@ -504,7 +504,7 @@ export const LandingPage: React.FC = () => {
       <Navbar />
 
       {/* 2. Full-Screen Cinematic Hero Section (~100vh on Desktop) */}
-      <section className="hero-section relative w-full min-h-[calc(100vh-4rem)] lg:min-h-screen flex flex-col justify-center items-start overflow-hidden px-4 sm:px-6 lg:px-8 py-16 sm:py-24 bg-white dark:bg-slate-950">
+      <section className="hero-section relative w-full min-h-[calc(100vh-4rem)] lg:min-h-screen flex flex-col justify-center items-start overflow-hidden px-4 sm:px-6 lg:px-8 py-16 sm:py-24 bg-slate-950 text-slate-100">
         {/* Hero Background Image with Responsive Overlays */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
           <img
@@ -512,47 +512,42 @@ export const LandingPage: React.FC = () => {
             alt="Magnifying glass inspecting source code with glowing red cyber bug"
             className="h-full w-full object-cover object-[70%_center] md:object-[65%_center] scale-100 transition-all duration-700"
           />
-          {/* Directional gradient overlay: covers only the left side for crisp text, leaving the magnifying glass & bug 100% visible on the right */}
-          <div className="absolute inset-y-0 left-0 w-full md:w-[65%] lg:w-[58%] bg-gradient-to-r from-white via-white/85 to-transparent dark:from-slate-950 dark:via-slate-950/85 dark:to-transparent" />
+          {/* Directional gradient overlay: covers the left side for crisp text, leaving magnifying glass & cyber bug visible on the right */}
+          <div className="hero-overlay-left absolute inset-y-0 left-0 w-full md:w-[65%] lg:w-[58%] bg-gradient-to-r from-slate-950 via-slate-950/85 to-transparent" />
           {/* Subtle top & bottom edge blend */}
-          <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white/70 to-transparent dark:from-slate-950/70 dark:to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white to-transparent dark:from-slate-950 dark:to-transparent" />
+          <div className="hero-edge-top absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-slate-950/70 to-transparent" />
+          <div className="hero-edge-bottom absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-slate-950 to-transparent" />
         </div>
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full z-10">
           <div className="max-w-2xl text-left flex flex-col items-start">
             {/* Master Heading: Build Smarter. Ship Faster. */}
-            <h1 className="hero-animate-fade-in hero-delay-1 hero-bright-title mt-4 sm:mt-6 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-slate-950 dark:text-white leading-[1.08]">
-              Build Smarter.{' '}
+            <h1
+              className="hero-title hero-animate-fade-in hero-delay-1 mt-4 sm:mt-6 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-white leading-[1.08]"
+            >
+              <span className="hero-title-text text-white">Build Smarter.</span>{' '}
               <br />
-              <span className="hero-bright-gradient text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500">
+              <span className="hero-ship-faster">
                 Ship Faster.
               </span>
             </h1>
 
             {/* Description */}
-            <p className="hero-animate-fade-in hero-delay-2 hero-bright-desc mt-6 max-w-xl text-base sm:text-lg md:text-xl text-slate-700 dark:text-slate-300 font-normal leading-relaxed">
+            <p
+              className="hero-desc hero-animate-fade-in hero-delay-2 mt-6 max-w-xl text-base sm:text-lg md:text-xl text-slate-100 font-normal leading-relaxed"
+            >
               Turn ambitious ideas into powerful digital experiences with modern tools, intelligent workflows, and technology built for what comes next.
             </p>
 
             {/* CTA Buttons on Left Side */}
             <div className="hero-animate-fade-in hero-delay-3 mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-start gap-4 w-full sm:w-auto">
-              {/* Primary CTA: Get Started */}
-              <Link
-                to="/workspace"
-                className="ui-button-lift group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 px-8 py-4 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition-all duration-200 hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98]"
-              >
-                <span>Get Started</span>
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-
               {/* Secondary CTA: Explore Features */}
               <button
                 type="button"
                 onClick={() => handleScrollToSection('features')}
-                className="ui-button-lift w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900/80 px-8 py-4 text-sm font-semibold text-slate-800 dark:text-slate-200 shadow-md transition-all duration-200 hover:border-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-cyan-400 active:scale-[0.98] cursor-pointer"
+                className="hero-secondary-btn ui-button-lift w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-900/80 px-8 py-4 text-sm font-semibold text-slate-200 shadow-md transition-all duration-200 hover:border-cyan-400 hover:bg-slate-800 hover:text-cyan-400 active:scale-[0.98] cursor-pointer"
               >
-                <Sparkles className="h-4 w-4 text-blue-600 dark:text-cyan-400" />
+                <Sparkles className="h-4 w-4 text-cyan-400" />
                 <span>Explore Features</span>
               </button>
             </div>
@@ -841,10 +836,16 @@ export const LandingPage: React.FC = () => {
           {/* Section Header with Title & Carousel Controls at Top-Right */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="max-w-3xl">
-              <h2 className="text-3xl font-black tracking-tight text-white sm:text-5xl">
+              <h2
+                style={{ color: '#ffffff' }}
+                className="languages-title text-3xl font-black tracking-tight text-white sm:text-5xl"
+              >
                 Supported Programming Languages & Technologies
               </h2>
-              <p className="mt-4 text-base text-slate-300 font-medium leading-relaxed">
+              <p
+                style={{ color: '#cbd5e1' }}
+                className="languages-desc mt-4 text-base text-slate-300 font-medium leading-relaxed"
+              >
                 Native support for compiling, executing, and analyzing code across modern systems, web frontends, backend runtimes, and databases.
               </p>
             </div>
@@ -1086,91 +1087,117 @@ export const LandingPage: React.FC = () => {
       {/* ============================================================== */}
       {/* 5. HOW IT WORKS SECTION (Write Code -> Analyze -> Fix -> Test) */}
       {/* ============================================================== */}
-      <section id="how-it-works" className="relative border-t border-slate-900 bg-slate-950 py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section
+        id="how-it-works"
+        className="how-it-works-section relative border-t border-slate-900 bg-slate-950 py-20 sm:py-28 overflow-hidden text-slate-100"
+      >
+        {/* Transparent AI Network Infrastructure Background Image */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+          <img
+            src="/how-it-works-bg.png"
+            alt="AI Neural Infrastructure and Automated Processing Network"
+            className="how-it-works-bg-img h-full w-full object-cover object-center scale-100 opacity-40 transition-all duration-700"
+          />
+          {/* Multi-layered transparent dark gradients for clean card contrast & depth */}
+          <div className="how-it-works-overlay absolute inset-0 bg-slate-950/75" />
+          <div className="how-it-works-edge-top absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-slate-950 via-slate-950/90 to-transparent" />
+          <div className="how-it-works-edge-bottom absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent" />
+        </div>
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
+            {/* Elegant glowing badge */}
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1.5 text-xs font-semibold text-blue-400 mb-4 backdrop-blur-md shadow-lg shadow-blue-500/10">
+              <Sparkles className="h-3.5 w-3.5 text-blue-400" />
+              <span>Intelligent Workflow Engine</span>
+            </div>
+
+            <h2 className="how-it-works-title text-3xl font-black tracking-tight text-white sm:text-5xl">
               How CodeGuardian AI Works
             </h2>
-            <p className="mt-4 text-base text-slate-400">
+            <p className="how-it-works-desc mt-4 text-base text-slate-300 max-w-2xl mx-auto leading-relaxed font-normal">
               A reliable workflow: Write Code &rarr; Analyze &rarr; Fix &rarr; Test.
             </p>
           </div>
 
           <div className="mt-16 grid grid-cols-1 md:grid-cols-4 gap-6">
             {/* Step 1: Write Code */}
-            <div className="ui-hover-card rounded-3xl border border-slate-800/80 bg-slate-900/50 p-6 flex flex-col justify-between">
+            <div className="how-it-works-card ui-hover-card rounded-3xl border border-slate-800/80 bg-slate-900/75 p-6 flex flex-col justify-between backdrop-blur-xl shadow-xl shadow-black/40 group hover:border-cyan-500/50 transition-all duration-300">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
-                    <FileCode className="h-5 w-5" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 shadow-md shadow-cyan-500/10 group-hover:scale-105 transition-transform">
+                    <FileCode className="h-6 w-6" />
                   </div>
-                  <span className="font-mono text-2xl font-black text-slate-700">01</span>
+                  <span className="font-mono text-2xl font-black text-slate-500 group-hover:text-cyan-400 transition-colors">01</span>
                 </div>
-                <h3 className="text-base font-bold text-white">Write or Paste Code</h3>
-                <p className="mt-2 text-xs text-slate-400 leading-relaxed">
+                <h3 className="text-base font-bold text-white group-hover:text-cyan-200 transition-colors">Write or Paste Code</h3>
+                <p className="mt-2.5 text-xs text-slate-300 leading-relaxed font-normal">
                   Select your language from the searchable selector and write or upload code in Monaco Editor with syntax highlighting.
                 </p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-800/60 text-[11px] font-semibold text-cyan-400">
-                Monaco Editor • 12+ Languages
+              <div className="mt-5 pt-3 border-t border-slate-800/70 text-[11px] font-semibold text-cyan-400 flex items-center justify-between">
+                <span>Monaco Editor</span>
+                <span className="text-slate-400">• 12+ Languages</span>
               </div>
             </div>
 
             {/* Step 2: Analyze */}
-            <div className="ui-hover-card rounded-3xl border border-slate-800/80 bg-slate-900/50 p-6 flex flex-col justify-between">
+            <div className="how-it-works-card ui-hover-card rounded-3xl border border-slate-800/80 bg-slate-900/75 p-6 flex flex-col justify-between backdrop-blur-xl shadow-xl shadow-black/40 group hover:border-blue-500/50 transition-all duration-300">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400">
-                    <Cpu className="h-5 w-5" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/15 border border-blue-500/30 text-blue-300 shadow-md shadow-blue-500/10 group-hover:scale-105 transition-transform">
+                    <Cpu className="h-6 w-6" />
                   </div>
-                  <span className="font-mono text-2xl font-black text-slate-700">02</span>
+                  <span className="font-mono text-2xl font-black text-slate-500 group-hover:text-blue-400 transition-colors">02</span>
                 </div>
-                <h3 className="text-base font-bold text-white">Analyze & Scan</h3>
-                <p className="mt-2 text-xs text-slate-400 leading-relaxed">
-                  Click <strong>Analyze Code</strong> to trigger AST parsing, Bandit security audits, syntax error detection, and quality metrics.
+                <h3 className="text-base font-bold text-white group-hover:text-blue-200 transition-colors">Analyze &amp; Scan</h3>
+                <p className="mt-2.5 text-xs text-slate-300 leading-relaxed font-normal">
+                  Click <strong className="text-white font-semibold">Analyze Code</strong> to trigger AST parsing, Bandit security audits, syntax error detection, and quality metrics.
                 </p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-800/60 text-[11px] font-semibold text-blue-400">
-                Deterministic AST & Security
+              <div className="mt-5 pt-3 border-t border-slate-800/70 text-[11px] font-semibold text-blue-400 flex items-center justify-between">
+                <span>Deterministic AST</span>
+                <span className="text-slate-400">• Security &amp; Bugs</span>
               </div>
             </div>
 
             {/* Step 3: Fix */}
-            <div className="ui-hover-card rounded-3xl border border-slate-800/80 bg-slate-900/50 p-6 flex flex-col justify-between">
+            <div className="how-it-works-card ui-hover-card rounded-3xl border border-slate-800/80 bg-slate-900/75 p-6 flex flex-col justify-between backdrop-blur-xl shadow-xl shadow-black/40 group hover:border-purple-500/50 transition-all duration-300">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-400">
-                    <Sparkles className="h-5 w-5" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-500/15 border border-purple-500/30 text-purple-300 shadow-md shadow-purple-500/10 group-hover:scale-105 transition-transform">
+                    <Sparkles className="h-6 w-6" />
                   </div>
-                  <span className="font-mono text-2xl font-black text-slate-700">03</span>
+                  <span className="font-mono text-2xl font-black text-slate-500 group-hover:text-purple-400 transition-colors">03</span>
                 </div>
-                <h3 className="text-base font-bold text-white">Fix Error with AI</h3>
-                <p className="mt-2 text-xs text-slate-400 leading-relaxed">
-                  Click <strong>Fix Error</strong> to generate corrected code. Review side-by-side diffs, apply them, and revert via Undo if needed.
+                <h3 className="text-base font-bold text-white group-hover:text-purple-200 transition-colors">Fix Error with AI</h3>
+                <p className="mt-2.5 text-xs text-slate-300 leading-relaxed font-normal">
+                  Click <strong className="text-white font-semibold">Fix Error</strong> to generate corrected code. Review side-by-side diffs, apply them, and revert via Undo if needed.
                 </p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-800/60 text-[11px] font-semibold text-purple-400">
-                Unified Diffs • Undo Stack
+              <div className="mt-5 pt-3 border-t border-slate-800/70 text-[11px] font-semibold text-purple-400 flex items-center justify-between">
+                <span>Unified Diffs</span>
+                <span className="text-slate-400">• Undo Stack</span>
               </div>
             </div>
 
             {/* Step 4: Test */}
-            <div className="ui-hover-card rounded-3xl border border-slate-800/80 bg-slate-900/50 p-6 flex flex-col justify-between">
+            <div className="how-it-works-card ui-hover-card rounded-3xl border border-slate-800/80 bg-slate-900/75 p-6 flex flex-col justify-between backdrop-blur-xl shadow-xl shadow-black/40 group hover:border-emerald-500/50 transition-all duration-300">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
-                    <TestTube2 className="h-5 w-5" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 shadow-md shadow-emerald-500/10 group-hover:scale-105 transition-transform">
+                    <TestTube2 className="h-6 w-6" />
                   </div>
-                  <span className="font-mono text-2xl font-black text-slate-700">04</span>
+                  <span className="font-mono text-2xl font-black text-slate-500 group-hover:text-emerald-400 transition-colors">04</span>
                 </div>
-                <h3 className="text-base font-bold text-white">Test & Verify Output</h3>
-                <p className="mt-2 text-xs text-slate-400 leading-relaxed">
-                  Click <strong>Run Code</strong> or <strong>Run Tests</strong> to execute in the sandbox and verify real outputs against assertions.
+                <h3 className="text-base font-bold text-white group-hover:text-emerald-200 transition-colors">Test &amp; Verify Output</h3>
+                <p className="mt-2.5 text-xs text-slate-300 leading-relaxed font-normal">
+                  Click <strong className="text-white font-semibold">Run Code</strong> or <strong className="text-white font-semibold">Run Tests</strong> to execute in the sandbox and verify real outputs against assertions.
                 </p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-800/60 text-[11px] font-semibold text-emerald-400">
-                Sandbox Execution • Assertion Bench
+              <div className="mt-5 pt-3 border-t border-slate-800/70 text-[11px] font-semibold text-emerald-400 flex items-center justify-between">
+                <span>Sandbox Execution</span>
+                <span className="text-slate-400">• Assertion Bench</span>
               </div>
             </div>
           </div>

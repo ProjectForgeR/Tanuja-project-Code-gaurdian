@@ -1,19 +1,18 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { ShieldCheck, Mail, ArrowLeft, CheckCircle2, Loader2, Home } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { ShieldCheck, Mail, ArrowLeft, CheckCircle2, Loader2, X } from 'lucide-react'
 import { authService } from '@/services/authService'
 
 export const ForgotPasswordPage: React.FC = () => {
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     try {
-      await authService.forgotPassword(email)
+      await authService.forgotPassword(email.trim())
       setSubmitted(true)
     } catch (err) {
       console.error(err)
@@ -33,24 +32,15 @@ export const ForgotPasswordPage: React.FC = () => {
 
       {/* Main Card */}
       <div className="relative z-10 w-full max-w-[500px] rounded-[22px] border border-slate-200 dark:border-slate-800/90 bg-white dark:bg-slate-900/80 p-7 sm:p-9 shadow-2xl shadow-slate-200/50 dark:shadow-black/60 backdrop-blur-xl">
-        {/* Top: Back and Home Buttons inside the card */}
-        <div className="mb-6 flex items-center justify-between">
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="group inline-flex items-center gap-1.5 rounded-lg border border-slate-300 dark:border-slate-700/60 bg-slate-100 dark:bg-slate-800/40 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-all hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-white"
-            title="Go back to previous page"
-          >
-            <ArrowLeft className="h-3.5 w-3.5 text-blue-500 transition-transform group-hover:-translate-x-0.5" />
-            <span>Back</span>
-          </button>
+        {/* Top: "X" (close) button on right side directly navigating to Home */}
+        <div className="mb-6 flex items-center justify-end">
           <Link
             to="/"
-            className="group inline-flex items-center gap-1.5 rounded-lg border border-slate-300 dark:border-slate-700/60 bg-slate-100 dark:bg-slate-800/40 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-all hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-white"
-            title="Go to Home page"
+            className="group inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-300 dark:border-slate-700/60 bg-slate-100 dark:bg-slate-800/40 text-slate-700 dark:text-slate-300 transition-all hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-white"
+            title="Go to Home"
+            aria-label="Close and return to Home"
           >
-            <Home className="h-3.5 w-3.5 text-blue-500" />
-            <span>Home</span>
+            <X className="h-4 w-4" />
           </Link>
         </div>
 
@@ -60,29 +50,29 @@ export const ForgotPasswordPage: React.FC = () => {
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 shadow-lg shadow-blue-500/25 transition-transform duration-200 hover:scale-105">
               <ShieldCheck className="h-7 w-7 text-white" />
             </div>
-            <span className="text-xl font-bold tracking-tight text-white">
-              CodeGuardian<span className="text-blue-400">AI</span>
+            <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+              CodeGuardian<span className="text-blue-500 dark:text-blue-400">AI</span>
             </span>
           </Link>
 
-          <h1 className="mt-5 text-2xl font-bold tracking-tight text-white">
+          <h1 className="mt-5 text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
             Reset Password
           </h1>
-          <p className="mt-1.5 text-xs sm:text-sm text-slate-400">
+          <p className="mt-1.5 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
             Enter your email to receive password recovery instructions
           </p>
         </div>
 
         {submitted ? (
           <div className="mt-6 space-y-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-5 text-center text-xs">
-            <CheckCircle2 className="mx-auto h-8 w-8 text-emerald-400" />
-            <p className="text-slate-200">
+            <CheckCircle2 className="mx-auto h-8 w-8 text-emerald-500 dark:text-emerald-400" />
+            <p className="text-slate-700 dark:text-slate-200">
               If an account matches <strong>{email}</strong>, a password recovery link has been dispatched to your inbox.
             </p>
             <div className="pt-2">
               <Link
                 to="/signin"
-                className="inline-flex items-center gap-1.5 font-semibold text-blue-400 hover:text-blue-300 transition"
+                className="inline-flex items-center gap-1.5 font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition"
               >
                 <ArrowLeft className="h-3.5 w-3.5" />
                 <span>Return to Sign In</span>
@@ -94,12 +84,12 @@ export const ForgotPasswordPage: React.FC = () => {
             <div>
               <label
                 htmlFor="forgot-email"
-                className="block text-xs font-semibold text-slate-300"
+                className="block text-xs font-semibold text-slate-700 dark:text-slate-300"
               >
                 Email Address
               </label>
               <div className="relative mt-1.5">
-                <Mail className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                <Mail className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
                 <input
                   id="forgot-email"
                   type="email"
@@ -107,7 +97,7 @@ export const ForgotPasswordPage: React.FC = () => {
                   placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950/60 py-2.5 pl-10 pr-4 text-xs text-white placeholder-slate-500 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/80 py-2.5 pl-10 pr-4 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-all duration-200 focus:border-blue-500 focus:bg-white dark:focus:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
             </div>
@@ -115,11 +105,11 @@ export const ForgotPasswordPage: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full mt-2 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 py-2.5 text-xs font-bold text-white shadow-lg shadow-blue-500/25 transition-all duration-200 hover:from-blue-500 hover:to-purple-500 hover:shadow-blue-500/40 active:scale-[0.99] disabled:opacity-50 cursor-pointer"
+              className="w-full mt-2 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 py-3 text-xs sm:text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition-all duration-200 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 hover:shadow-xl hover:shadow-blue-500/30 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100 cursor-pointer"
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin text-white" />
                   <span>Sending Instructions...</span>
                 </>
               ) : (
@@ -129,11 +119,11 @@ export const ForgotPasswordPage: React.FC = () => {
           </form>
         )}
 
-        <div className="mt-6 text-center text-xs text-slate-400">
+        <div className="mt-6 border-t border-slate-200 dark:border-slate-800/60 pt-5 text-center text-xs text-slate-500 dark:text-slate-400">
           Remembered your password?{' '}
           <Link
             to="/signin"
-            className="font-semibold text-blue-400 hover:text-blue-300 transition"
+            className="font-semibold text-blue-600 dark:text-blue-400 transition-colors hover:text-blue-500 dark:hover:text-blue-300 hover:underline"
           >
             Sign In
           </Link>
@@ -142,4 +132,5 @@ export const ForgotPasswordPage: React.FC = () => {
     </div>
   )
 }
+
 export default ForgotPasswordPage
