@@ -823,18 +823,18 @@ export const LandingPage: React.FC = () => {
       {/* ============================================================== */}
       {/* 3. SUPPORTED LANGUAGES SECTION */}
       {/* ============================================================== */}
-      <section id="languages" className="languages-section relative border-t border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/80 py-20 sm:py-28 overflow-hidden">
+      <section id="languages" className="languages-section relative border-t border-slate-200 dark:border-slate-800 py-20 sm:py-28 overflow-hidden">
         {/* Background Image with Transparent Overlays */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
           <img
             src="/languages-bg.png"
             alt="Developer coding on laptop with code on screen"
-            className="h-full w-full object-cover object-center scale-100 opacity-80 dark:opacity-95 transition-all duration-700"
+            className="languages-bg-img h-full w-full object-cover object-center scale-100 transition-all duration-700"
           />
-          {/* Subtle transparent overlay and gentle edge fades for high readability */}
-          <div className="absolute inset-0 bg-white/30 dark:bg-slate-950/40" />
-          <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white/70 to-transparent dark:from-slate-950/70 dark:to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white/70 to-transparent dark:from-slate-950/70 dark:to-transparent" />
+          {/* Dedicated transparent overlay and edge blends */}
+          <div className="languages-bg-overlay" />
+          <div className="languages-edge-top" />
+          <div className="languages-edge-bottom" />
         </div>
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
@@ -916,8 +916,8 @@ export const LandingPage: React.FC = () => {
         {/* Single-Line Horizontal Carousel */}
         <div className="relative mt-8 w-full">
           {/* Edge fade overlays */}
-          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-white/60 dark:from-slate-950/60 to-transparent z-10" />
-          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-white/60 dark:from-slate-950/60 to-transparent z-10" />
+          <div className="carousel-edge-left pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-16 z-10" />
+          <div className="carousel-edge-right pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-16 z-10" />
 
           {/* Carousel Track Container */}
           <div
