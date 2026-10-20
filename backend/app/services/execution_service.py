@@ -587,10 +587,38 @@ class ExecutionService:
                 "but standard input (stdin) was empty or reached end-of-file (EOF) before all expected values were provided."
             )
             how_to_fix = (
-                "Enter your input values line-by-line in the 'Custom Input (stdin)' panel below the editor, then click 'Run Code'."
+                "1. Always verify input is available using `sc.hasNextLine()` or `sc.hasNextInt()` before reading.\n"
+                "2. Provide your inputs line-by-line in the 'Custom Input (stdin)' panel below the editor, then click 'Run Code'."
             )
-            concept_to_learn = "Standard Input (stdin) Streams & Input Buffering"
-            corrected_code = code
+            concept_to_learn = "Standard Input (stdin) Streams & Defensive Input Validation"
+            if lang in ["java"] and "Scanner" in code:
+                corrected_code = (
+                    "import java.util.Scanner;\n\n"
+                    "public class Main {\n"
+                    "    public static void main(String[] args) {\n"
+                    "        try (Scanner sc = new Scanner(System.in)) {\n"
+                    "            // Safely guard against missing input (EOF)\n"
+                    "            if (!sc.hasNextLine()) {\n"
+                    "                System.out.println(\"Error: No standard input provided.\");\n"
+                    "                System.out.println(\"Please enter input in the Custom Input panel before running.\");\n"
+                    "                return;\n"
+                    "            }\n\n"
+                    "            System.out.print(\"Enter your name: \");\n"
+                    "            String name = sc.nextLine().trim();\n\n"
+                    "            System.out.print(\"Enter your age: \");\n"
+                    "            if (!sc.hasNextInt()) {\n"
+                    "                System.out.println(\"\\nError: Expected an integer for age.\");\n"
+                    "                return;\n"
+                    "            }\n\n"
+                    "            int age = sc.nextInt();\n"
+                    "            System.out.println(\"Hello \" + name);\n"
+                    "            System.out.println(\"Your age is \" + age);\n"
+                    "        }\n"
+                    "    }\n"
+                    "}\n"
+                )
+            else:
+                corrected_code = code
 
         elif "time limit" in status.lower():
             what_went_wrong = "Execution Time Limit Exceeded."

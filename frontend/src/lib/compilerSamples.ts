@@ -27,8 +27,42 @@ export const EXECUTABLE_SAMPLES: Record<string, ExecutableSample> = {
     id: 'java-input',
     name: 'Java — Scanner Interactive Input',
     language: 'java',
-    code: `import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n\n        System.out.print("Enter your name: ");\n        String name = sc.nextLine();\n\n        System.out.print("Enter your age: ");\n        int age = sc.nextInt();\n\n        System.out.println("Hello " + name);\n        System.out.println("Your age is " + age);\n    }\n}\n`,
-    description: 'Reads name and age using Scanner from standard input and prints greeting.',
+    code: `import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        // Safe input handling using try-with-resources
+        try (Scanner sc = new Scanner(System.in)) {
+            // Guard against missing input / EOF
+            if (!sc.hasNextLine()) {
+                System.out.println("Error: No standard input provided.");
+                System.out.println("Please enter input in the Custom Input panel below and click Run.");
+                return;
+            }
+
+            System.out.print("Enter your name: ");
+            String name = sc.nextLine().trim();
+
+            System.out.print("Enter your age: ");
+            // Validate that an integer is provided
+            if (!sc.hasNextInt()) {
+                if (sc.hasNext()) {
+                    String invalid = sc.next();
+                    System.out.println("\\nError: '" + invalid + "' is not a valid age. Expected an integer.");
+                } else {
+                    System.out.println("\\nError: Missing age input. Please provide both name and age.");
+                }
+                return;
+            }
+
+            int age = sc.nextInt();
+            System.out.println("Hello " + name);
+            System.out.println("Your age is " + age);
+        }
+    }
+}
+`,
+    description: 'Reads name and age safely using Scanner from standard input with EOF and type validation.',
     sampleStdin: 'Rahul\n21',
   },
   c: {

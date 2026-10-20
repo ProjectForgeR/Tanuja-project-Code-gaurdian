@@ -473,6 +473,28 @@ class PolyglotScanner(BaseAnalyzer):
                         suggested_patch="try (FileInputStream fis = new FileInputStream(file)) {\n    // process\n}",
                     )
                 )
+
+            # Unchecked Scanner reads without hasNext check (causes NoSuchElementException)
+            if re.search(r"\b\w+\.(nextLine|nextInt|nextLong|nextDouble|next)\s*\(", line):
+                if not re.search(r"hasNext(Line|Int|Long|Double)?", code):
+                    findings.append(
+                        FindingSchema(
+                            id=str(uuid.uuid4()),
+                            title="Unchecked Scanner Input (Causes NoSuchElementException on EOF)",
+                            severity="High",
+                            category="Bug",
+                            line_start=i + 1,
+                            line_end=i + 1,
+                            snippet=line.strip(),
+                            explanation="Calling `Scanner.nextLine()` or `nextInt()` without first checking `sc.hasNextLine()` or `sc.hasNextInt()` causes a fatal runtime `java.util.NoSuchElementException: No line found` if standard input is empty, truncated, or runs in a non-interactive environment.",
+                            impact="Program terminates abruptly with an unhandled runtime exception.",
+                            recommended_fix="Wrap input reading in `if (sc.hasNextLine())` or `if (sc.hasNextInt())` guards and provide graceful fallbacks or error messages.",
+                            confidence="High",
+                            detection_method="Polyglot Scanner Rule",
+                            rule_id="JAVA-UNCHECKED-SCANNER",
+                            suggested_patch="if (sc.hasNextLine()) {\n    String val = sc.nextLine();\n} else {\n    System.out.println(\"Error: No input provided.\");\n}",
+                        )
+                    )
         return findings
 
     def _scan_cpp(self, lines: List[str], code: str) -> List[FindingSchema]:
