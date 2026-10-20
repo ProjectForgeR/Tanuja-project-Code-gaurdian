@@ -41,6 +41,7 @@ import { AiFixModal } from '@/features/analysis/AiFixModal'
 import { TestGeneratorModal } from '@/features/analysis/TestGeneratorModal'
 import { AIExplanationPanel } from '@/features/analysis/AIExplanationPanel'
 import { CompilerOutputPanel } from '@/features/analysis/CompilerOutputPanel'
+import { CustomInputPanel } from '@/features/analysis/CustomInputPanel'
 import { LanguageSelector } from '@/features/analysis/LanguageSelector'
 import { CODE_SAMPLES } from '@/lib/samples'
 import { EXECUTABLE_SAMPLES } from '@/lib/compilerSamples'
@@ -221,6 +222,8 @@ export const WorkspacePage: React.FC = () => {
 
   // Real Sandbox Execution Engine (Judge0)
   const runExecution = async () => {
+    if (isExecuting) return
+
     if (!isAuthenticated) {
       setShowAuthGateModal(true)
       return
@@ -1214,6 +1217,29 @@ export const WorkspacePage: React.FC = () => {
                 </button>
               )}
 
+              {/* Interactive Stdin Sample Button */}
+              {EXECUTABLE_SAMPLES[language.toLowerCase()]?.sampleStdin && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const execSample = EXECUTABLE_SAMPLES[language.toLowerCase()]
+                    setCodeHistory((prev) => [...prev, code])
+                    setCode(execSample.code)
+                    setLastSavedCode(execSample.code)
+                    if (execSample.sampleStdin) {
+                      setProgramStdin(execSample.sampleStdin)
+                    }
+                    setExecutionResult(null)
+                    setErrorMsg(null)
+                    setTargetLine(null)
+                  }}
+                  title="Load interactive standard input (stdin) program and sample input"
+                  className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1.5 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/20 transition cursor-pointer"
+                >
+                  Load Input Program
+                </button>
+              )}
+
               {/* Unsaved Changes Indicator */}
               {code !== lastSavedCode ? (
                 <span className="inline-flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-[11px] font-semibold text-amber-300" title="Editor has unsaved code modifications">
@@ -1391,8 +1417,18 @@ export const WorkspacePage: React.FC = () => {
                 targetLine={targetLine}
                 executionErrorLine={executionResult?.error_detail?.line_number || null}
                 executionErrorMessage={executionResult?.error_detail?.raw_message || executionResult?.error_detail?.what_went_wrong || null}
-                height="560px"
+                height="460px"
               />
+
+              {/* Custom Input (stdin) Panel for Runtime User Input */}
+              <div className="mt-4">
+                <CustomInputPanel
+                  value={programStdin}
+                  onChange={setProgramStdin}
+                  disabled={isExecuting}
+                  language={language}
+                />
+              </div>
 
             </div>
 
@@ -1480,7 +1516,6 @@ export const WorkspacePage: React.FC = () => {
                   onRunCorrectedCode={handleRunCorrectedCode}
                   onClearOutput={() => {
                     setExecutionResult(null)
-                    setProgramStdin('')
                   }}
                   onJumpToLine={(line) => setTargetLine(line)}
                   testCases={testCases}

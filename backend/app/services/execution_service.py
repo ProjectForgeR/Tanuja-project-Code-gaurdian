@@ -316,8 +316,14 @@ class ExecutionService:
         cpu_limit = min(settings.EXECUTION_TIMEOUT_SECONDS, 4.0)
         wall_limit = min(cpu_limit + 1.5, 6.0)
 
+        # Standard input normalization: handle CRLF, CR, and ensure trailing newline
+        clean_stdin = stdin or ""
+        clean_stdin = clean_stdin.replace("\r\n", "\n").replace("\r", "\n")
+        if clean_stdin and not clean_stdin.endswith("\n"):
+            clean_stdin += "\n"
+
         encoded_code = base64.b64encode(code.encode("utf-8")).decode("ascii")
-        encoded_stdin = base64.b64encode(stdin.encode("utf-8")).decode("ascii") if stdin else ""
+        encoded_stdin = base64.b64encode(clean_stdin.encode("utf-8")).decode("ascii") if clean_stdin else ""
 
         payload = {
             "source_code": encoded_code,
@@ -572,6 +578,19 @@ class ExecutionService:
             why_it_happened = "An operator or function was passed arguments of incompatible data types."
             how_to_fix = "Convert types explicitly (e.g. `int(...)`, `str(...)`) before performing the operation."
             concept_to_learn = "Type Systems & Explicit Type Casting"
+
+        # Missing Standard Input (stdin) for Scanner, input(), cin, scanf
+        elif "nosuchelementexception" in error_lower or "no line found" in error_lower or "eoferror" in error_lower or "eof when reading a line" in error_lower:
+            what_went_wrong = f"Missing Runtime Standard Input (stdin) on Line {extracted_line or 1}."
+            why_it_happened = (
+                "The program attempted to read user input (e.g. `Scanner.nextLine()`, `Scanner.nextInt()`, or `input()`), "
+                "but standard input (stdin) was empty or reached end-of-file (EOF) before all expected values were provided."
+            )
+            how_to_fix = (
+                "Enter your input values line-by-line in the 'Custom Input (stdin)' panel below the editor, then click 'Run Code'."
+            )
+            concept_to_learn = "Standard Input (stdin) Streams & Input Buffering"
+            corrected_code = code
 
         elif "time limit" in status.lower():
             what_went_wrong = "Execution Time Limit Exceeded."
