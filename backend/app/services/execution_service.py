@@ -591,7 +591,8 @@ class ExecutionService:
                 "2. Provide your inputs line-by-line in the 'Custom Input (stdin)' panel below the editor, then click 'Run Code'."
             )
             concept_to_learn = "Standard Input (stdin) Streams & Defensive Input Validation"
-            if lang in ["java"] and "Scanner" in code:
+            lang_norm = (language or "").lower().strip()
+            if lang_norm in ["java"] and "Scanner" in code:
                 corrected_code = (
                     "import java.util.Scanner;\n\n"
                     "public class Main {\n"
