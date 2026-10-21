@@ -1,5 +1,5 @@
 import React from 'react'
-import { Terminal, Trash2, Check, Sparkles } from 'lucide-react'
+import { Terminal, Trash2, Check } from 'lucide-react'
 
 interface CustomInputPanelProps {
   value: string
@@ -21,10 +21,6 @@ export const CustomInputPanel: React.FC<CustomInputPanelProps> = ({
 
   const handleClear = () => {
     onChange('')
-  }
-
-  const applyPreset = (presetText: string) => {
-    onChange(presetText)
   }
 
   return (
@@ -60,49 +56,6 @@ export const CustomInputPanel: React.FC<CustomInputPanelProps> = ({
         </button>
       </div>
 
-      {/* Preset Buttons - Crystal clear in both Light & Dark Mode */}
-      <div className="mt-2.5 flex flex-wrap items-center gap-1.5 text-[11px]">
-        <span className="text-slate-600 dark:text-slate-400 font-semibold text-[10px] uppercase tracking-wider mr-0.5">
-          Presets:
-        </span>
-        <button
-          type="button"
-          onClick={() => applyPreset('Krishna\n21')}
-          disabled={disabled}
-          className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 hover:bg-emerald-50 dark:bg-slate-800/90 dark:hover:bg-slate-700 px-2.5 py-1 text-slate-700 dark:text-slate-200 hover:border-emerald-500 hover:text-emerald-700 dark:hover:text-emerald-300 font-medium transition cursor-pointer shadow-2xs disabled:opacity-50"
-          title="Preset: Name 'Krishna' on line 1, Age '21' on line 2 (Python input() / Java Scanner)"
-        >
-          Krishna / 21
-        </button>
-        <button
-          type="button"
-          onClick={() => applyPreset('10 20')}
-          disabled={disabled}
-          className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 hover:bg-emerald-50 dark:bg-slate-800/90 dark:hover:bg-slate-700 px-2.5 py-1 text-slate-700 dark:text-slate-200 hover:border-emerald-500 hover:text-emerald-700 dark:hover:text-emerald-300 font-medium transition cursor-pointer shadow-2xs disabled:opacity-50"
-          title="Preset: Two space-separated integers (10 20 for C/C++ scanf/cin)"
-        >
-          10 20
-        </button>
-        <button
-          type="button"
-          onClick={() => applyPreset('5 7')}
-          disabled={disabled}
-          className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 hover:bg-emerald-50 dark:bg-slate-800/90 dark:hover:bg-slate-700 px-2.5 py-1 text-slate-700 dark:text-slate-200 hover:border-emerald-500 hover:text-emerald-700 dark:hover:text-emerald-300 font-medium transition cursor-pointer shadow-2xs disabled:opacity-50"
-          title="Preset: Two space-separated integers (5 7 for Java/C++ addition)"
-        >
-          5 7
-        </button>
-        <button
-          type="button"
-          onClick={() => applyPreset('5\n10 20 30 40 50')}
-          disabled={disabled}
-          className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 hover:bg-emerald-50 dark:bg-slate-800/90 dark:hover:bg-slate-700 px-2.5 py-1 text-slate-700 dark:text-slate-200 hover:border-emerald-500 hover:text-emerald-700 dark:hover:text-emerald-300 font-medium transition cursor-pointer shadow-2xs disabled:opacity-50"
-          title="Preset: Array size 5 on line 1, followed by 5 numbers (Array Sum)"
-        >
-          Array (10-50)
-        </button>
-      </div>
-
       {/* Input Textarea Area */}
       <div className="mt-2.5">
         <textarea
@@ -112,7 +65,7 @@ export const CustomInputPanel: React.FC<CustomInputPanelProps> = ({
           onChange={(e) => onChange(e.target.value)}
           disabled={disabled}
           rows={3}
-          placeholder={`Enter runtime stdin line by line or space-separated...\nExample:\nKrishna\n21`}
+          placeholder={`Enter runtime standard input (stdin) for your program...\nSupports multiline, spaces, numbers, and strings`}
           className="w-full rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-2.5 font-mono text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-600 shadow-inner transition focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-950 focus:ring-1 focus:ring-emerald-500/40 focus:outline-none disabled:opacity-50 leading-relaxed selection:bg-emerald-500/30"
         />
       </div>
