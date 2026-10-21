@@ -1473,19 +1473,8 @@ export const WorkspacePage: React.FC = () => {
                 targetLine={targetLine}
                 executionErrorLine={executionResult?.error_detail?.line_number || null}
                 executionErrorMessage={executionResult?.error_detail?.raw_message || executionResult?.error_detail?.what_went_wrong || null}
-                height="460px"
+                height="600px"
               />
-
-              {/* Custom Input (stdin) Panel for Runtime User Input */}
-              <div className="mt-4">
-                <CustomInputPanel
-                  value={programStdin}
-                  onChange={setProgramStdin}
-                  disabled={isExecuting}
-                  language={language}
-                />
-              </div>
-
             </div>
 
             {/* Right: Mode Switcher & Dynamic Output Panel */}
@@ -1560,31 +1549,41 @@ export const WorkspacePage: React.FC = () => {
                 </ErrorBoundary>
               )}
 
-              {/* View 1: Real Sandboxed Compiler Output Panel */}
+              {/* View 1: Real Sandboxed Compiler Output Panel & Runtime Input */}
               {currentMode === 'compiler' && (
-                <CompilerOutputPanel
-                  result={executionResult}
-                  code={code}
-                  isExecuting={isExecuting}
-                  stdin={programStdin}
-                  onStdinChange={setProgramStdin}
-                  onApplyFix={handleApplyCompilerFix}
-                  onRunCorrectedCode={handleRunCorrectedCode}
-                  onClearOutput={() => {
-                    setExecutionResult(null)
-                  }}
-                  onJumpToLine={(line) => setTargetLine(line)}
-                  testCases={testCases}
-                  testResults={testResults}
-                  isRunningTests={isRunningTests}
-                  isGeneratingTests={isGeneratingTests}
-                  onRunTests={handleRunTests}
-                  onAddTestCase={handleAddTestCase}
-                  onDeleteTestCase={handleDeleteTestCase}
-                  onGenerateTestCases={handleGenerateTestCases}
-                  activeTabOverride={compilerTab}
-                  onTabChange={setCompilerTab}
-                />
+                <div className="space-y-3">
+                  {/* Custom Input (stdin) Panel for Runtime User Input */}
+                  <CustomInputPanel
+                    value={programStdin}
+                    onChange={setProgramStdin}
+                    disabled={isExecuting}
+                    language={language}
+                  />
+
+                  <CompilerOutputPanel
+                    result={executionResult}
+                    code={code}
+                    isExecuting={isExecuting}
+                    stdin={programStdin}
+                    onStdinChange={setProgramStdin}
+                    onApplyFix={handleApplyCompilerFix}
+                    onRunCorrectedCode={handleRunCorrectedCode}
+                    onClearOutput={() => {
+                      setExecutionResult(null)
+                    }}
+                    onJumpToLine={(line) => setTargetLine(line)}
+                    testCases={testCases}
+                    testResults={testResults}
+                    isRunningTests={isRunningTests}
+                    isGeneratingTests={isGeneratingTests}
+                    onRunTests={handleRunTests}
+                    onAddTestCase={handleAddTestCase}
+                    onDeleteTestCase={handleDeleteTestCase}
+                    onGenerateTestCases={handleGenerateTestCases}
+                    activeTabOverride={compilerTab}
+                    onTabChange={setCompilerTab}
+                  />
+                </div>
               )}
 
 

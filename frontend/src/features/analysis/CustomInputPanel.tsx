@@ -1,5 +1,5 @@
 import React from 'react'
-import { Terminal, Trash2, RotateCcw, Keyboard, Check, Sparkles } from 'lucide-react'
+import { Terminal, Trash2, Check, Sparkles } from 'lucide-react'
 
 interface CustomInputPanelProps {
   value: string
@@ -29,121 +29,117 @@ export const CustomInputPanel: React.FC<CustomInputPanelProps> = ({
 
   return (
     <div
-      className={`rounded-2xl border border-slate-800/90 bg-slate-900/70 p-4 shadow-xl backdrop-blur-md transition-colors ${className}`}
+      className={`rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 p-3.5 shadow-lg dark:shadow-xl backdrop-blur-md transition-all ${className}`}
     >
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 shadow-sm shadow-emerald-500/10">
-            <Terminal className="h-3.5 w-3.5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-white tracking-wide">Custom Input (stdin)</span>
-              <span className="rounded-full bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-semibold text-emerald-400">
-                Runtime Stdin
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-400">
-              Piped directly into standard input for <code>Scanner</code>, <code>input()</code>, <code>cin</code>, and <code>scanf</code>.
-            </p>
-          </div>
-        </div>
-
-        {/* Action Controls & Presets */}
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800/80 pb-2.5">
         <div className="flex items-center gap-2">
-          {/* Preset Buttons for Quick Testing */}
-          <div className="hidden sm:flex items-center gap-1.5 text-[11px]">
-            <span className="text-slate-500 font-medium mr-0.5">Presets:</span>
-            <button
-              type="button"
-              onClick={() => applyPreset('Krishna\n21')}
-              disabled={disabled}
-              className="rounded-lg border border-slate-700/80 bg-slate-800/70 px-2 py-1 text-slate-300 hover:border-emerald-500/40 hover:bg-slate-700 hover:text-white transition disabled:opacity-50 cursor-pointer shadow-xs"
-              title="Preset: Name 'Krishna' on line 1, Age '21' on line 2 (Python input() / Java Scanner)"
-            >
-              Krishna / 21
-            </button>
-            <button
-              type="button"
-              onClick={() => applyPreset('10 20')}
-              disabled={disabled}
-              className="rounded-lg border border-slate-700/80 bg-slate-800/70 px-2 py-1 text-slate-300 hover:border-emerald-500/40 hover:bg-slate-700 hover:text-white transition disabled:opacity-50 cursor-pointer shadow-xs"
-              title="Preset: Two space-separated integers (10 20 for C/C++ scanf/cin)"
-            >
-              10 20
-            </button>
-            <button
-              type="button"
-              onClick={() => applyPreset('5 7')}
-              disabled={disabled}
-              className="rounded-lg border border-slate-700/80 bg-slate-800/70 px-2 py-1 text-slate-300 hover:border-emerald-500/40 hover:bg-slate-700 hover:text-white transition disabled:opacity-50 cursor-pointer shadow-xs"
-              title="Preset: Two space-separated integers (5 7 for Java/C++ addition)"
-            >
-              5 7
-            </button>
-            <button
-              type="button"
-              onClick={() => applyPreset('5\n10 20 30 40 50')}
-              disabled={disabled}
-              className="rounded-lg border border-slate-700/80 bg-slate-800/70 px-2 py-1 text-slate-300 hover:border-emerald-500/40 hover:bg-slate-700 hover:text-white transition disabled:opacity-50 cursor-pointer shadow-xs"
-              title="Preset: Array size 5 on line 1, followed by 5 numbers (Array Sum)"
-            >
-              Array (10-50)
-            </button>
+          <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 shadow-xs">
+            <Terminal className="h-3 w-3" />
           </div>
-
-          {/* Clear Input Button */}
-          <button
-            type="button"
-            onClick={handleClear}
-            disabled={disabled || !value}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700/80 bg-slate-800/80 px-2.5 py-1 text-xs font-medium text-slate-300 hover:border-rose-500/40 hover:bg-slate-800 hover:text-rose-400 transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shadow-xs"
-            title="Clear the standard input buffer"
-          >
-            <Trash2 className="h-3 w-3" />
-            <span>Clear Input</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-slate-800 dark:text-white tracking-wide">
+              Custom Input (stdin)
+            </span>
+            <span className="rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 dark:text-emerald-300">
+              Runtime Stdin
+            </span>
+          </div>
         </div>
+
+        {/* Clear Input Button */}
+        <button
+          type="button"
+          onClick={handleClear}
+          disabled={disabled || !value}
+          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-700/80 bg-slate-100 dark:bg-slate-800/80 px-2.5 py-1 text-xs font-medium text-slate-700 dark:text-slate-300 hover:border-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 dark:hover:text-rose-400 transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shadow-2xs"
+          title="Clear the standard input buffer"
+        >
+          <Trash2 className="h-3 w-3" />
+          <span>Clear</span>
+        </button>
+      </div>
+
+      {/* Preset Buttons - Crystal clear in both Light & Dark Mode */}
+      <div className="mt-2.5 flex flex-wrap items-center gap-1.5 text-[11px]">
+        <span className="text-slate-600 dark:text-slate-400 font-semibold text-[10px] uppercase tracking-wider mr-0.5">
+          Presets:
+        </span>
+        <button
+          type="button"
+          onClick={() => applyPreset('Krishna\n21')}
+          disabled={disabled}
+          className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 hover:bg-emerald-50 dark:bg-slate-800/90 dark:hover:bg-slate-700 px-2.5 py-1 text-slate-700 dark:text-slate-200 hover:border-emerald-500 hover:text-emerald-700 dark:hover:text-emerald-300 font-medium transition cursor-pointer shadow-2xs disabled:opacity-50"
+          title="Preset: Name 'Krishna' on line 1, Age '21' on line 2 (Python input() / Java Scanner)"
+        >
+          Krishna / 21
+        </button>
+        <button
+          type="button"
+          onClick={() => applyPreset('10 20')}
+          disabled={disabled}
+          className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 hover:bg-emerald-50 dark:bg-slate-800/90 dark:hover:bg-slate-700 px-2.5 py-1 text-slate-700 dark:text-slate-200 hover:border-emerald-500 hover:text-emerald-700 dark:hover:text-emerald-300 font-medium transition cursor-pointer shadow-2xs disabled:opacity-50"
+          title="Preset: Two space-separated integers (10 20 for C/C++ scanf/cin)"
+        >
+          10 20
+        </button>
+        <button
+          type="button"
+          onClick={() => applyPreset('5 7')}
+          disabled={disabled}
+          className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 hover:bg-emerald-50 dark:bg-slate-800/90 dark:hover:bg-slate-700 px-2.5 py-1 text-slate-700 dark:text-slate-200 hover:border-emerald-500 hover:text-emerald-700 dark:hover:text-emerald-300 font-medium transition cursor-pointer shadow-2xs disabled:opacity-50"
+          title="Preset: Two space-separated integers (5 7 for Java/C++ addition)"
+        >
+          5 7
+        </button>
+        <button
+          type="button"
+          onClick={() => applyPreset('5\n10 20 30 40 50')}
+          disabled={disabled}
+          className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 hover:bg-emerald-50 dark:bg-slate-800/90 dark:hover:bg-slate-700 px-2.5 py-1 text-slate-700 dark:text-slate-200 hover:border-emerald-500 hover:text-emerald-700 dark:hover:text-emerald-300 font-medium transition cursor-pointer shadow-2xs disabled:opacity-50"
+          title="Preset: Array size 5 on line 1, followed by 5 numbers (Array Sum)"
+        >
+          Array (10-50)
+        </button>
       </div>
 
       {/* Input Textarea Area */}
-      <div className="mt-3">
+      <div className="mt-2.5">
         <textarea
           id="custom-stdin-input"
           name="custom-stdin-input"
           value={value}
           onChange={(e) => onChange(e.target.value)}
           disabled={disabled}
-          rows={4}
-          placeholder={`Enter runtime standard input (stdin) for your program...\n• Multiline: Enter values on separate lines (e.g. Krishna\\n21 for Python/Java)\n• Space-separated: Enter values on a single line (e.g. 10 20 for C scanf or C++ cin)\n• Array: Size on line 1, elements on line 2 (e.g. 5\\n10 20 30 40 50)`}
-          className="w-full rounded-xl border border-slate-800 bg-slate-950/90 p-3 font-mono text-xs text-slate-100 placeholder-slate-600 shadow-inner transition focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/40 focus:outline-none disabled:opacity-50 leading-relaxed selection:bg-emerald-600/40"
+          rows={3}
+          placeholder={`Enter runtime stdin line by line or space-separated...\nExample:\nKrishna\n21`}
+          className="w-full rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-2.5 font-mono text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-600 shadow-inner transition focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-950 focus:ring-1 focus:ring-emerald-500/40 focus:outline-none disabled:opacity-50 leading-relaxed selection:bg-emerald-500/30"
         />
       </div>
 
       {/* Footer Info & Telemetry */}
-      <div className="mt-2 flex flex-wrap items-center justify-between text-[11px] text-slate-400">
-        <div className="flex items-center gap-3">
+      <div className="mt-2 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
+        <div className="flex items-center gap-2.5">
           <span className="font-mono">
-            Lines: <strong className="text-slate-200">{lineCount}</strong>
+            Lines: <strong className="text-slate-700 dark:text-slate-200">{lineCount}</strong>
           </span>
-          <span className="text-slate-600">•</span>
+          <span className="text-slate-400 dark:text-slate-600">•</span>
           <span className="font-mono">
-            Characters: <strong className="text-slate-200">{charCount}</strong>
+            Chars: <strong className="text-slate-700 dark:text-slate-200">{charCount}</strong>
           </span>
           {value.trim() && (
             <>
-              <span className="text-slate-600">•</span>
-              <span className="text-emerald-400 flex items-center gap-1 font-medium">
-                <Check className="h-3 w-3" /> Input Ready
+              <span className="text-slate-400 dark:text-slate-600">•</span>
+              <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1 font-semibold">
+                <Check className="h-3 w-3" /> Ready
               </span>
             </>
           )}
         </div>
 
-        <div className="text-[11px] text-slate-500 italic">
-          Input is preserved across runs. Click &quot;Run Code&quot; to execute with this input.
-        </div>
+        <span className="text-[10px] text-slate-400 dark:text-slate-500">
+          Passed to stdin on Run
+        </span>
       </div>
     </div>
   )
