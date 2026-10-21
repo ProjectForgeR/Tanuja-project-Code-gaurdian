@@ -57,30 +57,39 @@ export const CustomInputPanel: React.FC<CustomInputPanelProps> = ({
             <span className="text-slate-500 font-medium mr-0.5">Presets:</span>
             <button
               type="button"
-              onClick={() => applyPreset('Rahul\n21')}
+              onClick={() => applyPreset('Krishna\n21')}
               disabled={disabled}
-              className="rounded-lg border border-slate-700/80 bg-slate-800/70 px-2.5 py-1 text-slate-300 hover:border-emerald-500/40 hover:bg-slate-700 hover:text-white transition disabled:opacity-50 cursor-pointer shadow-xs"
-              title="Preset: Name 'Rahul' on line 1, Age '21' on line 2 (matches Java Scanner sample)"
+              className="rounded-lg border border-slate-700/80 bg-slate-800/70 px-2 py-1 text-slate-300 hover:border-emerald-500/40 hover:bg-slate-700 hover:text-white transition disabled:opacity-50 cursor-pointer shadow-xs"
+              title="Preset: Name 'Krishna' on line 1, Age '21' on line 2 (Python input() / Java Scanner)"
             >
-              Rahul / 21
+              Krishna / 21
             </button>
             <button
               type="button"
-              onClick={() => applyPreset('10\n20\n30')}
+              onClick={() => applyPreset('10 20')}
               disabled={disabled}
-              className="rounded-lg border border-slate-700/80 bg-slate-800/70 px-2.5 py-1 text-slate-300 hover:border-emerald-500/40 hover:bg-slate-700 hover:text-white transition disabled:opacity-50 cursor-pointer shadow-xs"
-              title="Preset: 3 numbers on separate lines"
+              className="rounded-lg border border-slate-700/80 bg-slate-800/70 px-2 py-1 text-slate-300 hover:border-emerald-500/40 hover:bg-slate-700 hover:text-white transition disabled:opacity-50 cursor-pointer shadow-xs"
+              title="Preset: Two space-separated integers (10 20 for C/C++ scanf/cin)"
             >
-              10, 20, 30
+              10 20
             </button>
             <button
               type="button"
-              onClick={() => applyPreset('Hello World')}
+              onClick={() => applyPreset('5 7')}
               disabled={disabled}
-              className="rounded-lg border border-slate-700/80 bg-slate-800/70 px-2.5 py-1 text-slate-300 hover:border-emerald-500/40 hover:bg-slate-700 hover:text-white transition disabled:opacity-50 cursor-pointer shadow-xs"
-              title="Preset: Single line string"
+              className="rounded-lg border border-slate-700/80 bg-slate-800/70 px-2 py-1 text-slate-300 hover:border-emerald-500/40 hover:bg-slate-700 hover:text-white transition disabled:opacity-50 cursor-pointer shadow-xs"
+              title="Preset: Two space-separated integers (5 7 for Java/C++ addition)"
             >
-              Single String
+              5 7
+            </button>
+            <button
+              type="button"
+              onClick={() => applyPreset('5\n10 20 30 40 50')}
+              disabled={disabled}
+              className="rounded-lg border border-slate-700/80 bg-slate-800/70 px-2 py-1 text-slate-300 hover:border-emerald-500/40 hover:bg-slate-700 hover:text-white transition disabled:opacity-50 cursor-pointer shadow-xs"
+              title="Preset: Array size 5 on line 1, followed by 5 numbers (Array Sum)"
+            >
+              Array (10-50)
             </button>
           </div>
 
@@ -107,7 +116,7 @@ export const CustomInputPanel: React.FC<CustomInputPanelProps> = ({
           onChange={(e) => onChange(e.target.value)}
           disabled={disabled}
           rows={4}
-          placeholder={`Enter runtime standard input line by line...\nExample for Java Scanner / Python input():\nRahul\n21`}
+          placeholder={`Enter runtime standard input (stdin) for your program...\n• Multiline: Enter values on separate lines (e.g. Krishna\\n21 for Python/Java)\n• Space-separated: Enter values on a single line (e.g. 10 20 for C scanf or C++ cin)\n• Array: Size on line 1, elements on line 2 (e.g. 5\\n10 20 30 40 50)`}
           className="w-full rounded-xl border border-slate-800 bg-slate-950/90 p-3 font-mono text-xs text-slate-100 placeholder-slate-600 shadow-inner transition focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/40 focus:outline-none disabled:opacity-50 leading-relaxed selection:bg-emerald-600/40"
         />
       </div>

@@ -88,6 +88,7 @@ export const WorkspacePage: React.FC = () => {
   const [isExecuting, setIsExecuting] = useState<boolean>(false)
   const [executionResult, setExecutionResult] = useState<ExecuteResponse | null>(null)
   const [programStdin, setProgramStdin] = useState<string>('')
+  const bypassedMissingStdinRef = useRef<boolean>(false)
   const [activeWorkspaceMode, setActiveWorkspaceMode] = useState<'compiler' | 'audit' | 'preview'>(() => {
     return ['html', 'css', 'reactjs', 'reactts'].includes(initialLang) ? 'preview' : 'compiler'
   })
@@ -302,6 +303,61 @@ export const WorkspacePage: React.FC = () => {
       return
     }
 
+
+    // Smart Input Validation Guard: Check if the program expects stdin but none was provided
+    const expectsStdin = (src: string, lang: string): boolean => {
+      const l = lang.toLowerCase()
+      if (['python', 'py'].includes(l)) return /\binput\s*\(|\bsys\.stdin\b/.test(src)
+      if (['java'].includes(l)) return /\bScanner\b|\bSystem\.in\b|\bBufferedReader\b/.test(src)
+      if (['c', 'cpp', 'c++'].includes(l)) return /\bscanf\s*\(|\bcin\s*>>|\bgetline\s*\(|\bfgets\s*\([^,]+,\s*[^,]+,\s*stdin\)/.test(src)
+      if (['javascript', 'js', 'typescript', 'ts', 'nodejs'].includes(l)) return /\breadFileSync\s*\(\s*0|\breadline\b|\bprocess\.stdin\b/.test(src)
+      if (['csharp', 'cs'].includes(l)) return /\bConsole\.Read(Line)?\s*\(/.test(src)
+      if (['go', 'golang'].includes(l)) return /\bfmt\.Scan(ln|f)?\s*\(|\bos\.Stdin\b|\bbufio\.NewReader\s*\(\s*os\.Stdin\)/.test(src)
+      if (['rust'].includes(l)) return /\bio::stdin\s*\(|\bread_line\s*\(/.test(src)
+      if (['ruby', 'rb'].includes(l)) return /\bgets(\.chomp)?\b|\bSTDIN\.gets\b/.test(src)
+      if (['php'].includes(l)) return /\bfgets\s*\(\s*STDIN|\breadline\s*\(/.test(src)
+      return false
+    }
+
+    if (!bypassedMissingStdinRef.current && expectsStdin(trimmed, language) && !programStdin.trim()) {
+      setIsExecuting(false)
+      setActiveWorkspaceMode('compiler')
+      setCompilerTab('errors')
+      setExecutionResult({
+        status: 'Input Required',
+        success: false,
+        output:
+          'Input Required (stdin):\n\n' +
+          'This program uses standard input functions (such as input(), Scanner, scanf, or cin), but the Custom Input panel is empty.\n\n' +
+          '👉 Please enter your test inputs line-by-line in the "Custom Input (stdin)" panel below the editor, then click "Run Code".\n\n' +
+          '(Tip: You can use the preset buttons above the Custom Input panel, or click "Run Code" again to execute with empty input).',
+        stdout: '',
+        stderr: 'Standard input stream (stdin) is empty. Provide input in the Custom Input panel before running.',
+        compile_output: '',
+        language,
+        execution_time: 0,
+        memory_usage_kb: 0,
+        exit_code: 1,
+        error_detail: {
+          error_type: 'Input Required',
+          raw_message: 'Program expects runtime standard input, but Custom Input (stdin) is empty',
+          what_went_wrong: 'The program contains input-reading statements, but no input was supplied in the Custom Input panel.',
+          why_it_happened: 'Online sandboxes feed input via standard input (stdin) before execution. Running without input causes NoSuchElementException, EOFError, or runtime errors.',
+          how_to_fix: 'Enter the required input in the "Custom Input (stdin)" panel directly below the Monaco editor, or use one of the quick presets (e.g. Krishna / 21, 10 20).',
+          concept_to_learn: 'Standard Input (stdin) Stream Provisioning',
+        },
+      })
+      bypassedMissingStdinRef.current = true
+      // Auto-focus input box
+      setTimeout(() => {
+        const el = document.getElementById('custom-stdin-input')
+        if (el) el.focus()
+      }, 150)
+      return
+    }
+
+    // Reset the bypass ref for next execution
+    bypassedMissingStdinRef.current = false
 
     try {
       const res = await compilerService.executeCode({
