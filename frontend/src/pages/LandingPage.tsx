@@ -894,32 +894,35 @@ export const LandingPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Side Corner: Inset Image + Carousel Controls */}
-            <div className="flex flex-col sm:flex-row lg:flex-col items-start lg:items-end gap-3 shrink-0">
-              {/* Inset Image Card */}
-              <div className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 shadow-md hover:shadow-xl transition-all duration-300 w-72 sm:w-80 h-36 sm:h-44">
+            {/* Right Side Corner: Large Inset Image + Carousel Controls */}
+            <div className="flex flex-col items-start lg:items-end gap-3.5 shrink-0 w-full lg:w-auto">
+              {/* Large Inset Image Card */}
+              <div className="group relative overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 shadow-xl hover:shadow-2xl transition-all duration-500 w-full sm:w-[460px] md:w-[500px] lg:w-[520px] xl:w-[580px] h-60 sm:h-72 md:h-80">
                 <img
                   src="/languages-preview.jpg"
                   alt="Code execution and compiler diagnostics preview"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
-                <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[11px] font-semibold text-white">
-                  <span className="bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-md border border-white/10 shadow-sm">
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
+                <div className="absolute bottom-3.5 left-4 right-4 flex items-center justify-between text-xs font-semibold text-white">
+                  <span className="bg-slate-900/85 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/15 shadow-lg flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
                     Live Compiler Engine
                   </span>
-                  <span className="text-cyan-300 drop-shadow">12+ Runtimes</span>
+                  <span className="bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 backdrop-blur-md px-3 py-1.5 rounded-xl drop-shadow">
+                    12+ Polyglot Runtimes
+                  </span>
                 </div>
               </div>
 
               {/* Carousel Controls (Pause/Play, Left Arrow, Right Arrow) */}
-              <div className="carousel-controls-box flex items-center gap-2 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1.5 rounded-xl shadow-sm">
+              <div className="carousel-controls-box flex items-center gap-2 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-2 rounded-2xl shadow-sm">
                 <button
                   type="button"
                   onClick={togglePlayPause}
                   aria-label={isPlaying ? 'Pause automatic scrolling' : 'Resume automatic scrolling'}
                   title={isPlaying ? 'Pause' : 'Play'}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-cyan-600 dark:hover:text-cyan-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition cursor-pointer"
+                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-cyan-600 dark:hover:text-cyan-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition cursor-pointer shadow-sm"
                 >
                   {isPlaying ? (
                     <>
@@ -941,7 +944,7 @@ export const LandingPage: React.FC = () => {
                   onClick={handleScrollLeft}
                   aria-label="Scroll carousel to the left"
                   title="Scroll Left"
-                  className="p-1.5 rounded-lg text-slate-700 dark:text-slate-200 hover:text-cyan-600 dark:hover:text-cyan-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition cursor-pointer"
+                  className="p-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-cyan-600 dark:hover:text-cyan-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition cursor-pointer shadow-sm"
                 >
                   <ChevronLeft className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
                 </button>
@@ -951,7 +954,7 @@ export const LandingPage: React.FC = () => {
                   onClick={handleScrollRight}
                   aria-label="Scroll carousel to the right"
                   title="Scroll Right"
-                  className="p-1.5 rounded-lg text-slate-700 dark:text-slate-200 hover:text-cyan-600 dark:hover:text-cyan-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition cursor-pointer"
+                  className="p-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-cyan-600 dark:hover:text-cyan-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition cursor-pointer shadow-sm"
                 >
                   <ChevronRight className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
                 </button>
