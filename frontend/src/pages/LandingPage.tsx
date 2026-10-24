@@ -1004,113 +1004,107 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* ============================================================== */}
-      {/* 4. FEATURES SECTION (Cards for error detection, AI fixes, etc.) */}
+      {/* 4. FEATURES SECTION (From Vulnerability Detection to Production Peace of Mind) */}
       {/* ============================================================== */}
       <section id="features" className="relative border-t border-slate-900 bg-slate-950 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
-              Engineered for Complete Code Verification
+            <h2 className="text-3xl font-serif font-bold tracking-tight text-white sm:text-5xl">
+              From Vulnerability Detection to Production Peace of Mind
             </h2>
-            <p className="mt-4 text-base text-slate-400">
-              From syntax verification and real isolated compilation to AI auto-fix patches and output assertion test suites.
+            <p className="mt-4 text-base text-slate-400 max-w-2xl mx-auto leading-relaxed">
+              Explore how CodeGuardian AI inspects every branch, flags hidden threats, and stops broken releases before they impact users.
             </p>
           </div>
 
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Feature 1: Accurate Error & Bug Detection */}
-            <div className="ui-hover-card rounded-3xl border border-slate-800/80 bg-slate-900/50 p-7 flex flex-col justify-between">
+          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Card 1: Real-Time Security Threat Alerts */}
+            <div className="group rounded-3xl border border-slate-800/90 bg-slate-900/60 p-5 sm:p-6 shadow-sm hover:shadow-xl hover:border-slate-700 transition-all duration-300 flex flex-col justify-between">
               <div>
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 mb-5">
-                  <Bug className="h-6 w-6" />
+                <div className="overflow-hidden rounded-2xl bg-slate-950 aspect-[16/10]">
+                  <img
+                    src="/security-threats.jpg"
+                    alt="Real-Time Security Threat Alerts"
+                    className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                  />
                 </div>
-                <h3 className="text-lg font-bold text-white">Accurate Error & Bug Detection</h3>
-                <p className="mt-2.5 text-xs text-slate-400 leading-relaxed">
-                  Pinpoint syntax errors, runtime exceptions, logical bugs, and deprecations with exact line-and-column coordinates directly mapped onto Monaco editor markers.
-                </p>
+                <div className="mt-6">
+                  <h3 className="text-lg sm:text-xl font-bold tracking-tight text-white">
+                    Real-Time Security Threat Alerts
+                  </h3>
+                  <p className="mt-2.5 text-xs sm:text-sm text-slate-400 leading-relaxed font-normal">
+                    Identify injection vectors, weak cryptographic ciphers, and unvalidated inputs directly within your active workspace before commit.
+                  </p>
+                </div>
               </div>
-              <div className="mt-6 pt-3 border-t border-slate-800/60 font-mono text-[11px] text-rose-400">
-                ✓ AST Syntax + Runtime Exception Tracing
+
+              <div className="mt-8 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold">
+                <span className="border border-red-500/20 bg-red-500/10 text-red-400 px-2.5 py-1 rounded-lg">
+                  150+ Bandit & OWASP Rules
+                </span>
+                <span className="border border-red-500/20 bg-red-500/10 text-red-400 px-2.5 py-1 rounded-lg">
+                  Zero Server Execution
+                </span>
               </div>
             </div>
 
-            {/* Feature 2: AI-Assisted Auto-Fixes */}
-            <div className="ui-hover-card rounded-3xl border border-slate-800/80 bg-slate-900/50 p-7 flex flex-col justify-between">
+            {/* Card 2: Multi-Language AST Diagnostics */}
+            <div className="group rounded-3xl border border-slate-800/90 bg-slate-900/60 p-5 sm:p-6 shadow-sm hover:shadow-xl hover:border-slate-700 transition-all duration-300 flex flex-col justify-between">
               <div>
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-400 mb-5">
-                  <Sparkles className="h-6 w-6" />
+                <div className="overflow-hidden rounded-2xl bg-slate-950 aspect-[16/10]">
+                  <img
+                    src="/ast-diagnostics.jpg"
+                    alt="Multi-Language AST Diagnostics"
+                    className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                  />
                 </div>
-                <h3 className="text-lg font-bold text-white">AI-Assisted Auto-Fixes & Diffs</h3>
-                <p className="mt-2.5 text-xs text-slate-400 leading-relaxed">
-                  Generate corrected versions of your code with 1-click. Review side-by-side color-coded diff comparisons with full multi-level Undo history backup.
-                </p>
+                <div className="mt-6">
+                  <h3 className="text-lg sm:text-xl font-bold tracking-tight text-white">
+                    Multi-Language AST Diagnostics
+                  </h3>
+                  <p className="mt-2.5 text-xs sm:text-sm text-slate-400 leading-relaxed font-normal">
+                    High-performance static parsing across Python, JavaScript, TypeScript, Go, Java, and C++ with instant editor squiggly markers.
+                  </p>
+                </div>
               </div>
-              <div className="mt-6 pt-3 border-t border-slate-800/60 font-mono text-[11px] text-purple-400">
-                ✓ Side-by-side diffs + Reversible undo stack
+
+              <div className="mt-8 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold">
+                <span className="border border-blue-500/20 bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded-lg">
+                  Sub-second Parsing
+                </span>
+                <span className="border border-blue-500/20 bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded-lg">
+                  Polyglot Support
+                </span>
               </div>
             </div>
 
-            {/* Feature 3: Real Sandboxed Code Execution */}
-            <div className="ui-hover-card rounded-3xl border border-slate-800/80 bg-slate-900/50 p-7 flex flex-col justify-between">
+            {/* Card 3: Prevent Costly Outages & 404s */}
+            <div className="group rounded-3xl border border-slate-800/90 bg-slate-900/60 p-5 sm:p-6 shadow-sm hover:shadow-xl hover:border-slate-700 transition-all duration-300 flex flex-col justify-between">
               <div>
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 mb-5">
-                  <Play className="h-6 w-6" />
+                <div className="overflow-hidden rounded-2xl bg-slate-950 aspect-[16/10]">
+                  <img
+                    src="/prevent-outages.jpg"
+                    alt="Prevent Costly Outages & 404s"
+                    className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                  />
                 </div>
-                <h3 className="text-lg font-bold text-white">Sandboxed Code Execution</h3>
-                <p className="mt-2.5 text-xs text-slate-400 leading-relaxed">
-                  Execute code safely in isolated Judge0 containers or safe in-memory SQLite instances. View real stdout, stderr, execution time, and memory metrics.
-                </p>
+                <div className="mt-6">
+                  <h3 className="text-lg sm:text-xl font-bold tracking-tight text-white">
+                    Prevent Costly Outages & 404s
+                  </h3>
+                  <p className="mt-2.5 text-xs sm:text-sm text-slate-400 leading-relaxed font-normal">
+                    Automated unit test generation (pytest, Jest, JUnit) covers malicious inputs and edge cases to ensure zero runtime surprises in production.
+                  </p>
+                </div>
               </div>
-              <div className="mt-6 pt-3 border-t border-slate-800/60 font-mono text-[11px] text-emerald-400">
-                ✓ Isolated Judge0 & SQLite Sandboxes
-              </div>
-            </div>
 
-            {/* Feature 4: Test Cases & Output Verification */}
-            <div className="ui-hover-card rounded-3xl border border-slate-800/80 bg-slate-900/50 p-7 flex flex-col justify-between">
-              <div>
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 mb-5">
-                  <TestTube2 className="h-6 w-6" />
-                </div>
-                <h3 className="text-lg font-bold text-white">Test Cases & Output Verification</h3>
-                <p className="mt-2.5 text-xs text-slate-400 leading-relaxed">
-                  Define custom test inputs and expected outputs. Automated runners compare program output line-by-line and flag the exact mismatch location.
-                </p>
-              </div>
-              <div className="mt-6 pt-3 border-t border-slate-800/60 font-mono text-[11px] text-blue-400">
-                ✓ Automated Pass/Fail & Line Mismatch Callouts
-              </div>
-            </div>
-
-            {/* Feature 5: Security & Vulnerability Analysis */}
-            <div className="ui-hover-card rounded-3xl border border-slate-800/80 bg-slate-900/50 p-7 flex flex-col justify-between">
-              <div>
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 mb-5">
-                  <ShieldCheck className="h-6 w-6" />
-                </div>
-                <h3 className="text-lg font-bold text-white">Security Vulnerability Scanner</h3>
-                <p className="mt-2.5 text-xs text-slate-400 leading-relaxed">
-                  Detect SQL injection, command execution, path traversal, prototype pollution, and hardcoded secrets using 150+ deterministic Bandit and OWASP rules.
-                </p>
-              </div>
-              <div className="mt-6 pt-3 border-t border-slate-800/60 font-mono text-[11px] text-cyan-400">
-                ✓ 150+ Deterministic AST & Bandit Security Rules
-              </div>
-            </div>
-
-            {/* Feature 6: Code Quality & Health Score */}
-            <div className="ui-hover-card rounded-3xl border border-slate-800/80 bg-slate-900/50 p-7 flex flex-col justify-between">
-              <div>
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 mb-5">
-                  <Award className="h-6 w-6" />
-                </div>
-                <h3 className="text-lg font-bold text-white">Transparent Health & Quality Score</h3>
-                <p className="mt-2.5 text-xs text-slate-400 leading-relaxed">
-                  No black-box mystery numbers. Scores start at 100 with clear mathematical point deductions for critical, high, and medium defects.
-                </p>
-              </div>
-              <div className="mt-6 pt-3 border-t border-slate-800/60 font-mono text-[11px] text-indigo-400">
-                ✓ Explainable Mathematical Deduction Formula
+              <div className="mt-8 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold">
+                <span className="border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-lg">
+                  Automated Test Suites
+                </span>
+                <span className="border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-lg">
+                  Regression Guard
+                </span>
               </div>
             </div>
           </div>
