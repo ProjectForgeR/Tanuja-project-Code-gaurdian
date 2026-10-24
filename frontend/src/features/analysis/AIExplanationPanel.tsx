@@ -107,20 +107,20 @@ const ExplanationCard: React.FC<{ explanation: FindingExplanation; index: number
 
   return (
     <div
-      className={`rounded-xl border bg-white overflow-hidden transition-all duration-200 shadow-xs ${
+      className={`rounded-xl border bg-white dark:bg-slate-900 overflow-hidden transition-all duration-200 shadow-xs ${
         explanation.severity === 'Critical'
-          ? 'border-rose-200 hover:border-rose-300'
+          ? 'border-rose-200 dark:border-rose-900/60 hover:border-rose-300 dark:hover:border-rose-700'
           : explanation.severity === 'High'
-          ? 'border-amber-200 hover:border-amber-300'
+          ? 'border-amber-200 dark:border-amber-900/60 hover:border-amber-300 dark:hover:border-amber-700'
           : explanation.severity === 'Medium'
-          ? 'border-amber-200 hover:border-amber-300'
-          : 'border-slate-200 hover:border-slate-300'
+          ? 'border-amber-200 dark:border-amber-900/60 hover:border-amber-300 dark:hover:border-amber-700'
+          : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
       }`}
     >
       {/* Card Header */}
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full text-left px-4 py-3 flex items-start justify-between gap-3 hover:bg-slate-50 transition cursor-pointer"
+        className="w-full text-left px-4 py-3 flex items-start justify-between gap-3 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition cursor-pointer"
       >
         <div className="flex items-start gap-3 min-w-0">
           {/* Severity dot */}
@@ -134,12 +134,12 @@ const ExplanationCard: React.FC<{ explanation: FindingExplanation; index: number
                 {explanation.severity}
               </span>
               {explanation.line > 0 && (
-                <span className="rounded-md bg-slate-100 border border-slate-200 px-2 py-0.5 text-[10px] font-mono text-slate-600">
+                <span className="rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-0.5 text-[10px] font-mono text-slate-600 dark:text-slate-300">
                   Line {explanation.line}
                 </span>
               )}
             </div>
-            <p className="text-sm font-semibold text-slate-900 leading-snug">{explanation.title}</p>
+            <p className="text-sm font-semibold text-slate-900 dark:text-white leading-snug">{explanation.title}</p>
           </div>
         </div>
 
@@ -154,17 +154,17 @@ const ExplanationCard: React.FC<{ explanation: FindingExplanation; index: number
 
       {/* Expanded Body */}
       {expanded && (
-        <div className="border-t border-slate-100 px-4 py-4 space-y-4 bg-slate-50/40">
+        <div className="border-t border-slate-100 dark:border-slate-800 px-4 py-4 space-y-4 bg-slate-50/40 dark:bg-slate-950/40">
           {/* What is the problem */}
           {explanation.what && (
             <div>
               <div className="flex items-center gap-1.5 mb-1.5">
                 <AlertCircle className="h-3.5 w-3.5 text-rose-600 shrink-0" />
-                <span className="text-[11px] font-bold uppercase tracking-wider text-rose-800">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-rose-800 dark:text-rose-300">
                   What is the problem?
                 </span>
               </div>
-              <p className="text-sm text-slate-700 leading-relaxed pl-5">{explanation.what}</p>
+              <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed pl-5">{explanation.what}</p>
             </div>
           )}
 
@@ -173,11 +173,11 @@ const ExplanationCard: React.FC<{ explanation: FindingExplanation; index: number
             <div>
               <div className="flex items-center gap-1.5 mb-1.5">
                 <Bug className="h-3.5 w-3.5 text-amber-600 shrink-0" />
-                <span className="text-[11px] font-bold uppercase tracking-wider text-amber-800">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300">
                   Why does it happen?
                 </span>
               </div>
-              <p className="text-sm text-slate-700 leading-relaxed pl-5">{explanation.why}</p>
+              <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed pl-5">{explanation.why}</p>
             </div>
           )}
 
@@ -330,28 +330,28 @@ export const AIExplanationPanel: React.FC<AIExplanationPanelProps> = ({
   const count = result.explanations.length
 
   return (
-    <div className="rounded-xl border border-violet-200 bg-white overflow-hidden shadow-xs">
+    <div className="rounded-xl border border-violet-200 dark:border-violet-900/60 bg-white dark:bg-slate-900 overflow-hidden shadow-xs">
       {/* Panel Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-violet-100 bg-violet-50/60">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-violet-100 dark:border-violet-900/40 bg-violet-50/60 dark:bg-violet-950/30">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-100 border border-violet-200">
-            <Sparkles className="h-3.5 w-3.5 text-violet-600" />
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-100 dark:bg-violet-900/50 border border-violet-200 dark:border-violet-800">
+            <Sparkles className="h-3.5 w-3.5 text-violet-600 dark:text-violet-400" />
           </div>
           <div>
-            <span className="text-sm font-bold text-slate-900">AI Error Explanations</span>
+            <span className="text-sm font-bold text-slate-900 dark:text-white">AI Error Explanations</span>
             {count > 0 && (
-              <span className="ml-2 rounded-full bg-violet-100 border border-violet-200 px-2 py-0.5 text-[10px] font-bold text-violet-700">
+              <span className="ml-2 rounded-full bg-violet-100 dark:bg-violet-900/50 border border-violet-200 dark:border-violet-800 px-2 py-0.5 text-[10px] font-bold text-violet-700 dark:text-violet-300">
                 {count} finding{count !== 1 ? 's' : ''} explained
               </span>
             )}
           </div>
           {result.ai_used && (
-            <span className="rounded-full bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
+            <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 dark:text-emerald-300">
               AI-powered
             </span>
           )}
           {!result.ai_used && (
-            <span className="rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
+            <span className="rounded-full bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800 px-2 py-0.5 text-[10px] font-semibold text-amber-700 dark:text-amber-300">
               Rule-based
             </span>
           )}
@@ -360,13 +360,13 @@ export const AIExplanationPanel: React.FC<AIExplanationPanelProps> = ({
           <button
             onClick={onRetry}
             title="Refresh explanations"
-            className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50 hover:text-slate-900 cursor-pointer shadow-2xs"
+            className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 transition hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white cursor-pointer shadow-2xs"
           >
             <RefreshCw className="h-3.5 w-3.5" />
           </button>
           <button
             onClick={() => setPanelExpanded(!panelExpanded)}
-            className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50 hover:text-slate-900 cursor-pointer shadow-2xs"
+            className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 transition hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white cursor-pointer shadow-2xs"
           >
             {panelExpanded ? (
               <ChevronUp className="h-3.5 w-3.5" />
@@ -376,7 +376,7 @@ export const AIExplanationPanel: React.FC<AIExplanationPanelProps> = ({
           </button>
           <button
             onClick={onDismiss}
-            className="text-[11px] font-bold text-slate-400 hover:text-slate-700 transition px-1 cursor-pointer"
+            className="text-[11px] font-bold text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition px-1 cursor-pointer"
             title="Close panel"
           >
             ✕

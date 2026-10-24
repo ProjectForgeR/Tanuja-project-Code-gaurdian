@@ -224,7 +224,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
     if (!result) return null
     if (result.success) {
       return (
-        <div className="flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700">
+        <div className="flex items-center gap-1.5 rounded-full border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
           <CheckCircle2 className="h-3.5 w-3.5" />
           <span>Execution Successful</span>
         </div>
@@ -232,7 +232,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
     }
     if (result.status === 'Time Limit Exceeded') {
       return (
-        <div className="flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-700">
+        <div className="flex items-center gap-1.5 rounded-full border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/50 px-2.5 py-0.5 text-xs font-semibold text-amber-700 dark:text-amber-400">
           <Clock className="h-3.5 w-3.5" />
           <span>Time Limit Exceeded</span>
         </div>
@@ -240,7 +240,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
     }
     if (result.status === 'Compilation Error') {
       return (
-        <div className="flex items-center gap-1.5 rounded-full border border-rose-200 bg-rose-50 px-2.5 py-0.5 text-xs font-semibold text-rose-700">
+        <div className="flex items-center gap-1.5 rounded-full border border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/50 px-2.5 py-0.5 text-xs font-semibold text-rose-700 dark:text-rose-400">
           <XCircle className="h-3.5 w-3.5" />
           <span>Compilation Error</span>
         </div>
@@ -248,14 +248,14 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
     }
     if (result.status === 'Syntax Error') {
       return (
-        <div className="flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-700">
+        <div className="flex items-center gap-1.5 rounded-full border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/50 px-2.5 py-0.5 text-xs font-semibold text-amber-700 dark:text-amber-400">
           <AlertTriangle className="h-3.5 w-3.5" />
           <span>Syntax Error</span>
         </div>
       )
     }
     return (
-      <div className="flex items-center gap-1.5 rounded-full border border-rose-200 bg-rose-50 px-2.5 py-0.5 text-xs font-semibold text-rose-700">
+      <div className="flex items-center gap-1.5 rounded-full border border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/50 px-2.5 py-0.5 text-xs font-semibold text-rose-700 dark:text-rose-400">
         <XCircle className="h-3.5 w-3.5" />
         <span>{result.status || 'Runtime Error'}</span>
       </div>
@@ -263,9 +263,9 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
   }
 
   return (
-    <div className="flex flex-col rounded-xl border border-slate-200 bg-white shadow-xs overflow-hidden">
+    <div className="flex flex-col rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs overflow-hidden">
       {/* Header Toolbar */}
-      <div className="flex flex-wrap items-center justify-between border-b border-slate-200 bg-slate-50/80 px-4 py-2.5 gap-2">
+      <div className="flex flex-wrap items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/90 px-4 py-2.5 gap-2">
         {/* Navigation Tabs - Highlighted in Blue */}
         <div className="flex items-center gap-1 overflow-x-auto">
           {/* Tab: Output */}
@@ -275,7 +275,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
             className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
               activeTab === 'output'
                 ? 'bg-blue-600 text-white shadow-xs'
-                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
             }`}
           >
             <Terminal className="h-3.5 w-3.5" />
@@ -289,7 +289,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
             className={`relative flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
               activeTab === 'errors'
                 ? 'bg-blue-600 text-white shadow-xs'
-                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
             }`}
           >
             <AlertTriangle className="h-3.5 w-3.5" />
@@ -306,7 +306,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
             className={`relative flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
               activeTab === 'tests'
                 ? 'bg-blue-600 text-white shadow-xs'
-                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
             }`}
           >
             <TestTube2 className="h-3.5 w-3.5" />
@@ -317,8 +317,8 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                   activeTab === 'tests'
                     ? 'bg-blue-700 text-white'
                     : testResults.all_passed
-                    ? 'bg-emerald-100 text-emerald-700'
-                    : 'bg-rose-100 text-rose-700'
+                    ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400'
+                    : 'bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-400'
                 }`}
               >
                 {testResults.passed}/{testResults.total}
@@ -333,7 +333,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
             className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
               activeTab === 'logs'
                 ? 'bg-blue-600 text-white shadow-xs'
-                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
             }`}
           >
             <FileCode2 className="h-3.5 w-3.5" />
@@ -347,7 +347,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
             className={`relative flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
               activeTab === 'audit'
                 ? 'bg-blue-600 text-white shadow-xs'
-                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
             }`}
           >
             <ShieldCheck className="h-3.5 w-3.5" />
@@ -357,7 +357,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                 className={`rounded-full px-1.5 py-0.2 text-[10px] font-bold ${
                   activeTab === 'audit'
                     ? 'bg-blue-700 text-white'
-                    : 'bg-violet-100 text-violet-700'
+                    : 'bg-violet-100 dark:bg-violet-950/60 text-violet-700 dark:text-violet-400'
                 }`}
               >
                 {findings.length}
@@ -373,7 +373,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
               className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
                 activeTab === 'preview'
                   ? 'bg-blue-600 text-white shadow-xs'
-                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
               }`}
             >
               <ExternalLink className="h-3.5 w-3.5" />
@@ -388,17 +388,17 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
             <button
               type="button"
               onClick={handleCopyOutput}
-              className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 transition hover:bg-slate-50 cursor-pointer shadow-2xs"
+              className="inline-flex items-center gap-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1 text-xs font-medium text-slate-700 dark:text-slate-200 transition hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer shadow-2xs"
               title="Copy output to clipboard"
             >
               {copied ? (
                 <>
-                  <Check className="h-3.5 w-3.5 text-emerald-600" />
-                  <span className="text-emerald-700 font-semibold">Copied</span>
+                  <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <span className="text-emerald-700 dark:text-emerald-400 font-semibold">Copied</span>
                 </>
               ) : (
                 <>
-                  <Copy className="h-3.5 w-3.5 text-slate-500" />
+                  <Copy className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400" />
                   <span>Copy</span>
                 </>
               )}
@@ -408,7 +408,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
           <button
             type="button"
             onClick={onClearOutput}
-            className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-medium text-slate-600 transition hover:bg-slate-50 hover:text-rose-600 cursor-pointer shadow-2xs"
+            className="inline-flex items-center gap-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1 text-xs font-medium text-slate-600 dark:text-slate-300 transition hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-rose-600 dark:hover:text-rose-400 cursor-pointer shadow-2xs"
             title="Clear output console"
           >
             <Trash2 className="h-3.5 w-3.5" />
@@ -419,20 +419,20 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
 
       {/* Status Bar */}
       {result && (activeTab === 'output' || activeTab === 'errors' || activeTab === 'logs') && (
-        <div className="flex flex-wrap items-center justify-between border-b border-slate-200 bg-slate-50/50 px-4 py-2 text-xs">
+        <div className="flex flex-wrap items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 px-4 py-2 text-xs">
           <div className="flex items-center gap-3">
             {getStatusBadge()}
             {result.exit_code !== undefined && result.exit_code !== null && (
-              <span className="font-mono text-[11px] text-slate-600">
+              <span className="font-mono text-[11px] text-slate-600 dark:text-slate-400">
                 Exit Code:{' '}
-                <strong className={result.exit_code === 0 ? 'text-emerald-700' : 'text-rose-700'}>
+                <strong className={result.exit_code === 0 ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-400'}>
                   {result.exit_code}
                 </strong>
               </span>
             )}
           </div>
 
-          <div className="flex items-center gap-4 text-[11px] text-slate-500">
+          <div className="flex items-center gap-4 text-[11px] text-slate-500 dark:text-slate-400">
             {result.execution_time !== null && result.execution_time !== undefined && (
               <span className="flex items-center gap-1">
                 <Clock className="h-3.5 w-3.5 text-slate-400" />
@@ -450,13 +450,13 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
       )}
 
       {/* Main Content Viewport */}
-      <div className="min-h-[440px] max-h-[580px] overflow-y-auto p-4 bg-white text-slate-900">
+      <div className="min-h-[440px] max-h-[580px] overflow-y-auto p-4 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">
         {/* Loading State */}
         {isExecuting && (
           <div className="flex min-h-[380px] flex-col items-center justify-center text-center">
             <div className="h-9 w-9 animate-spin rounded-full border-3 border-emerald-600 border-t-transparent" />
-            <p className="mt-3.5 text-sm font-bold text-slate-900">Running Program in Isolated Sandbox...</p>
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="mt-3.5 text-sm font-bold text-slate-900 dark:text-white">Running Program in Isolated Sandbox...</p>
+            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
               Executing in isolated Judge0 sandbox environment with strict memory and CPU boundaries.
             </p>
           </div>
@@ -468,22 +468,22 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
             {result ? (
               <div className="space-y-3">
                 {result.output ? (
-                  <pre className="rounded-xl border border-slate-200 bg-slate-50 p-4 font-mono text-xs text-slate-900 whitespace-pre-wrap leading-relaxed shadow-inner">
+                  <pre className="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-4 font-mono text-xs text-slate-900 dark:text-slate-100 whitespace-pre-wrap leading-relaxed shadow-inner">
                     {result.output}
                   </pre>
                 ) : (
-                  <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50/60 py-16 text-slate-500 text-xs">
-                    <CheckCircle2 className="h-8 w-8 text-emerald-600 mb-2" />
-                    <span className="font-semibold text-slate-800">Program executed successfully with no output returned.</span>
+                  <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/40 py-16 text-slate-500 dark:text-slate-400 text-xs">
+                    <CheckCircle2 className="h-8 w-8 text-emerald-600 dark:text-emerald-400 mb-2" />
+                    <span className="font-semibold text-slate-800 dark:text-slate-200">Program executed successfully with no output returned.</span>
                   </div>
                 )}
               </div>
             ) : (
-              <div className="flex min-h-[360px] flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50/60 p-8 text-center text-slate-500">
-                <Terminal className="h-10 w-10 text-slate-400 mb-2.5" />
-                <p className="font-bold text-slate-800 text-sm">Sandbox Ready for Execution</p>
-                <p className="text-xs text-slate-500 mt-1 max-w-sm leading-relaxed">
-                  Click <strong className="text-emerald-700">&quot;Run Code&quot;</strong> in the toolbar to execute your code in an isolated environment and view real stdout.
+              <div className="flex min-h-[360px] flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/40 p-8 text-center text-slate-500 dark:text-slate-400">
+                <Terminal className="h-10 w-10 text-slate-400 dark:text-slate-500 mb-2.5" />
+                <p className="font-bold text-slate-800 dark:text-slate-200 text-sm">Sandbox Ready for Execution</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm leading-relaxed">
+                  Click <strong className="text-emerald-700 dark:text-emerald-400">&quot;Run Code&quot;</strong> in the toolbar to execute your code in an isolated environment and view real stdout.
                 </p>
               </div>
             )}
@@ -496,58 +496,58 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
             {result && !result.success ? (
               <div className="space-y-4">
                 {/* Error Banner */}
-                <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-xs text-rose-900">
+                <div className="rounded-xl border border-rose-200 dark:border-rose-900/60 bg-rose-50 dark:bg-rose-950/40 p-4 text-xs text-rose-900 dark:text-rose-200">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-rose-800 flex items-center gap-2">
-                      <XCircle className="h-4 w-4 text-rose-600" />
+                    <span className="font-bold text-rose-800 dark:text-rose-300 flex items-center gap-2">
+                      <XCircle className="h-4 w-4 text-rose-600 dark:text-rose-400" />
                       {result.error_detail?.error_type || result.status}
                     </span>
                     {result.error_detail?.line_number && (
                       <button
                         type="button"
                         onClick={() => onJumpToLine && onJumpToLine(result.error_detail!.line_number!)}
-                        className="inline-flex items-center gap-1 rounded-md bg-rose-100 px-2 py-0.5 text-[11px] font-semibold text-rose-800 hover:bg-rose-200 transition cursor-pointer"
+                        className="inline-flex items-center gap-1 rounded-md bg-rose-100 dark:bg-rose-900/60 px-2 py-0.5 text-[11px] font-semibold text-rose-800 dark:text-rose-300 hover:bg-rose-200 dark:hover:bg-rose-800/80 transition cursor-pointer"
                       >
                         <span>Line {result.error_detail.line_number}</span>
                         <ArrowRight className="h-3 w-3" />
                       </button>
                     )}
                   </div>
-                  <pre className="mt-2.5 overflow-x-auto rounded-lg bg-white/80 p-2.5 font-mono text-[11px] text-rose-950 whitespace-pre-wrap border border-rose-200">
+                  <pre className="mt-2.5 overflow-x-auto rounded-lg bg-white/80 dark:bg-slate-950/80 p-2.5 font-mono text-[11px] text-rose-950 dark:text-rose-200 whitespace-pre-wrap border border-rose-200 dark:border-rose-900/60">
                     {result.stderr || result.compile_output || result.output}
                   </pre>
                 </div>
 
                 {/* Educational Diagnosis Cards */}
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 text-xs">
-                  <div className="rounded-xl border border-slate-200 bg-slate-50/80 p-3.5">
-                    <h4 className="font-bold text-slate-900 flex items-center gap-1.5">
-                      <AlertTriangle className="h-3.5 w-3.5 text-amber-600" />
+                  <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/60 p-3.5">
+                    <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                      <AlertTriangle className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
                       What Went Wrong
                     </h4>
-                    <p className="mt-1.5 text-slate-700 leading-relaxed">
+                    <p className="mt-1.5 text-slate-700 dark:text-slate-300 leading-relaxed">
                       {result.error_detail?.what_went_wrong ||
                         'The program encountered a compilation, syntax, or runtime error during execution.'}
                     </p>
                   </div>
 
-                  <div className="rounded-xl border border-slate-200 bg-slate-50/80 p-3.5">
-                    <h4 className="font-bold text-slate-900 flex items-center gap-1.5">
-                      <BookOpen className="h-3.5 w-3.5 text-blue-600" />
+                  <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/60 p-3.5">
+                    <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                      <BookOpen className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
                       Why It Happened
                     </h4>
-                    <p className="mt-1.5 text-slate-700 leading-relaxed">
+                    <p className="mt-1.5 text-slate-700 dark:text-slate-300 leading-relaxed">
                       {result.error_detail?.why_it_happened ||
                         'The interpreter or compiler could not process this line due to an unexpected token or invalid instruction.'}
                     </p>
                   </div>
 
-                  <div className="rounded-xl border border-slate-200 bg-slate-50/80 p-3.5 sm:col-span-2">
-                    <h4 className="font-bold text-slate-900 flex items-center gap-1.5">
-                      <Wrench className="h-3.5 w-3.5 text-emerald-600" />
+                  <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/60 p-3.5 sm:col-span-2">
+                    <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                      <Wrench className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                       Recommended Solution
                     </h4>
-                    <p className="mt-1.5 text-slate-700 leading-relaxed">
+                    <p className="mt-1.5 text-slate-700 dark:text-slate-300 leading-relaxed">
                       {result.error_detail?.how_to_fix ||
                         'Inspect the highlighted line above and apply the auto-corrected code below.'}
                     </p>
@@ -555,13 +555,13 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
 
                   {/* Auto-remediation Apply Button */}
                   {effectiveFix && (
-                    <div className="sm:col-span-2 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-emerald-200 bg-emerald-50/80 p-3.5">
+                    <div className="sm:col-span-2 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50/80 dark:bg-emerald-950/40 p-3.5">
                       <div className="text-xs">
-                        <span className="font-bold text-emerald-900 flex items-center gap-1.5">
-                          <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
+                        <span className="font-bold text-emerald-900 dark:text-emerald-300 flex items-center gap-1.5">
+                          <Sparkles className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                           AI Corrected Code Available
                         </span>
-                        <span className="text-[11px] text-emerald-800">
+                        <span className="text-[11px] text-emerald-800 dark:text-emerald-400">
                           Synthesized syntax repair is ready to apply.
                         </span>
                       </div>
@@ -590,10 +590,10 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                 </div>
               </div>
             ) : (
-              <div className="flex min-h-[360px] flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50/60 p-8 text-center text-slate-500">
-                <CheckCircle2 className="h-10 w-10 text-emerald-600 mb-2" />
-                <p className="font-bold text-slate-800 text-sm">No Execution Errors</p>
-                <p className="text-xs text-slate-500 mt-1">Standard error stream is clean. Code executed without fatal errors.</p>
+              <div className="flex min-h-[360px] flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/40 p-8 text-center text-slate-500 dark:text-slate-400">
+                <CheckCircle2 className="h-10 w-10 text-emerald-600 dark:text-emerald-400 mb-2" />
+                <p className="font-bold text-slate-800 dark:text-slate-200 text-sm">No Execution Errors</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Standard error stream is clean. Code executed without fatal errors.</p>
               </div>
             )}
           </>
@@ -603,13 +603,13 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
         {!isExecuting && activeTab === 'tests' && (
           <div className="space-y-4 font-sans">
             {/* Header / Summary */}
-            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3.5">
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 p-3.5">
               <div>
-                <h4 className="text-xs font-bold text-slate-900 flex items-center gap-2">
-                  <TestTube2 className="h-4 w-4 text-purple-600" />
+                <h4 className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <TestTube2 className="h-4 w-4 text-purple-600 dark:text-purple-400" />
                   Automated Test Verification Bench
                 </h4>
-                <p className="text-[11px] text-slate-500 mt-0.5">
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                   Verify runtime output against assertions across normal, edge, invalid, and branch coverage categories.
                 </p>
               </div>
@@ -619,7 +619,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                   type="button"
                   onClick={onGenerateTestCases}
                   disabled={isGeneratingTests}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-purple-200 bg-purple-50 px-3 py-1.5 text-xs font-semibold text-purple-700 hover:bg-purple-100 disabled:opacity-50 transition cursor-pointer"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-950/50 px-3 py-1.5 text-xs font-semibold text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-900/50 disabled:opacity-50 transition cursor-pointer"
                   title="Dynamically generate structured test suite using AI & AST analysis"
                 >
                   {isGeneratingTests ? (
@@ -633,7 +633,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                 <button
                   type="button"
                   onClick={() => setShowAddModal(true)}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer shadow-2xs"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
                 >
                   <Plus className="h-3.5 w-3.5" />
                   <span>Add Case</span>
@@ -644,7 +644,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                     <button
                       type="button"
                       onClick={handleExportTests}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50 transition cursor-pointer shadow-2xs"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
                       title="Export test suite as JSON"
                     >
                       <Download className="h-3.5 w-3.5" />
@@ -655,7 +655,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                       <button
                         type="button"
                         onClick={onClearTestCases}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-600 hover:text-rose-600 transition cursor-pointer shadow-2xs"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs text-slate-600 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-400 transition cursor-pointer shadow-2xs"
                         title="Clear all test cases"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
@@ -687,53 +687,53 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
 
             {/* Test Results Progress & Telemetry */}
             {testResults && (
-              <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-3 space-y-2.5">
+              <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/60 p-3 space-y-2.5">
                 <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
                   <div className="flex items-center gap-3">
                     <span
                       className={`font-bold flex items-center gap-1.5 ${
-                        testResults.all_passed ? 'text-emerald-700' : 'text-rose-700'
+                        testResults.all_passed ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-400'
                       }`}
                     >
                       {testResults.all_passed ? (
                         <>
-                          <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                          <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                           All Tests Passed ({testResults.passed}/{testResults.total})
                         </>
                       ) : (
                         <>
-                          <XCircle className="h-4 w-4 text-rose-600" />
+                          <XCircle className="h-4 w-4 text-rose-600 dark:text-rose-400" />
                           Test Failures Detected: {testResults.failed} failed, {testResults.errors} errors
                         </>
                       )}
                     </span>
                     {testResults.timeouts !== undefined && testResults.timeouts > 0 && (
-                      <span className="flex items-center gap-1 rounded bg-amber-100 px-2 py-0.5 text-[11px] font-bold text-amber-700">
+                      <span className="flex items-center gap-1 rounded bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 text-[11px] font-bold text-amber-700 dark:text-amber-400">
                         <Clock className="h-3 w-3" />
                         {testResults.timeouts} Timed Out
                       </span>
                     )}
                   </div>
 
-                  <div className="flex items-center gap-3 text-slate-600 text-[11px]">
+                  <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400 text-[11px]">
                     {testResults.duration_seconds !== undefined && (
                       <span className="flex items-center gap-1">
-                        <Zap className="h-3 w-3 text-amber-600" />
+                        <Zap className="h-3 w-3 text-amber-600 dark:text-amber-400" />
                         {testResults.duration_seconds}s
                       </span>
                     )}
                     {testResults.estimated_coverage !== undefined && (
-                      <span className="rounded-md border border-indigo-200 bg-indigo-50 px-2 py-0.5 font-semibold text-indigo-700">
+                      <span className="rounded-md border border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-950/50 px-2 py-0.5 font-semibold text-indigo-700 dark:text-indigo-400">
                         ~{testResults.estimated_coverage}% Est. Coverage
                       </span>
                     )}
-                    <span className="font-semibold text-slate-900">
+                    <span className="font-semibold text-slate-900 dark:text-white">
                       Pass Rate: {testResults.pass_percentage ?? Math.round((testResults.passed / testResults.total) * 100)}%
                     </span>
                   </div>
                 </div>
 
-                <div className="h-2 w-full rounded-full bg-slate-200 overflow-hidden flex">
+                <div className="h-2 w-full rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden flex">
                   <div
                     className="bg-emerald-500 h-full transition-all duration-500"
                     style={{ width: `${(testResults.passed / testResults.total) * 100}%` }}
@@ -756,7 +756,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
             {/* Category Filter Pills */}
             {testCases.length > 0 && (
               <div className="flex flex-wrap items-center gap-1.5 pb-1">
-                <span className="text-[11px] font-medium text-slate-500 flex items-center gap-1 mr-1">
+                <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1 mr-1">
                   <Filter className="h-3 w-3" /> Filter:
                 </span>
                 {['All', 'Normal', 'Boundary / Edge', 'Invalid Input', 'Branch Coverage', 'Regression'].map((cat) => {
@@ -774,13 +774,13 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                       className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium transition cursor-pointer ${
                         isSelected
                           ? 'bg-blue-600 text-white shadow-2xs'
-                          : 'border border-slate-200 bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                          : 'border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-700'
                       }`}
                     >
                       <span>{cat}</span>
                       <span
                         className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                          isSelected ? 'bg-blue-700 text-white' : 'bg-slate-100 text-slate-600'
+                          isSelected ? 'bg-blue-700 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
                         }`}
                       >
                         {count}
@@ -793,12 +793,12 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
 
             {/* Test Case Cards List */}
             {filteredTestCases.length === 0 ? (
-              <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50/60 p-8 text-center text-slate-500">
-                <TestTube2 className="h-8 w-8 text-slate-400 mb-2" />
-                <p className="font-semibold text-slate-800 text-xs">
+              <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/40 p-8 text-center text-slate-500 dark:text-slate-400">
+                <TestTube2 className="h-8 w-8 text-slate-400 dark:text-slate-500 mb-2" />
+                <p className="font-semibold text-slate-800 dark:text-slate-200 text-xs">
                   {testCases.length === 0 ? 'No Test Cases Configured' : 'No Test Cases in This Category'}
                 </p>
-                <p className="text-[11px] text-slate-500 mt-1 max-w-sm">
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 max-w-sm">
                   {testCases.length === 0
                     ? 'Click "Generate Test Cases" or "Add Case" to define inputs and expected outputs.'
                     : 'Select "All" to view test cases in other categories.'}
@@ -816,19 +816,19 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                       key={tc.id}
                       className={`rounded-xl border p-3.5 transition ${
                         status === 'passed'
-                          ? 'border-emerald-200 bg-emerald-50/40'
+                          ? 'border-emerald-200 dark:border-emerald-800/80 bg-emerald-50/40 dark:bg-emerald-950/20'
                           : status === 'failed'
-                          ? 'border-rose-200 bg-rose-50/40'
+                          ? 'border-rose-200 dark:border-rose-800/80 bg-rose-50/40 dark:bg-rose-950/20'
                           : status === 'timeout'
-                          ? 'border-amber-200 bg-amber-50/40'
+                          ? 'border-amber-200 dark:border-amber-800/80 bg-amber-50/40 dark:bg-amber-950/20'
                           : status === 'error'
-                          ? 'border-amber-200 bg-amber-50/40'
-                          : 'border-slate-200 bg-white'
+                          ? 'border-amber-200 dark:border-amber-800/80 bg-amber-50/40 dark:bg-amber-950/20'
+                          : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900'
                       }`}
                     >
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="font-semibold text-xs text-slate-900">
+                          <span className="font-semibold text-xs text-slate-900 dark:text-white">
                             #{idx + 1} {tc.name}
                           </span>
 
@@ -836,14 +836,14 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                           <span
                             className={`rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 ${
                               status === 'passed'
-                                ? 'bg-emerald-100 text-emerald-800'
+                                ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300'
                                 : status === 'failed'
-                                ? 'bg-rose-100 text-rose-800'
+                                ? 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300'
                                 : status === 'timeout'
-                                ? 'bg-amber-100 text-amber-800'
+                                ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300'
                                 : status === 'error'
-                                ? 'bg-amber-100 text-amber-800'
-                                : 'bg-slate-100 text-slate-600'
+                                ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300'
+                                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
                             }`}
                           >
                             {status === 'passed' && <Check className="h-3 w-3" />}
@@ -854,20 +854,20 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
 
                           {/* Category Badge */}
                           {tc.category && (
-                            <span className="rounded border border-purple-200 bg-purple-50 px-2 py-0.5 text-[10px] font-medium text-purple-700">
+                            <span className="rounded border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-950/50 px-2 py-0.5 text-[10px] font-medium text-purple-700 dark:text-purple-300">
                               {tc.category}
                             </span>
                           )}
 
                           {tc.is_user_edited && (
-                            <span className="rounded border border-blue-200 bg-blue-50 px-1.5 py-0.5 text-[10px] text-blue-700">
+                            <span className="rounded border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/50 px-1.5 py-0.5 text-[10px] text-blue-700 dark:text-blue-300">
                               Edited
                             </span>
                           )}
 
                           {tc.is_verified && (
                             <span
-                              className="rounded border border-emerald-200 bg-emerald-50 px-1.5 py-0.5 text-[10px] text-emerald-700"
+                              className="rounded border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/50 px-1.5 py-0.5 text-[10px] text-emerald-700 dark:text-emerald-300"
                               title="Output verified by runtime sandbox execution"
                             >
                               Verified Oracle
@@ -882,7 +882,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                               type="button"
                               onClick={() => onRunSingleTest(tc)}
                               disabled={isRunningTests}
-                              className="rounded-lg border border-slate-200 bg-white p-1.5 text-slate-600 hover:bg-blue-600 hover:text-white transition disabled:opacity-50 cursor-pointer shadow-2xs"
+                              className="rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-1.5 text-slate-600 dark:text-slate-300 hover:bg-blue-600 hover:text-white transition disabled:opacity-50 cursor-pointer shadow-2xs"
                               title="Run only this test case"
                             >
                               <Play className="h-3.5 w-3.5 fill-current" />
@@ -900,7 +900,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                                 setEditExpectedVal(tc.expected_output || '')
                               }
                             }}
-                            className="rounded-lg border border-slate-200 bg-white p-1.5 text-slate-600 hover:bg-slate-100 transition cursor-pointer shadow-2xs"
+                            className="rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-1.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
                             title={isEditing ? 'Cancel Edit' : 'Edit Input & Expected Output'}
                           >
                             <Edit3 className="h-3.5 w-3.5" />
@@ -909,7 +909,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                           <button
                             type="button"
                             onClick={() => onDeleteTestCase(tc.id)}
-                            className="rounded-lg border border-slate-200 bg-white p-1.5 text-slate-500 hover:text-rose-600 hover:border-rose-300 transition cursor-pointer shadow-2xs"
+                            className="rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-1.5 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-300 dark:hover:border-rose-800 transition cursor-pointer shadow-2xs"
                             title="Remove test case"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
@@ -919,39 +919,39 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
 
                       {/* Reason / Target Hypothesis */}
                       {tc.reason && (
-                        <p className="mt-1.5 text-[11px] text-slate-500 italic">Target: {tc.reason}</p>
+                        <p className="mt-1.5 text-[11px] text-slate-500 dark:text-slate-400 italic">Target: {tc.reason}</p>
                       )}
 
                       {/* Inline Editing Form */}
                       {isEditing ? (
-                        <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-3 space-y-2.5">
+                        <div className="mt-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-3 space-y-2.5">
                           <div>
-                            <label className="text-[10px] uppercase font-bold text-slate-600 block mb-1">
+                            <label className="text-[10px] uppercase font-bold text-slate-600 dark:text-slate-400 block mb-1">
                               Stdin Input:
                             </label>
                             <textarea
                               rows={2}
                               value={editInputVal}
                               onChange={(e) => setEditInputVal(e.target.value)}
-                              className="w-full rounded-lg border border-slate-300 bg-white p-2 font-mono text-xs text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none"
+                              className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2 font-mono text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-blue-500 focus:outline-none"
                             />
                           </div>
                           <div>
-                            <label className="text-[10px] uppercase font-bold text-slate-600 block mb-1">
+                            <label className="text-[10px] uppercase font-bold text-slate-600 dark:text-slate-400 block mb-1">
                               Expected Output:
                             </label>
                             <textarea
                               rows={2}
                               value={editExpectedVal}
                               onChange={(e) => setEditExpectedVal(e.target.value)}
-                              className="w-full rounded-lg border border-slate-300 bg-white p-2 font-mono text-xs text-emerald-800 placeholder-slate-400 focus:border-blue-500 focus:outline-none"
+                              className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2 font-mono text-xs text-emerald-800 dark:text-emerald-400 placeholder-slate-400 focus:border-blue-500 focus:outline-none"
                             />
                           </div>
                           <div className="flex justify-end gap-2">
                             <button
                               type="button"
                               onClick={() => setEditingCaseId(null)}
-                              className="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-xs text-slate-600 hover:bg-slate-100"
+                              className="rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1 text-xs text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700"
                             >
                               Cancel
                             </button>
@@ -976,36 +976,36 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                         /* Stdin and Expected vs Actual Output Display */
                         <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 text-xs font-mono">
                           {tc.input && (
-                            <div className="sm:col-span-2 rounded-lg bg-slate-50 border border-slate-200 p-2 text-slate-800">
-                              <span className="text-[10px] text-slate-500 uppercase block font-sans font-semibold">
+                            <div className="sm:col-span-2 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-2 text-slate-800 dark:text-slate-200">
+                              <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase block font-sans font-semibold">
                                 Test Input (Stdin):
                               </span>
                               <pre className="mt-0.5 whitespace-pre-wrap">{tc.input}</pre>
                             </div>
                           )}
 
-                          <div className="rounded-lg bg-slate-50 border border-slate-200 p-2 text-slate-800">
-                            <span className="text-[10px] text-slate-500 uppercase block font-sans font-semibold">
+                          <div className="rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-2 text-slate-800 dark:text-slate-200">
+                            <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase block font-sans font-semibold">
                               Expected Output:
                             </span>
-                            <pre className="mt-0.5 whitespace-pre-wrap text-emerald-800 font-semibold">
+                            <pre className="mt-0.5 whitespace-pre-wrap text-emerald-800 dark:text-emerald-400 font-semibold">
                               {tc.expected_output || '(Empty / Any)'}
                             </pre>
                           </div>
 
-                          <div className="rounded-lg bg-slate-50 border border-slate-200 p-2 text-slate-800">
-                            <span className="text-[10px] text-slate-500 uppercase block font-sans font-semibold">
+                          <div className="rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-2 text-slate-800 dark:text-slate-200">
+                            <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase block font-sans font-semibold">
                               Actual Output:
                             </span>
                             <pre
                               className={`mt-0.5 whitespace-pre-wrap ${
                                 status === 'passed'
-                                  ? 'text-emerald-800 font-semibold'
+                                  ? 'text-emerald-800 dark:text-emerald-400 font-semibold'
                                   : status === 'failed'
-                                  ? 'text-rose-800 font-bold'
+                                  ? 'text-rose-800 dark:text-rose-400 font-bold'
                                   : status === 'timeout'
-                                  ? 'text-amber-800'
-                                  : 'text-slate-600'
+                                  ? 'text-amber-800 dark:text-amber-400'
+                                  : 'text-slate-600 dark:text-slate-400'
                               }`}
                             >
                               {resItem ? resItem.actual_output || '(No output)' : 'Pending test run...'}
@@ -1016,30 +1016,30 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
 
                       {/* Mismatch Callout */}
                       {resItem?.mismatch_line && (
-                        <div className="mt-2.5 rounded-lg border border-rose-200 bg-rose-50 p-2 text-xs font-sans text-rose-800">
+                        <div className="mt-2.5 rounded-lg border border-rose-200 dark:border-rose-900/60 bg-rose-50 dark:bg-rose-950/40 p-2 text-xs font-sans text-rose-800 dark:text-rose-300">
                           <strong>Failure Mismatch:</strong> {resItem.mismatch_line}
                         </div>
                       )}
 
                       {/* Error / Timeout details */}
                       {resItem?.error_message && (
-                        <div className="mt-2.5 rounded-lg border border-amber-200 bg-amber-50 p-2 text-xs font-mono text-amber-900 whitespace-pre-wrap">
+                        <div className="mt-2.5 rounded-lg border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/40 p-2 text-xs font-mono text-amber-900 dark:text-amber-300 whitespace-pre-wrap">
                           {resItem.error_message}
                         </div>
                       )}
 
                       {/* AI Explain Failure Button */}
                       {(status === 'failed' || status === 'error' || status === 'timeout') && (
-                        <div className="mt-3 pt-2 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2">
-                          <span className="text-[11px] text-slate-600">
+                        <div className="mt-3 pt-2 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2">
+                          <span className="text-[11px] text-slate-600 dark:text-slate-400">
                             Execution diverged from assertion. Diagnose root cause and generate a verified patch:
                           </span>
                           <button
                             type="button"
                             onClick={() => onExplainTestFailure && resItem && onExplainTestFailure(resItem)}
-                            className="inline-flex items-center gap-1.5 rounded-lg border border-purple-200 bg-purple-50 px-3 py-1.5 text-xs font-bold text-purple-700 hover:bg-purple-100 transition cursor-pointer shadow-2xs"
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-950/50 px-3 py-1.5 text-xs font-bold text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-900/50 transition cursor-pointer shadow-2xs"
                           >
-                            <Sparkles className="h-3.5 w-3.5 text-purple-600" />
+                            <Sparkles className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
                             <span>Explain Failure with AI</span>
                           </button>
                         </div>
@@ -1052,32 +1052,32 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
 
             {/* Modal: Add Test Case */}
             {showAddModal && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4">
-                <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <Plus className="h-4 w-4 text-purple-600" />
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+                <div className="w-full max-w-md rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-2xl">
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <Plus className="h-4 w-4 text-purple-600 dark:text-purple-400" />
                     Create Custom Test Case
                   </h3>
                   <form onSubmit={handleCreateTestCase} className="mt-4 space-y-3 text-xs">
                     <div>
-                      <label className="font-semibold text-slate-700 block mb-1">Test Name</label>
+                      <label className="font-semibold text-slate-700 dark:text-slate-300 block mb-1">Test Name</label>
                       <input
                         type="text"
                         required
                         placeholder="e.g. Test with Negative Integers"
                         value={newCaseName}
                         onChange={(e) => setNewCaseName(e.target.value)}
-                        className="w-full rounded-xl border border-slate-300 bg-white py-2 px-3 text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none"
+                        className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 py-2 px-3 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-blue-500 focus:outline-none"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">
                       <div>
-                        <label className="font-semibold text-slate-700 block mb-1">Category</label>
+                        <label className="font-semibold text-slate-700 dark:text-slate-300 block mb-1">Category</label>
                         <select
                           value={newCaseCategory}
                           onChange={(e) => setNewCaseCategory(e.target.value)}
-                          className="w-full rounded-xl border border-slate-300 bg-white py-2 px-3 text-slate-900 focus:border-blue-500 focus:outline-none"
+                          className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 py-2 px-3 text-slate-900 dark:text-slate-100 focus:border-blue-500 focus:outline-none"
                         >
                           <option value="Normal">Normal</option>
                           <option value="Boundary / Edge">Boundary / Edge</option>
@@ -1088,19 +1088,19 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                       </div>
 
                       <div>
-                        <label className="font-semibold text-slate-700 block mb-1">Reason / Purpose</label>
+                        <label className="font-semibold text-slate-700 dark:text-slate-300 block mb-1">Reason / Purpose</label>
                         <input
                           type="text"
                           placeholder="e.g. Zero division guard"
                           value={newCaseReason}
                           onChange={(e) => setNewCaseReason(e.target.value)}
-                          className="w-full rounded-xl border border-slate-300 bg-white py-2 px-3 text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none"
+                          className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 py-2 px-3 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-blue-500 focus:outline-none"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="font-semibold text-slate-700 block mb-1">
+                      <label className="font-semibold text-slate-700 dark:text-slate-300 block mb-1">
                         Standard Input (Stdin) <span className="text-slate-400 font-normal">(optional)</span>
                       </label>
                       <textarea
@@ -1108,12 +1108,12 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                         placeholder="Input data piped to program"
                         value={newCaseInput}
                         onChange={(e) => setNewCaseInput(e.target.value)}
-                        className="w-full rounded-xl border border-slate-300 bg-white py-2 px-3 font-mono text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none"
+                        className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 py-2 px-3 font-mono text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-blue-500 focus:outline-none"
                       />
                     </div>
 
                     <div>
-                      <label className="font-semibold text-slate-700 block mb-1">
+                      <label className="font-semibold text-slate-700 dark:text-slate-300 block mb-1">
                         Expected Output (Stdout)
                       </label>
                       <textarea
@@ -1122,7 +1122,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                         placeholder="Exact output expected from program"
                         value={newCaseExpected}
                         onChange={(e) => setNewCaseExpected(e.target.value)}
-                        className="w-full rounded-xl border border-slate-300 bg-white py-2 px-3 font-mono text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none"
+                        className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 py-2 px-3 font-mono text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-blue-500 focus:outline-none"
                       />
                     </div>
 
@@ -1130,7 +1130,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                       <button
                         type="button"
                         onClick={() => setShowAddModal(false)}
-                        className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-slate-600 hover:bg-slate-50"
+                        className="rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-1.5 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
                       >
                         Cancel
                       </button>
@@ -1153,49 +1153,49 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
           <div className="space-y-3 font-mono text-xs">
             {result ? (
               <div className="space-y-3">
-                <div className="text-slate-600 border-b border-slate-200 pb-2">
-                  <span className="font-sans font-bold text-slate-800">
+                <div className="text-slate-600 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 pb-2">
+                  <span className="font-sans font-bold text-slate-800 dark:text-slate-200">
                     Compiler Sandbox Diagnostic Logs & Environment Telemetry
                   </span>
                 </div>
-                <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-2 text-slate-800">
+                <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-4 space-y-2 text-slate-800 dark:text-slate-200">
                   <div>
-                    <span className="text-blue-700 font-bold">[Execution Target]</span>{' '}
+                    <span className="text-blue-700 dark:text-blue-400 font-bold">[Execution Target]</span>{' '}
                     Language: <span className="font-semibold">{result.language}</span>
                   </div>
                   <div>
-                    <span className="text-blue-700 font-bold">[Status Code]</span>{' '}
+                    <span className="text-blue-700 dark:text-blue-400 font-bold">[Status Code]</span>{' '}
                     Result:{' '}
-                    <span className={result.success ? 'text-emerald-700 font-bold' : 'text-rose-700 font-bold'}>
+                    <span className={result.success ? 'text-emerald-700 dark:text-emerald-400 font-bold' : 'text-rose-700 dark:text-rose-400 font-bold'}>
                       {result.status}
                     </span>
                   </div>
                   {result.compile_output && (
                     <div className="pt-2">
-                      <div className="text-amber-800 font-bold mb-1">[Compiler Diagnostic Output]:</div>
-                      <pre className="p-3 bg-white rounded-lg border border-amber-200 text-amber-900 whitespace-pre-wrap">
+                      <div className="text-amber-800 dark:text-amber-300 font-bold mb-1">[Compiler Diagnostic Output]:</div>
+                      <pre className="p-3 bg-white dark:bg-slate-900 rounded-lg border border-amber-200 dark:border-amber-800/80 text-amber-900 dark:text-amber-200 whitespace-pre-wrap">
                         {result.compile_output}
                       </pre>
                     </div>
                   )}
                   {result.stderr && (
                     <div className="pt-2">
-                      <div className="text-rose-800 font-bold mb-1">[Standard Error Stream]:</div>
-                      <pre className="p-3 bg-white rounded-lg border border-rose-200 text-rose-900 whitespace-pre-wrap">
+                      <div className="text-rose-800 dark:text-rose-300 font-bold mb-1">[Standard Error Stream]:</div>
+                      <pre className="p-3 bg-white dark:bg-slate-900 rounded-lg border border-rose-200 dark:border-rose-800/80 text-rose-900 dark:text-rose-200 whitespace-pre-wrap">
                         {result.stderr}
                       </pre>
                     </div>
                   )}
-                  <div className="text-slate-500 text-[11px] pt-2 border-t border-slate-200/80">
+                  <div className="text-slate-500 dark:text-slate-400 text-[11px] pt-2 border-t border-slate-200/80 dark:border-slate-800">
                     Sandbox Engine: Judge0 CE Isolated Micro-VM / Safe SQLite In-Memory Database
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="flex min-h-[360px] flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50/60 p-8 text-center text-slate-500">
-                <FileCode2 className="h-10 w-10 text-slate-400 mb-2" />
-                <p className="font-bold text-slate-800 text-sm">No Build Logs Available</p>
-                <p className="text-xs text-slate-500 mt-1">Run code to capture compiler and linker outputs.</p>
+              <div className="flex min-h-[360px] flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/40 p-8 text-center text-slate-500 dark:text-slate-400">
+                <FileCode2 className="h-10 w-10 text-slate-400 dark:text-slate-500 mb-2" />
+                <p className="font-bold text-slate-800 dark:text-slate-200 text-sm">No Build Logs Available</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Run code to capture compiler and linker outputs.</p>
               </div>
             )}
           </div>
@@ -1219,13 +1219,13 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
 
         {/* Tab 6: Live Preview Tab (for Web Languages) */}
         {!isExecuting && activeTab === 'preview' && isWebPreview && previewDocument && (
-          <div className="rounded-xl border border-slate-200 overflow-hidden shadow-xs">
-            <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold text-slate-700">
+          <div className="rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xs">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300">
               <div className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                 <span>Interactive Browser Preview</span>
               </div>
-              <span className="text-[11px] text-slate-500">Isolated Sandboxed Iframe</span>
+              <span className="text-[11px] text-slate-500 dark:text-slate-400">Isolated Sandboxed Iframe</span>
             </div>
             <iframe
               title="Browser Live Preview"

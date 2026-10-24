@@ -141,28 +141,28 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
   }
 
   return (
-    <div className="fixed inset-y-0 right-0 z-40 flex w-full max-w-md flex-col border-l border-slate-200 bg-white shadow-2xl transition-transform duration-300">
+    <div className="fixed inset-y-0 right-0 z-40 flex w-full max-w-md flex-col border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl transition-transform duration-300">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-200 bg-white px-5 py-4">
+      <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-5 py-4">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-violet-50 border border-violet-200 text-violet-600 shadow-xs">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-violet-50 dark:bg-violet-950/50 border border-violet-200 dark:border-violet-800 text-violet-600 dark:text-violet-400 shadow-xs">
             <Sparkles className="h-4 w-4" />
           </div>
           <div>
-            <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+            <h2 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
               AI Copilot
-              <span className="rounded-full bg-violet-50 border border-violet-200 px-2 py-0.5 text-[10px] font-semibold text-violet-700">
+              <span className="rounded-full bg-violet-50 dark:bg-violet-950/50 border border-violet-200 dark:border-violet-800 px-2 py-0.5 text-[10px] font-semibold text-violet-700 dark:text-violet-300">
                 Claude & Gemini
               </span>
             </h2>
-            <p className="text-[11px] text-slate-500">Autonomous code review & remediation</p>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">Autonomous code review & remediation</p>
           </div>
         </div>
 
         <button
           type="button"
           onClick={onClose}
-          className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition"
+          className="rounded-lg p-1.5 text-slate-400 dark:text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-300 transition"
           title="Close AI Copilot"
         >
           <X className="h-4 w-4" />
@@ -170,14 +170,14 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-slate-200 bg-slate-50/60 px-4 pt-2">
+      <div className="flex border-b border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 px-4 pt-2">
         <button
           type="button"
           onClick={() => setActiveTab('chat')}
           className={`flex items-center gap-1.5 border-b-2 px-3 py-2 text-xs font-semibold transition ${
             activeTab === 'chat'
-              ? 'border-violet-600 text-violet-700'
-              : 'border-transparent text-slate-500 hover:text-slate-900'
+              ? 'border-violet-600 text-violet-700 dark:text-violet-400'
+              : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
           }`}
         >
           <BrainCircuit className="h-3.5 w-3.5" />
@@ -189,8 +189,8 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
           onClick={() => setActiveTab('diff')}
           className={`flex items-center gap-1.5 border-b-2 px-3 py-2 text-xs font-semibold transition ${
             activeTab === 'diff'
-              ? 'border-violet-600 text-violet-700'
-              : 'border-transparent text-slate-500 hover:text-slate-900'
+              ? 'border-violet-600 text-violet-700 dark:text-violet-400'
+              : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
           }`}
         >
           <Code2 className="h-3.5 w-3.5" />
@@ -207,7 +207,7 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
           <>
             {/* Quick Prompt Suggestions */}
             <div>
-              <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block mb-2">
+              <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-2">
                 Quick Actions
               </span>
               <div className="grid grid-cols-2 gap-2">
@@ -217,7 +217,7 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
                     if (onExplainErrors) onExplainErrors()
                     handleSendPrompt('Explain code logic, complexity, and root cause of any warnings.')
                   }}
-                  className="flex items-start gap-2 rounded-xl border border-slate-200 bg-white p-2.5 text-left text-xs font-medium text-slate-700 hover:border-violet-300 hover:bg-violet-50/30 transition shadow-2xs"
+                  className="flex items-start gap-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-left text-xs font-medium text-slate-700 dark:text-slate-200 hover:border-violet-300 dark:hover:border-violet-700 hover:bg-violet-50/30 dark:hover:bg-violet-950/30 transition shadow-2xs"
                 >
                   <Lightbulb className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
                   <span>Explain Architecture & Logic</span>
@@ -229,7 +229,7 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
                     if (onFixErrors) onFixErrors()
                     handleSendPrompt('Find any security vulnerabilities or runtime bugs and provide a patch.')
                   }}
-                  className="flex items-start gap-2 rounded-xl border border-slate-200 bg-white p-2.5 text-left text-xs font-medium text-slate-700 hover:border-violet-300 hover:bg-violet-50/30 transition shadow-2xs"
+                  className="flex items-start gap-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-left text-xs font-medium text-slate-700 dark:text-slate-200 hover:border-violet-300 dark:hover:border-violet-700 hover:bg-violet-50/30 dark:hover:bg-violet-950/30 transition shadow-2xs"
                 >
                   <ShieldAlert className="h-4 w-4 text-rose-500 shrink-0 mt-0.5" />
                   <span>Find Security Bugs & Fixes</span>
@@ -238,9 +238,9 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
                 <button
                   type="button"
                   onClick={() => handleSendPrompt('Optimize code execution time, reduce complexity, and improve memory efficiency.')}
-                  className="flex items-start gap-2 rounded-xl border border-slate-200 bg-white p-2.5 text-left text-xs font-medium text-slate-700 hover:border-violet-300 hover:bg-violet-50/30 transition shadow-2xs"
+                  className="flex items-start gap-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-left text-xs font-medium text-slate-700 dark:text-slate-200 hover:border-violet-300 dark:hover:border-violet-700 hover:bg-violet-50/30 dark:hover:bg-violet-950/30 transition shadow-2xs"
                 >
-                  <Zap className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <Zap className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                   <span>Optimize Performance</span>
                 </button>
 
@@ -250,9 +250,9 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
                     if (onRefactorCode) onRefactorCode()
                     handleSendPrompt('Identify code smells and suggest clean behavior-preserving refactoring.')
                   }}
-                  className="flex items-start gap-2 rounded-xl border border-slate-200 bg-white p-2.5 text-left text-xs font-medium text-slate-700 hover:border-violet-300 hover:bg-violet-50/30 transition shadow-2xs"
+                  className="flex items-start gap-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-left text-xs font-medium text-slate-700 dark:text-slate-200 hover:border-violet-300 dark:hover:border-violet-700 hover:bg-violet-50/30 dark:hover:bg-violet-950/30 transition shadow-2xs"
                 >
-                  <Wrench className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
+                  <Wrench className="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
                   <span>Refactor Code Smells</span>
                 </button>
               </div>
@@ -260,29 +260,29 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
 
             {/* AI Response Card */}
             {(isLoading || isExplaining) && (
-              <div className="flex items-center gap-3 rounded-xl border border-violet-200 bg-violet-50/50 p-4 text-xs text-violet-800">
+              <div className="flex items-center gap-3 rounded-xl border border-violet-200 dark:border-violet-800 bg-violet-50/50 dark:bg-violet-950/40 p-4 text-xs text-violet-800 dark:text-violet-300">
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-violet-600 border-t-transparent shrink-0" />
                 <span>AI is analyzing your code and synthesizing recommendations...</span>
               </div>
             )}
 
             {customResponse && !isLoading && (
-              <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm space-y-3">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                  <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-                    <Sparkles className="h-3.5 w-3.5 text-violet-600" />
+              <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 p-4 shadow-sm space-y-3">
+                <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-2">
+                  <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                    <Sparkles className="h-3.5 w-3.5 text-violet-600 dark:text-violet-400" />
                     Copilot Response
                   </span>
                   <button
                     type="button"
                     onClick={() => handleCopyCode(customResponse)}
-                    className="flex items-center gap-1 text-[11px] font-medium text-slate-500 hover:text-slate-800"
+                    className="flex items-center gap-1 text-[11px] font-medium text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
                   >
-                    {copied ? <Check className="h-3 w-3 text-emerald-600" /> : <Copy className="h-3 w-3" />}
+                    {copied ? <Check className="h-3 w-3 text-emerald-600 dark:text-emerald-400" /> : <Copy className="h-3 w-3" />}
                     <span>{copied ? 'Copied' : 'Copy'}</span>
                   </button>
                 </div>
-                <div className="prose prose-sm max-w-none text-xs text-slate-700 leading-relaxed whitespace-pre-line font-sans">
+                <div className="prose prose-sm max-w-none text-xs text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line font-sans">
                   {customResponse}
                 </div>
               </div>
@@ -290,13 +290,13 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
 
             {/* ExplainResult display if available */}
             {explainResult && !customResponse && (
-              <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs space-y-3">
-                <h3 className="text-xs font-bold text-slate-900">Analysis Summary</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">{explainResult.message || 'Analyzed code findings.'}</p>
+              <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 p-4 shadow-xs space-y-3">
+                <h3 className="text-xs font-bold text-slate-900 dark:text-white">Analysis Summary</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{explainResult.message || 'Analyzed code findings.'}</p>
                 {explainResult.explanations.map((exp, idx) => (
-                  <div key={idx} className="rounded-lg bg-amber-50 border border-amber-200 p-2.5 text-xs text-amber-900">
+                  <div key={idx} className="rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/80 p-2.5 text-xs text-amber-900 dark:text-amber-200">
                     <strong>Line {exp.line}: {exp.title}</strong>
-                    <p className="mt-1 text-slate-700 leading-relaxed">{exp.what}</p>
+                    <p className="mt-1 text-slate-700 dark:text-slate-300 leading-relaxed">{exp.what}</p>
                     {exp.corrected_code && (
                       <button
                         type="button"
@@ -304,7 +304,7 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
                           setSuggestedCode(exp.corrected_code)
                           setActiveTab('diff')
                         }}
-                        className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-violet-700 hover:text-violet-900 cursor-pointer"
+                        className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-violet-700 dark:text-violet-300 hover:text-violet-900 dark:hover:text-violet-100 cursor-pointer"
                       >
                         <Code2 className="h-3 w-3" />
                         <span>Preview Patch in Diff Tab</span>
@@ -323,7 +323,7 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
             {suggestedCode ? (
               <>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-800">Diff Comparison</span>
+                  <span className="text-xs font-bold text-slate-800 dark:text-slate-200">Diff Comparison</span>
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
@@ -341,7 +341,7 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
                     <button
                       type="button"
                       onClick={() => setSuggestedCode(null)}
-                      className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50 transition"
+                      className="inline-flex items-center gap-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
                     >
                       <span>Reject</span>
                     </button>
@@ -350,7 +350,7 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
                       <button
                         type="button"
                         onClick={onUndoFix}
-                        className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50 transition"
+                        className="inline-flex items-center gap-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
                         title="Revert last applied fix"
                       >
                         <Undo2 className="h-3.5 w-3.5" />
@@ -363,19 +363,19 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
                 {/* Diff Viewer Card */}
                 <div className="space-y-3">
                   <div>
-                    <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block mb-1">
+                    <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
                       Current Code
                     </span>
-                    <pre className="max-h-48 overflow-y-auto rounded-xl border border-red-200 bg-red-50/40 p-3 font-mono text-[11px] text-red-900 leading-relaxed">
+                    <pre className="max-h-48 overflow-y-auto rounded-xl border border-red-200 dark:border-red-900/60 bg-red-50/40 dark:bg-red-950/30 p-3 font-mono text-[11px] text-red-900 dark:text-red-300 leading-relaxed">
                       {code}
                     </pre>
                   </div>
 
                   <div>
-                    <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block mb-1">
+                    <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
                       AI Suggested Replacement
                     </span>
-                    <pre className="max-h-56 overflow-y-auto rounded-xl border border-emerald-200 bg-emerald-50/40 p-3 font-mono text-[11px] text-emerald-900 leading-relaxed">
+                    <pre className="max-h-56 overflow-y-auto rounded-xl border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/40 dark:bg-emerald-950/30 p-3 font-mono text-[11px] text-emerald-900 dark:text-emerald-300 leading-relaxed">
                       {suggestedCode}
                     </pre>
                   </div>
@@ -383,9 +383,9 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
               </>
             ) : (
               <div className="flex flex-col items-center justify-center py-12 text-center text-slate-400">
-                <Code2 className="h-10 w-10 text-slate-300 mb-2" />
-                <p className="text-xs font-semibold text-slate-600">No Pending Diffs</p>
-                <p className="text-[11px] text-slate-400 mt-1 max-w-xs">
+                <Code2 className="h-10 w-10 text-slate-300 dark:text-slate-600 mb-2" />
+                <p className="text-xs font-semibold text-slate-600 dark:text-slate-300">No Pending Diffs</p>
+                <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1 max-w-xs">
                   Ask Copilot to fix an error or optimize code to see side-by-side diff comparisons here.
                 </p>
               </div>
@@ -395,7 +395,7 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
       </div>
 
       {/* Input Bar */}
-      <div className="border-t border-slate-200 bg-white p-4">
+      <div className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
         <form
           onSubmit={(e) => {
             e.preventDefault()
@@ -409,7 +409,7 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
             onChange={(e) => setQuery(e.target.value)}
             disabled={isLoading}
             placeholder="Ask Copilot a question or prompt for fix..."
-            className="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs text-slate-900 placeholder-slate-400 focus:border-violet-500 focus:bg-white focus:outline-none transition"
+            className="flex-1 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-violet-500 focus:bg-white dark:focus:bg-slate-900 focus:outline-none transition"
           />
           <button
             type="submit"

@@ -1183,12 +1183,12 @@ export const WorkspacePage: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen bg-[#F8FAFC] text-[#172033] overflow-hidden">
+    <div className="flex h-screen bg-[#F8FAFC] dark:bg-slate-950 text-[#172033] dark:text-slate-100 overflow-hidden">
       <Sidebar />
 
       <main className="flex-1 flex flex-col h-full overflow-y-auto">
         {/* Header Bar */}
-        <div className="border-b border-[#E2E8F0] bg-white px-6 py-3.5 shadow-2xs">
+        <div className="border-b border-[#E2E8F0] dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-3 shadow-2xs">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               {/* Back & Home Navigation Buttons */}
@@ -1196,35 +1196,27 @@ export const WorkspacePage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => navigate(-1)}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer shadow-2xs"
+                  className="inline-flex items-center justify-center h-8 w-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition cursor-pointer shadow-2xs"
                   title="Go back to previous page"
                 >
-                  <ArrowLeft className="h-3.5 w-3.5 text-blue-600" />
-                  <span>Back</span>
+                  <ArrowLeft className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                 </button>
                 <Link
                   to="/"
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer shadow-2xs"
+                  className="inline-flex items-center justify-center h-8 w-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition cursor-pointer shadow-2xs"
                   title="Go to Home page"
                 >
-                  <Home className="h-3.5 w-3.5 text-blue-600" />
-                  <span>Home</span>
+                  <Home className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                 </Link>
               </div>
 
-              <div className="h-6 w-px bg-slate-200 hidden sm:block" />
+              <div className="h-5 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block" />
 
-              <div>
-                <h1 className="text-base font-bold tracking-tight text-slate-900 flex items-center gap-2">
-                  <ShieldCheck className="h-5 w-5 text-blue-600" />
-                  <span>CodeGuardian AI</span>
-                  <span className="rounded-md bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 text-[11px] font-semibold">
-                    Analysis Workspace
-                  </span>
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                <h1 className="text-base font-bold tracking-tight text-slate-900 dark:text-white">
+                  CodeGuardian AI
                 </h1>
-                <p className="text-xs text-slate-500">
-                  Interactive multi-language static analyzer, execution sandbox & AI remediation engine.
-                </p>
               </div>
             </div>
 
@@ -1273,15 +1265,15 @@ export const WorkspacePage: React.FC = () => {
               </button>
 
               {/* Tidy Secondary Toolbar */}
-              <div className="flex flex-wrap items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 p-1">
+              <div className="flex flex-wrap items-center gap-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 p-1">
                 {/* Fix Error */}
                 <button
                   type="button"
                   onClick={handleFixFirstError}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition cursor-pointer shadow-2xs"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
                   title="Suggest or apply fixes for identified issues using AI"
                 >
-                  <Sparkles className="h-3.5 w-3.5 text-amber-600" />
+                  <Sparkles className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
                   <span>Fix Error</span>
                 </button>
 
@@ -1290,13 +1282,13 @@ export const WorkspacePage: React.FC = () => {
                   type="button"
                   onClick={handleRefactorCode}
                   disabled={isRefactoring}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-50 transition cursor-pointer shadow-2xs"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-50 transition cursor-pointer shadow-2xs"
                   title="Detect code smells and perform behavior-preserving AI refactoring"
                 >
                   {isRefactoring ? (
-                    <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-slate-600 border-t-transparent" />
+                    <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-slate-600 dark:border-slate-400 border-t-transparent" />
                   ) : (
-                    <Sparkles className="h-3.5 w-3.5 text-cyan-600" />
+                    <Sparkles className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" />
                   )}
                   <span>AI Refactor</span>
                 </button>
@@ -1306,13 +1298,13 @@ export const WorkspacePage: React.FC = () => {
                   type="button"
                   onClick={handleRunTests}
                   disabled={isRunningTests}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-50 transition cursor-pointer shadow-2xs"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-50 transition cursor-pointer shadow-2xs"
                   title="Run automated test suite and verify outputs"
                 >
                   {isRunningTests ? (
-                    <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-slate-600 border-t-transparent" />
+                    <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-slate-600 dark:border-slate-400 border-t-transparent" />
                   ) : (
-                    <TestTube2 className="h-3.5 w-3.5 text-purple-600" />
+                    <TestTube2 className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
                   )}
                   <span>Run Tests</span>
                 </button>
@@ -1331,12 +1323,12 @@ export const WorkspacePage: React.FC = () => {
                       ? 'Run Analyze Code first to generate findings'
                       : 'Explain detected findings in plain English using AI'
                   }
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-40 transition cursor-pointer shadow-2xs"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 transition cursor-pointer shadow-2xs"
                 >
                   {isExplaining ? (
-                    <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-violet-600 border-t-transparent" />
+                    <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-violet-600 dark:border-violet-400 border-t-transparent" />
                   ) : (
-                    <BrainCircuit className="h-3.5 w-3.5 text-violet-600" />
+                    <BrainCircuit className="h-3.5 w-3.5 text-violet-600 dark:text-violet-400" />
                   )}
                   <span>Explain with AI</span>
                 </button>
@@ -1348,7 +1340,7 @@ export const WorkspacePage: React.FC = () => {
                   className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition cursor-pointer shadow-2xs ${
                     showCopilot
                       ? 'bg-purple-700 text-white shadow-xs'
-                      : 'border border-purple-200 bg-purple-50 text-purple-700 hover:bg-purple-100'
+                      : 'border border-purple-200 dark:border-purple-800/60 bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-900/50'
                   }`}
                   title="Toggle AI Copilot Assistant & Diff Viewer side panel"
                 >
@@ -1361,9 +1353,9 @@ export const WorkspacePage: React.FC = () => {
                   type="button"
                   onClick={handleResetCode}
                   title="Restore default or initial code and clear errors"
-                  className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-100 transition cursor-pointer shadow-2xs"
+                  className="inline-flex items-center gap-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
                 >
-                  <RotateCcw className="h-3.5 w-3.5 text-amber-600" />
+                  <RotateCcw className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
                   <span>Reset</span>
                 </button>
 
@@ -1371,21 +1363,21 @@ export const WorkspacePage: React.FC = () => {
                 <Link
                   to="/settings"
                   title="Workspace Settings"
-                  className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white p-1.5 text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition cursor-pointer shadow-2xs"
+                  className="inline-flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-1.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
                 >
                   <Settings className="h-3.5 w-3.5" />
                 </Link>
 
-                {/* Optional Theme Toggle Button */}
+                {/* Theme Toggle Button */}
                 <button
                   onClick={toggleTheme}
                   type="button"
                   aria-label="Toggle theme mode"
                   title={theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
-                  className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 transition cursor-pointer shadow-2xs"
+                  className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
                 >
                   {theme === 'dark' ? (
-                    <Sun className="h-3.5 w-3.5 text-amber-600" />
+                    <Sun className="h-3.5 w-3.5 text-amber-400" />
                   ) : (
                     <Moon className="h-3.5 w-3.5 text-indigo-600" />
                   )}
@@ -1399,10 +1391,10 @@ export const WorkspacePage: React.FC = () => {
         {/* Workspace Body */}
         <div className="p-6 space-y-6">
           {/* Editor Controls Toolbar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-3 text-xs shadow-2xs">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 text-xs shadow-2xs">
             {/* Left: Language Selector & Unsaved Changes Status */}
             <div className="flex flex-wrap items-center gap-2.5">
-              <span className="font-semibold text-slate-500 text-[11px] uppercase tracking-wider">Language:</span>
+              <span className="font-semibold text-slate-500 dark:text-slate-400 text-[11px] uppercase tracking-wider">Language:</span>
               <LanguageSelector value={language} onChange={handleLanguageChange} />
 
               {/* Starter Template button */}
@@ -1410,7 +1402,7 @@ export const WorkspacePage: React.FC = () => {
                 type="button"
                 onClick={handleResetCode}
                 title={`Load clean ${LANGUAGE_CONFIG[language.toLowerCase()]?.label || language} starter template`}
-                className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 transition cursor-pointer"
+                className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-2.5 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer"
               >
                 Starter Template
               </button>
@@ -1430,7 +1422,7 @@ export const WorkspacePage: React.FC = () => {
                     setTargetLine(null)
                   }}
                   title="Load vulnerability audit sample with known security defects"
-                  className="rounded-lg border border-purple-200 bg-purple-50 px-2.5 py-1.5 text-xs font-semibold text-purple-700 hover:bg-purple-100 transition cursor-pointer"
+                  className="rounded-lg border border-purple-200 dark:border-purple-800/60 bg-purple-50 dark:bg-purple-950/40 px-2.5 py-1.5 text-xs font-semibold text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-900/50 transition cursor-pointer"
                 >
                   Load Audit Sample
                 </button>
@@ -1453,7 +1445,7 @@ export const WorkspacePage: React.FC = () => {
                     setTargetLine(null)
                   }}
                   title="Load interactive standard input (stdin) program and sample input"
-                  className="rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 text-xs font-semibold text-emerald-800 hover:bg-emerald-100 transition cursor-pointer"
+                  className="rounded-lg border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1.5 text-xs font-semibold text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition cursor-pointer"
                 >
                   Load Input Program
                 </button>
@@ -1461,13 +1453,13 @@ export const WorkspacePage: React.FC = () => {
 
               {/* Unsaved Changes Indicator */}
               {code !== lastSavedCode ? (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-800" title="Editor has unsaved code modifications">
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-amber-200 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 text-[11px] font-semibold text-amber-800 dark:text-amber-300" title="Editor has unsaved code modifications">
                   <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
                   Unsaved Changes
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-800" title="All edits are up-to-date">
-                  <CheckCircle2 className="h-3 w-3 text-emerald-600" />
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 text-[11px] font-semibold text-emerald-800 dark:text-emerald-300" title="All edits are up-to-date">
+                  <CheckCircle2 className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
                   Code Saved
                 </span>
               )}
@@ -1480,9 +1472,9 @@ export const WorkspacePage: React.FC = () => {
                 type="button"
                 onClick={handleFormatCode}
                 title="Format source code using Monaco beautifier"
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer shadow-2xs"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
               >
-                <AlignLeft className="h-3.5 w-3.5 text-blue-600" />
+                <AlignLeft className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
                 <span>Format</span>
               </button>
 
@@ -1491,16 +1483,16 @@ export const WorkspacePage: React.FC = () => {
                 type="button"
                 onClick={handleCopyCode}
                 title="Copy editor code to clipboard"
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer shadow-2xs"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
               >
                 {copiedCode ? (
                   <>
-                    <Check className="h-3.5 w-3.5 text-emerald-600" />
-                    <span className="text-emerald-700">Copied!</span>
+                    <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                    <span className="text-emerald-700 dark:text-emerald-300">Copied!</span>
                   </>
                 ) : (
                   <>
-                    <Copy className="h-3.5 w-3.5 text-slate-500" />
+                    <Copy className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400" />
                     <span>Copy</span>
                   </>
                 )}
@@ -1512,9 +1504,9 @@ export const WorkspacePage: React.FC = () => {
                 onClick={handleUndoFix}
                 disabled={codeHistory.length === 0}
                 title={codeHistory.length > 0 ? `Revert to previous code before AI fix (${codeHistory.length} state available)` : 'No applied fixes to undo'}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer shadow-2xs disabled:opacity-40 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                <Undo2 className="h-3.5 w-3.5 text-indigo-600" />
+                <Undo2 className="h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400" />
                 <span>Undo Fix {codeHistory.length > 0 ? `(${codeHistory.length})` : ''}</span>
               </button>
 
@@ -1528,9 +1520,9 @@ export const WorkspacePage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer shadow-2xs"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
               >
-                <Upload className="h-3.5 w-3.5 text-blue-600" />
+                <Upload className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
                 <span>Upload</span>
               </button>
 
@@ -1541,7 +1533,7 @@ export const WorkspacePage: React.FC = () => {
                   setCode('')
                 }}
                 title="Clear code editor"
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-500 hover:text-rose-600 transition cursor-pointer shadow-2xs"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 transition cursor-pointer shadow-2xs"
               >
                 <Trash2 className="h-3.5 w-3.5" />
                 <span>Clear</span>
@@ -1552,17 +1544,17 @@ export const WorkspacePage: React.FC = () => {
                   <a
                     href={analysisService.getExportHtmlUrl(analysisResult.id)}
                     download
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer shadow-2xs"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
                   >
-                    <Download className="h-3.5 w-3.5 text-emerald-600" />
+                    <Download className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                     <span>Report</span>
                   </a>
                   <a
                     href={analysisService.getExportJsonUrl(analysisResult.id)}
                     download
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer shadow-2xs"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
                   >
-                    <FileCode className="h-3.5 w-3.5 text-indigo-600" />
+                    <FileCode className="h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400" />
                     <span>JSON</span>
                   </a>
                 </>
@@ -1572,21 +1564,21 @@ export const WorkspacePage: React.FC = () => {
 
           {/* Analysis Progress Banner */}
           {isAnalyzing && (
-            <div className="flex items-center gap-3 rounded-xl border border-blue-200 bg-blue-50/80 px-4 py-2.5 text-xs text-blue-800 shadow-2xs">
-              <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-blue-600 border-t-transparent shrink-0" />
+            <div className="flex items-center gap-3 rounded-xl border border-blue-200 dark:border-blue-800/60 bg-blue-50/80 dark:bg-blue-950/40 px-4 py-2.5 text-xs text-blue-800 dark:text-blue-300 shadow-2xs">
+              <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-blue-600 dark:border-blue-400 border-t-transparent shrink-0" />
               <div className="flex flex-col gap-0.5">
                 <span className="font-semibold">{analysisStep || 'Analyzing source code...'}</span>
-                <span className="text-blue-600/70 text-[10px]">Running {language.toUpperCase()} analyzers</span>
+                <span className="text-blue-600/70 dark:text-blue-400/70 text-[10px]">Running {language.toUpperCase()} analyzers</span>
               </div>
             </div>
           )}
 
           {/* Error Banner */}
           {errorMsg && !isAnalyzing && (
-            <div className="flex items-start gap-3 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-xs text-rose-800 shadow-2xs">
-              <AlertTriangle className="h-4 w-4 text-rose-600 shrink-0 mt-0.5" />
+            <div className="flex items-start gap-3 rounded-xl border border-rose-200 dark:border-rose-800/60 bg-rose-50 dark:bg-rose-950/40 px-4 py-3 text-xs text-rose-800 dark:text-rose-300 shadow-2xs">
+              <AlertTriangle className="h-4 w-4 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
               <div>
-                <span className="font-bold text-rose-900">Analysis Error: </span>
+                <span className="font-bold text-rose-900 dark:text-rose-200">Analysis Error: </span>
                 <span>{errorMsg}</span>
               </div>
             </div>
@@ -1613,14 +1605,14 @@ export const WorkspacePage: React.FC = () => {
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
             {/* Left: Monaco Editor */}
             <div className="lg:col-span-7">
-              <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2 text-xs rounded-xl border border-slate-200 bg-white p-2.5 shadow-2xs">
+              <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2.5 shadow-2xs">
                 <div className="flex items-center gap-2.5">
-                  <span className="font-mono text-slate-800 font-bold">{filename}</span>
-                  <span className="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 border border-blue-200 px-2.5 py-0.5 text-xs font-semibold text-blue-700">
+                  <span className="font-mono text-slate-800 dark:text-slate-100 font-bold">{filename}</span>
+                  <span className="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/60 px-2.5 py-0.5 text-xs font-semibold text-blue-700 dark:text-blue-300">
                     <span>{LANGUAGE_CONFIG[language.toLowerCase()]?.icon || '🔹'}</span>
                     <span>{LANGUAGE_CONFIG[language.toLowerCase()]?.label || language.toUpperCase()}</span>
                   </span>
-                  <span className="text-[11px] text-slate-500 font-mono">
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
                     {language.toLowerCase() === 'reactjs'
                       ? 'JSX mode'
                       : language.toLowerCase() === 'reactts'
@@ -1631,7 +1623,7 @@ export const WorkspacePage: React.FC = () => {
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-[11px] text-slate-500 font-mono font-medium">{code.split('\n').length} lines</span>
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono font-medium">{code.split('\n').length} lines</span>
                 </div>
               </div>
               <CodeEditor
@@ -1735,16 +1727,16 @@ export const WorkspacePage: React.FC = () => {
 
         {/* Authentication Gate Modal (Requires Sign In to Test Code) */}
         {showAuthGateModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4">
-            <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl space-y-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600 border border-blue-200 mx-auto">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+            <div className="w-full max-w-md rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-2xl space-y-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 mx-auto">
                 <ShieldCheck className="h-6 w-6" />
               </div>
               <div className="text-center">
-                <h3 className="text-lg font-bold text-slate-900">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                   Authentication Required
                 </h3>
-                <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
+                <p className="mt-1.5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                   To test code and generate AI security audits, you must be signed in. All your analyzed code and vulnerability reports are encrypted and tied securely to your user account.
                 </p>
               </div>
@@ -1757,13 +1749,13 @@ export const WorkspacePage: React.FC = () => {
                 </button>
                 <button
                   onClick={() => navigate('/signup')}
-                  className="w-full rounded-xl border border-slate-200 bg-white py-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer shadow-2xs"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
                 >
                   Create New Account
                 </button>
                 <button
                   onClick={() => setShowAuthGateModal(false)}
-                  className="text-xs text-slate-500 hover:text-slate-800 py-1 cursor-pointer"
+                  className="text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 py-1 cursor-pointer"
                 >
                   Cancel
                 </button>

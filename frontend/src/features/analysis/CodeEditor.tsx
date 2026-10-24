@@ -177,16 +177,16 @@ export const CodeEditor = React.forwardRef<CodeEditorHandle, CodeEditorProps>(({
       fallbackTitle="Code Editor Notice"
       fallbackMessage="The code editor encountered an issue during a language transition. Click below to reload."
     >
-      <div className="relative h-full w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xs">
+      <div className="relative h-full w-full overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-xs">
         <Editor
           height={height}
           language={mapLanguage(language)}
           value={code}
           onChange={(val) => onChange(val ?? '')}
           onMount={handleEditorDidMount}
-          theme="vs"
+          theme={theme === 'dark' ? 'vs-dark' : 'vs'}
           loading={
-            <div className="flex h-full w-full items-center justify-center bg-white text-xs text-slate-500">
+            <div className="flex h-full w-full items-center justify-center bg-white dark:bg-slate-950 text-xs text-slate-500 dark:text-slate-400">
               <div className="flex items-center gap-2">
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
                 <span>Initializing Monaco Editor...</span>
