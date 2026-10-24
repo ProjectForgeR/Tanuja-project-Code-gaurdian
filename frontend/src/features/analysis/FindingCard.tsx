@@ -48,7 +48,7 @@ export const FindingCard: React.FC<FindingCardProps> = ({
   const shortId = finding.rule_id || (finding.id ? finding.id.slice(0, 8).toUpperCase() : 'ERR')
 
   return (
-    <div className="group rounded-xl border border-slate-800 bg-slate-900/60 p-4 transition hover:border-slate-700/80 hover:bg-slate-900/90 shadow-md">
+    <div className="group rounded-xl border border-slate-200 bg-white p-4 transition hover:border-slate-300 shadow-2xs">
       {/* Header Badges */}
       <div className="flex flex-wrap items-center justify-between gap-2.5">
         <div className="flex flex-wrap items-center gap-2">
@@ -59,12 +59,12 @@ export const FindingCard: React.FC<FindingCardProps> = ({
           </span>
 
           {/* Error Type */}
-          <span className="rounded-md border border-slate-700/60 bg-slate-800/60 px-2 py-0.5 text-[11px] font-medium text-slate-300">
+          <span className="rounded-md border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-700">
             {finding.category || 'Vulnerability'}
           </span>
 
           {/* Error ID */}
-          <span className="rounded-md border border-slate-800 bg-slate-950 px-2 py-0.5 font-mono text-[10px] text-slate-400">
+          <span className="rounded-md border border-slate-200 bg-slate-50 px-2 py-0.5 font-mono text-[10px] text-slate-500">
             ID: {shortId}
           </span>
 
@@ -72,7 +72,7 @@ export const FindingCard: React.FC<FindingCardProps> = ({
           <button
             type="button"
             onClick={() => onJumpToLine && onJumpToLine(finding.line_start)}
-            className="inline-flex items-center gap-1 rounded-md border border-blue-500/20 bg-blue-500/10 px-2 py-0.5 text-[11px] font-medium text-blue-400 transition hover:bg-blue-500/20 cursor-pointer"
+            className="inline-flex items-center gap-1 rounded-md border border-blue-200 bg-blue-50 px-2 py-0.5 text-[11px] font-semibold text-blue-700 transition hover:bg-blue-100 cursor-pointer"
             title="Go to exact error location in editor"
           >
             <span>Line {finding.line_start}:{finding.col_start || 1}</span>
@@ -95,30 +95,30 @@ export const FindingCard: React.FC<FindingCardProps> = ({
       </div>
 
       {/* Error Title */}
-      <h4 className="mt-3 text-sm font-semibold text-white group-hover:text-blue-300 transition">
+      <h4 className="mt-3 text-sm font-semibold text-slate-900 group-hover:text-blue-600 transition">
         {finding.title}
       </h4>
 
       {/* Plain-English Explanation */}
-      <p className="mt-1.5 text-xs leading-relaxed text-slate-300">
+      <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
         {finding.explanation}
       </p>
 
       {/* Code Snippet preview */}
       {finding.snippet && (
-        <div className="mt-3 overflow-hidden rounded-lg border border-slate-800 bg-slate-950 font-mono text-[11px]">
-          <div className="flex items-center justify-between border-b border-slate-800/80 bg-slate-900/40 px-3 py-1 text-[10px] text-slate-400">
+        <div className="mt-3 overflow-hidden rounded-lg border border-slate-200 bg-slate-50 font-mono text-[11px]">
+          <div className="flex items-center justify-between border-b border-slate-200 bg-slate-100/70 px-3 py-1 text-[10px] text-slate-600">
             <span>Location: Line {finding.line_start}</span>
             <button
               onClick={handleCopy}
-              className="flex items-center gap-1 hover:text-white transition cursor-pointer"
+              className="flex items-center gap-1 hover:text-slate-900 transition cursor-pointer"
               title="Copy snippet"
             >
-              {copied ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
+              {copied ? <Check className="h-3 w-3 text-emerald-600" /> : <Copy className="h-3 w-3" />}
               {copied ? 'Copied' : 'Copy'}
             </button>
           </div>
-          <pre className="overflow-x-auto p-2.5 text-slate-300">
+          <pre className="overflow-x-auto p-2.5 text-slate-800">
             <code>{finding.snippet}</code>
           </pre>
         </div>
@@ -126,12 +126,12 @@ export const FindingCard: React.FC<FindingCardProps> = ({
 
       {/* Recommended Correction Preview */}
       {finding.recommended_fix && (
-        <div className="mt-3 rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-2.5 text-xs text-slate-300">
-          <div className="flex items-center gap-1.5 text-emerald-400 font-semibold text-[11px] mb-1">
+        <div className="mt-3 rounded-lg border border-emerald-200 bg-emerald-50/50 p-2.5 text-xs text-emerald-950">
+          <div className="flex items-center gap-1.5 text-emerald-700 font-semibold text-[11px] mb-1">
             <Lightbulb className="h-3.5 w-3.5" />
             Recommended Correction:
           </div>
-          <p className="text-slate-300 leading-relaxed text-[11px]">
+          <p className="text-slate-700 leading-relaxed text-[11px]">
             {finding.recommended_fix}
           </p>
         </div>
@@ -139,13 +139,13 @@ export const FindingCard: React.FC<FindingCardProps> = ({
 
       {/* Collapsible Details */}
       {expanded && (
-        <div className="mt-3 space-y-2.5 border-t border-slate-800/60 pt-3 text-xs">
+        <div className="mt-3 space-y-2.5 border-t border-slate-100 pt-3 text-xs">
           {finding.impact && (
             <div>
-              <strong className="text-slate-400 flex items-center gap-1 text-[11px] mb-0.5">
-                <AlertTriangle className="h-3 w-3 text-amber-400" /> Why This Problem Occurs & Impact:
+              <strong className="text-slate-600 flex items-center gap-1 text-[11px] mb-0.5">
+                <AlertTriangle className="h-3 w-3 text-amber-600" /> Why This Problem Occurs & Impact:
               </strong>
-              <span className="text-slate-300 text-[11px] leading-relaxed block pl-4">
+              <span className="text-slate-600 text-[11px] leading-relaxed block pl-4">
                 {finding.impact}
               </span>
             </div>
@@ -153,18 +153,18 @@ export const FindingCard: React.FC<FindingCardProps> = ({
 
           {finding.rule_id && (
             <div className="text-[11px] text-slate-500 pt-1">
-              Rule ID: <code className="text-slate-400">{finding.rule_id}</code> | Confidence: <strong>{finding.confidence}</strong>
+              Rule ID: <code className="text-slate-700 bg-slate-100 px-1 py-0.5 rounded">{finding.rule_id}</code> | Confidence: <strong>{finding.confidence}</strong>
             </div>
           )}
         </div>
       )}
 
       {/* Actions Toolbar */}
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-slate-800/60 pt-3">
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-3">
         <button
           type="button"
           onClick={() => setExpanded(!expanded)}
-          className="flex items-center gap-1 text-[11px] font-medium text-slate-400 hover:text-white transition cursor-pointer"
+          className="flex items-center gap-1 text-[11px] font-medium text-slate-500 hover:text-slate-800 transition cursor-pointer"
         >
           {expanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
           {expanded ? 'Hide Details' : 'View Impact & Rule Details'}
@@ -175,9 +175,9 @@ export const FindingCard: React.FC<FindingCardProps> = ({
             <button
               type="button"
               onClick={() => onJumpToLine(finding.line_start)}
-              className="inline-flex items-center gap-1 rounded-lg border border-slate-700 bg-slate-800/70 px-2.5 py-1 text-xs font-semibold text-slate-300 transition hover:bg-slate-700 hover:text-white cursor-pointer"
+              className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-slate-900 cursor-pointer shadow-2xs"
             >
-              <ArrowRight className="h-3.5 w-3.5 text-blue-400" />
+              <ArrowRight className="h-3.5 w-3.5 text-blue-600" />
               Go to Error
             </button>
           )}
@@ -186,7 +186,7 @@ export const FindingCard: React.FC<FindingCardProps> = ({
             <button
               type="button"
               onClick={() => onGenerateTests(finding)}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-purple-500/30 bg-purple-500/10 px-2.5 py-1 text-xs font-semibold text-purple-300 transition hover:bg-purple-500/20 hover:text-purple-200 cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-purple-200 bg-purple-50 px-2.5 py-1 text-xs font-semibold text-purple-700 transition hover:bg-purple-100 cursor-pointer shadow-2xs"
             >
               <TestTube2 className="h-3.5 w-3.5" />
               Tests
@@ -197,7 +197,7 @@ export const FindingCard: React.FC<FindingCardProps> = ({
             <button
               type="button"
               onClick={() => onReviewFix(finding)}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 px-3.5 py-1 text-xs font-bold text-white shadow-sm shadow-blue-600/30 transition hover:from-blue-500 hover:to-indigo-500 cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3.5 py-1 text-xs font-bold text-white shadow-xs transition hover:bg-blue-700 cursor-pointer"
             >
               <Sparkles className="h-3.5 w-3.5" />
               Fix Error

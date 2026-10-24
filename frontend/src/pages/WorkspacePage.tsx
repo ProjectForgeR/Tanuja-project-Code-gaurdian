@@ -26,6 +26,7 @@ import {
   Wrench,
   ArrowLeft,
   Home,
+  Settings,
 } from 'lucide-react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Navbar } from '@/components/layout/Navbar'
@@ -40,11 +41,12 @@ import { DuplicateGroupsView } from '@/features/analysis/DuplicateGroupsView'
 import { AiFixModal } from '@/features/analysis/AiFixModal'
 import { TestGeneratorModal } from '@/features/analysis/TestGeneratorModal'
 import { AIExplanationPanel } from '@/features/analysis/AIExplanationPanel'
-import { CompilerOutputPanel } from '@/features/analysis/CompilerOutputPanel'
+import { CompilerOutputPanel, ResultsPanelTab } from '@/features/analysis/CompilerOutputPanel'
 import { CustomInputPanel } from '@/features/analysis/CustomInputPanel'
 import { LanguageSelector } from '@/features/analysis/LanguageSelector'
 import { AiRefactorModal } from '@/features/analysis/AiRefactorModal'
 import { ExplainFailureModal } from '@/features/analysis/ExplainFailureModal'
+import { AiCopilotPanel } from '@/features/analysis/AiCopilotPanel'
 import { CODE_SAMPLES } from '@/lib/samples'
 import { EXECUTABLE_SAMPLES } from '@/lib/compilerSamples'
 import { getDefaultTestCases } from '@/lib/defaultTestCases'
@@ -94,7 +96,8 @@ export const WorkspacePage: React.FC = () => {
   const [activeWorkspaceMode, setActiveWorkspaceMode] = useState<'compiler' | 'audit' | 'preview'>(() => {
     return ['html', 'css', 'reactjs', 'reactts'].includes(initialLang) ? 'preview' : 'compiler'
   })
-  const [compilerTab, setCompilerTab] = useState<'output' | 'errors' | 'tests' | 'logs' | 'stdin'>('output')
+  const [compilerTab, setCompilerTab] = useState<ResultsPanelTab>('output')
+  const [showCopilot, setShowCopilot] = useState<boolean>(false)
 
   // Test Suite Bench state
   const [testCases, setTestCases] = useState<TestCaseItem[]>(() => getDefaultTestCases(initialLang))
@@ -1180,12 +1183,12 @@ export const WorkspacePage: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden">
+    <div className="flex h-screen bg-[#F8FAFC] text-[#172033] overflow-hidden">
       <Sidebar />
 
       <main className="flex-1 flex flex-col h-full overflow-y-auto">
         {/* Header Bar */}
-        <div className="border-b border-slate-800 bg-slate-950/80 px-6 py-4 backdrop-blur-md">
+        <div className="border-b border-[#E2E8F0] bg-white px-6 py-3.5 shadow-2xs">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               {/* Back & Home Navigation Buttons */}
@@ -1193,41 +1196,46 @@ export const WorkspacePage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => navigate(-1)}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer shadow-sm"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer shadow-2xs"
                   title="Go back to previous page"
                 >
-                  <ArrowLeft className="h-3.5 w-3.5 text-blue-500" />
+                  <ArrowLeft className="h-3.5 w-3.5 text-blue-600" />
                   <span>Back</span>
                 </button>
                 <Link
                   to="/"
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer shadow-sm"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer shadow-2xs"
                   title="Go to Home page"
                 >
-                  <Home className="h-3.5 w-3.5 text-blue-500" />
+                  <Home className="h-3.5 w-3.5 text-blue-600" />
                   <span>Home</span>
                 </Link>
               </div>
 
+              <div className="h-6 w-px bg-slate-200 hidden sm:block" />
+
               <div>
-                <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-                  <Terminal className="h-5 w-5 text-blue-400" />
-                  Analysis Workspace
+                <h1 className="text-base font-bold tracking-tight text-slate-900 flex items-center gap-2">
+                  <ShieldCheck className="h-5 w-5 text-blue-600" />
+                  <span>CodeGuardian AI</span>
+                  <span className="rounded-md bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 text-[11px] font-semibold">
+                    Analysis Workspace
+                  </span>
                 </h1>
-                <p className="text-xs text-slate-400">
-                  Interactive multi-language static analyzer and AI remediation assistant.
+                <p className="text-xs text-slate-500">
+                  Interactive multi-language static analyzer, execution sandbox & AI remediation engine.
                 </p>
               </div>
             </div>
 
-            {/* 5 Primary Top Actions Toolbar */}
+            {/* Header Top Actions Toolbar */}
             <div className="flex flex-wrap items-center gap-2">
-              {/* 1. ANALYZE CODE Button */}
+              {/* 1. ANALYZE CODE Button (Solid Primary Blue #2563EB) */}
               <button
                 type="button"
                 onClick={() => runAnalysis(code, language, filename, true)}
                 disabled={isAnalyzing}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 px-4 py-2 text-xs font-bold text-white shadow-md shadow-blue-500/20 transition hover:from-blue-500 hover:to-indigo-500 disabled:opacity-50 cursor-pointer"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
                 title="Analyze code for bugs, syntax errors, and security issues"
               >
                 {isAnalyzing ? (
@@ -1243,12 +1251,12 @@ export const WorkspacePage: React.FC = () => {
                 )}
               </button>
 
-              {/* 2. RUN CODE Button — Real Isolated Execution */}
+              {/* 2. RUN CODE Button (Solid Secondary Green #059669) */}
               <button
                 type="button"
                 onClick={runExecution}
                 disabled={isExecuting}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 px-4 py-2 text-xs font-bold text-white shadow-md shadow-emerald-500/20 transition hover:from-emerald-500 hover:to-teal-500 disabled:opacity-50 cursor-pointer"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-emerald-700 disabled:opacity-50 cursor-pointer"
                 title="Execute code in real sandboxed environment (Judge0 / SQLite)"
               >
                 {isExecuting ? (
@@ -1264,117 +1272,125 @@ export const WorkspacePage: React.FC = () => {
                 )}
               </button>
 
-              {/* 3. FIX ERROR Button — AI Remediation */}
-              <button
-                type="button"
-                onClick={handleFixFirstError}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-600 via-orange-600 to-amber-500 px-4 py-2 text-xs font-bold text-white shadow-md shadow-amber-500/20 transition hover:from-amber-500 hover:to-orange-500 cursor-pointer"
-                title="Suggest or apply fixes for identified issues using AI"
-              >
-                <Sparkles className="h-3.5 w-3.5" />
-                <span>Fix Error</span>
-              </button>
+              {/* Tidy Secondary Toolbar */}
+              <div className="flex flex-wrap items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 p-1">
+                {/* Fix Error */}
+                <button
+                  type="button"
+                  onClick={handleFixFirstError}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition cursor-pointer shadow-2xs"
+                  title="Suggest or apply fixes for identified issues using AI"
+                >
+                  <Sparkles className="h-3.5 w-3.5 text-amber-600" />
+                  <span>Fix Error</span>
+                </button>
 
-              {/* 3.5 AI REFACTOR Button — Code Smells & Architectural Refactoring */}
-              <button
-                type="button"
-                onClick={handleRefactorCode}
-                disabled={isRefactoring}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-cyan-600 via-teal-600 to-emerald-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-cyan-600/20 transition hover:from-cyan-500 hover:to-emerald-500 disabled:opacity-50 cursor-pointer"
-                title="Detect code smells and perform behavior-preserving AI refactoring"
-              >
-                {isRefactoring ? (
-                  <>
-                    <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                    <span>Refactoring...</span>
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="h-3.5 w-3.5 text-cyan-200" />
-                    <span>AI Refactor</span>
-                  </>
-                )}
-              </button>
+                {/* AI Refactor */}
+                <button
+                  type="button"
+                  onClick={handleRefactorCode}
+                  disabled={isRefactoring}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-50 transition cursor-pointer shadow-2xs"
+                  title="Detect code smells and perform behavior-preserving AI refactoring"
+                >
+                  {isRefactoring ? (
+                    <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-slate-600 border-t-transparent" />
+                  ) : (
+                    <Sparkles className="h-3.5 w-3.5 text-cyan-600" />
+                  )}
+                  <span>AI Refactor</span>
+                </button>
 
-              {/* 4. RUN TESTS Button */}
-              <button
-                type="button"
-                onClick={handleRunTests}
-                disabled={isRunningTests}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-purple-600 via-violet-600 to-purple-500 px-4 py-2 text-xs font-bold text-white shadow-md shadow-purple-500/20 transition hover:from-purple-500 hover:to-violet-500 disabled:opacity-50 cursor-pointer"
-                title="Run automated test suite and verify outputs"
-              >
-                {isRunningTests ? (
-                  <>
-                    <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                    <span>Testing...</span>
-                  </>
-                ) : (
-                  <>
-                    <TestTube2 className="h-3.5 w-3.5" />
-                    <span>Run Tests</span>
-                  </>
-                )}
-              </button>
+                {/* Run Tests */}
+                <button
+                  type="button"
+                  onClick={handleRunTests}
+                  disabled={isRunningTests}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-50 transition cursor-pointer shadow-2xs"
+                  title="Run automated test suite and verify outputs"
+                >
+                  {isRunningTests ? (
+                    <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-slate-600 border-t-transparent" />
+                  ) : (
+                    <TestTube2 className="h-3.5 w-3.5 text-purple-600" />
+                  )}
+                  <span>Run Tests</span>
+                </button>
 
-              {/* 5. RESET CODE Button */}
-              <button
-                type="button"
-                onClick={handleResetCode}
-                title="Restore default or initial code and clear errors"
-                className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-2 text-xs font-semibold text-slate-300 transition hover:bg-slate-800 hover:text-white"
-              >
-                <RotateCcw className="h-3.5 w-3.5 text-amber-400" />
-                <span>Reset Code</span>
-              </button>
+                {/* Explain with AI */}
+                <button
+                  onClick={handleExplainErrors}
+                  disabled={
+                    !analysisResult ||
+                    isAnalyzing ||
+                    isExplaining ||
+                    code.trim().length < 5
+                  }
+                  title={
+                    !analysisResult
+                      ? 'Run Analyze Code first to generate findings'
+                      : 'Explain detected findings in plain English using AI'
+                  }
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-40 transition cursor-pointer shadow-2xs"
+                >
+                  {isExplaining ? (
+                    <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-violet-600 border-t-transparent" />
+                  ) : (
+                    <BrainCircuit className="h-3.5 w-3.5 text-violet-600" />
+                  )}
+                  <span>Explain with AI</span>
+                </button>
 
-              {/* Explain Errors with AI Button */}
-              <button
-                onClick={handleExplainErrors}
-                disabled={
-                  !analysisResult ||
-                  isAnalyzing ||
-                  isExplaining ||
-                  code.trim().length < 5
-                }
-                title={
-                  !analysisResult
-                    ? 'Run Analyze Code first to generate findings'
-                    : 'Explain detected findings in plain English using AI'
-                }
-                className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-40 ${
-                  showExplanationPanel && !isExplaining
-                    ? 'border border-violet-500/40 bg-violet-500/15 text-violet-300 hover:bg-violet-500/25 shadow-sm shadow-violet-500/10'
-                    : 'border border-violet-500/30 bg-violet-500/10 text-violet-400 hover:bg-violet-500/20 hover:text-violet-300 shadow-sm shadow-violet-500/10'
-                }`}
-              >
-                {isExplaining ? (
-                  <>
-                    <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-violet-400 border-t-transparent" />
-                    <span>Explaining...</span>
-                  </>
-                ) : (
-                  <>
-                    <BrainCircuit className="h-3.5 w-3.5" />
-                    <span>Explain with AI</span>
-                  </>
-                )}
-              </button>
+                {/* AI Copilot Side Panel Toggle */}
+                <button
+                  type="button"
+                  onClick={() => setShowCopilot((prev) => !prev)}
+                  className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition cursor-pointer shadow-2xs ${
+                    showCopilot
+                      ? 'bg-purple-700 text-white shadow-xs'
+                      : 'border border-purple-200 bg-purple-50 text-purple-700 hover:bg-purple-100'
+                  }`}
+                  title="Toggle AI Copilot Assistant & Diff Viewer side panel"
+                >
+                  <Sparkles className="h-3.5 w-3.5" />
+                  <span>AI Copilot</span>
+                </button>
 
-              {/* Theme Toggle Button */}
-              <button
-                onClick={toggleTheme}
-                type="button"
-                aria-label="Toggle theme mode"
-                title={theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
-                className="flex h-8.5 w-8.5 items-center justify-center rounded-xl border border-slate-800 bg-slate-900/60 text-slate-300 transition hover:bg-slate-800 hover:text-white"
-              >
-                {theme === 'dark' ? (
-                  <Sun className="h-4 w-4 text-amber-400" />
-                ) : (
-                  <Moon className="h-4 w-4 text-indigo-500" />
-                )}
-              </button>
+                {/* Reset Code */}
+                <button
+                  type="button"
+                  onClick={handleResetCode}
+                  title="Restore default or initial code and clear errors"
+                  className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-100 transition cursor-pointer shadow-2xs"
+                >
+                  <RotateCcw className="h-3.5 w-3.5 text-amber-600" />
+                  <span>Reset</span>
+                </button>
+
+                {/* Settings Link */}
+                <Link
+                  to="/settings"
+                  title="Workspace Settings"
+                  className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white p-1.5 text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition cursor-pointer shadow-2xs"
+                >
+                  <Settings className="h-3.5 w-3.5" />
+                </Link>
+
+                {/* Optional Theme Toggle Button */}
+                <button
+                  onClick={toggleTheme}
+                  type="button"
+                  aria-label="Toggle theme mode"
+                  title={theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
+                  className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 transition cursor-pointer shadow-2xs"
+                >
+                  {theme === 'dark' ? (
+                    <Sun className="h-3.5 w-3.5 text-amber-600" />
+                  ) : (
+                    <Moon className="h-3.5 w-3.5 text-indigo-600" />
+                  )}
+                </button>
+              </div>
             </div>
 
           </div>
@@ -1383,10 +1399,10 @@ export const WorkspacePage: React.FC = () => {
         {/* Workspace Body */}
         <div className="p-6 space-y-6">
           {/* Editor Controls Toolbar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-800 bg-slate-900/60 p-3 text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-3 text-xs shadow-2xs">
             {/* Left: Language Selector & Unsaved Changes Status */}
             <div className="flex flex-wrap items-center gap-2.5">
-              <span className="font-semibold text-slate-400 text-[11px] uppercase tracking-wider">Language:</span>
+              <span className="font-semibold text-slate-500 text-[11px] uppercase tracking-wider">Language:</span>
               <LanguageSelector value={language} onChange={handleLanguageChange} />
 
               {/* Starter Template button */}
@@ -1394,7 +1410,7 @@ export const WorkspacePage: React.FC = () => {
                 type="button"
                 onClick={handleResetCode}
                 title={`Load clean ${LANGUAGE_CONFIG[language.toLowerCase()]?.label || language} starter template`}
-                className="rounded-lg border border-slate-700 bg-slate-800/80 px-2.5 py-1.5 text-xs text-slate-300 hover:bg-slate-700 transition"
+                className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 transition cursor-pointer"
               >
                 Starter Template
               </button>
@@ -1414,7 +1430,7 @@ export const WorkspacePage: React.FC = () => {
                     setTargetLine(null)
                   }}
                   title="Load vulnerability audit sample with known security defects"
-                  className="rounded-lg border border-purple-500/30 bg-purple-500/10 px-2.5 py-1.5 text-xs text-purple-300 hover:bg-purple-500/20 transition"
+                  className="rounded-lg border border-purple-200 bg-purple-50 px-2.5 py-1.5 text-xs font-semibold text-purple-700 hover:bg-purple-100 transition cursor-pointer"
                 >
                   Load Audit Sample
                 </button>
@@ -1437,7 +1453,7 @@ export const WorkspacePage: React.FC = () => {
                     setTargetLine(null)
                   }}
                   title="Load interactive standard input (stdin) program and sample input"
-                  className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1.5 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/20 transition cursor-pointer"
+                  className="rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 text-xs font-semibold text-emerald-800 hover:bg-emerald-100 transition cursor-pointer"
                 >
                   Load Input Program
                 </button>
@@ -1445,13 +1461,13 @@ export const WorkspacePage: React.FC = () => {
 
               {/* Unsaved Changes Indicator */}
               {code !== lastSavedCode ? (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-[11px] font-semibold text-amber-300" title="Editor has unsaved code modifications">
-                  <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-800" title="Editor has unsaved code modifications">
+                  <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
                   Unsaved Changes
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-400" title="All edits are up-to-date">
-                  <CheckCircle2 className="h-3 w-3" />
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-800" title="All edits are up-to-date">
+                  <CheckCircle2 className="h-3 w-3 text-emerald-600" />
                   Code Saved
                 </span>
               )}
@@ -1464,9 +1480,9 @@ export const WorkspacePage: React.FC = () => {
                 type="button"
                 onClick={handleFormatCode}
                 title="Format source code using Monaco beautifier"
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer shadow-2xs"
               >
-                <AlignLeft className="h-3.5 w-3.5 text-sky-400" />
+                <AlignLeft className="h-3.5 w-3.5 text-blue-600" />
                 <span>Format</span>
               </button>
 
@@ -1475,16 +1491,16 @@ export const WorkspacePage: React.FC = () => {
                 type="button"
                 onClick={handleCopyCode}
                 title="Copy editor code to clipboard"
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer shadow-2xs"
               >
                 {copiedCode ? (
                   <>
-                    <Check className="h-3.5 w-3.5 text-emerald-400" />
-                    <span className="text-emerald-400">Copied!</span>
+                    <Check className="h-3.5 w-3.5 text-emerald-600" />
+                    <span className="text-emerald-700">Copied!</span>
                   </>
                 ) : (
                   <>
-                    <Copy className="h-3.5 w-3.5 text-slate-400" />
+                    <Copy className="h-3.5 w-3.5 text-slate-500" />
                     <span>Copy</span>
                   </>
                 )}
@@ -1496,9 +1512,9 @@ export const WorkspacePage: React.FC = () => {
                 onClick={handleUndoFix}
                 disabled={codeHistory.length === 0}
                 title={codeHistory.length > 0 ? `Revert to previous code before AI fix (${codeHistory.length} state available)` : 'No applied fixes to undo'}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition disabled:opacity-40 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer shadow-2xs disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                <Undo2 className="h-3.5 w-3.5 text-indigo-400" />
+                <Undo2 className="h-3.5 w-3.5 text-indigo-600" />
                 <span>Undo Fix {codeHistory.length > 0 ? `(${codeHistory.length})` : ''}</span>
               </button>
 
@@ -1512,9 +1528,9 @@ export const WorkspacePage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer shadow-2xs"
               >
-                <Upload className="h-3.5 w-3.5 text-blue-400" />
+                <Upload className="h-3.5 w-3.5 text-blue-600" />
                 <span>Upload</span>
               </button>
 
@@ -1525,7 +1541,7 @@ export const WorkspacePage: React.FC = () => {
                   setCode('')
                 }}
                 title="Clear code editor"
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-400 hover:bg-slate-800 hover:text-white transition"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-500 hover:text-rose-600 transition cursor-pointer shadow-2xs"
               >
                 <Trash2 className="h-3.5 w-3.5" />
                 <span>Clear</span>
@@ -1536,17 +1552,17 @@ export const WorkspacePage: React.FC = () => {
                   <a
                     href={analysisService.getExportHtmlUrl(analysisResult.id)}
                     download
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer shadow-2xs"
                   >
-                    <Download className="h-3.5 w-3.5 text-emerald-400" />
+                    <Download className="h-3.5 w-3.5 text-emerald-600" />
                     <span>Report</span>
                   </a>
                   <a
                     href={analysisService.getExportJsonUrl(analysisResult.id)}
                     download
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer shadow-2xs"
                   >
-                    <FileCode className="h-3.5 w-3.5 text-indigo-400" />
+                    <FileCode className="h-3.5 w-3.5 text-indigo-600" />
                     <span>JSON</span>
                   </a>
                 </>
@@ -1556,27 +1572,27 @@ export const WorkspacePage: React.FC = () => {
 
           {/* Analysis Progress Banner */}
           {isAnalyzing && (
-            <div className="flex items-center gap-3 rounded-xl border border-blue-500/30 bg-blue-500/8 px-4 py-2.5 text-xs text-blue-300">
-              <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-blue-400 border-t-transparent shrink-0" />
+            <div className="flex items-center gap-3 rounded-xl border border-blue-200 bg-blue-50/80 px-4 py-2.5 text-xs text-blue-800 shadow-2xs">
+              <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-blue-600 border-t-transparent shrink-0" />
               <div className="flex flex-col gap-0.5">
                 <span className="font-semibold">{analysisStep || 'Analyzing source code...'}</span>
-                <span className="text-blue-400/60 text-[10px]">Running {language.toUpperCase()} analyzers</span>
+                <span className="text-blue-600/70 text-[10px]">Running {language.toUpperCase()} analyzers</span>
               </div>
             </div>
           )}
 
           {/* Error Banner */}
           {errorMsg && !isAnalyzing && (
-            <div className="flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/8 px-4 py-3 text-xs text-red-300">
-              <AlertTriangle className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
+            <div className="flex items-start gap-3 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-xs text-rose-800 shadow-2xs">
+              <AlertTriangle className="h-4 w-4 text-rose-600 shrink-0 mt-0.5" />
               <div>
-                <span className="font-semibold text-red-300">Analysis Error: </span>
+                <span className="font-bold text-rose-900">Analysis Error: </span>
                 <span>{errorMsg}</span>
               </div>
             </div>
           )}
 
-          {/* ScoreCard */}
+          {/* ScoreCard - Quality Metrics Cards */}
           {analysisResult && (
             <ScoreCard
               qualityScore={analysisResult.quality_score}
@@ -1588,17 +1604,19 @@ export const WorkspacePage: React.FC = () => {
               performanceCount={analysisResult.performance_count}
               securityCount={analysisResult.security_count}
               complexityMetrics={analysisResult.complexity_metrics}
+              testResults={testResults}
+              totalTestCases={testCases.length}
             />
           )}
 
-          {/* Editor & Findings Layout */}
+          {/* Editor & Unified Results Layout */}
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
             {/* Left: Monaco Editor */}
             <div className="lg:col-span-7">
-              <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
+              <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2 text-xs rounded-xl border border-slate-200 bg-white p-2.5 shadow-2xs">
                 <div className="flex items-center gap-2.5">
-                  <span className="font-mono text-slate-200 font-semibold">{filename}</span>
-                  <span className="inline-flex items-center gap-1.5 rounded-lg bg-blue-500/10 border border-blue-500/30 px-2.5 py-1 text-xs font-semibold text-blue-400 shadow-sm shadow-blue-500/10">
+                  <span className="font-mono text-slate-800 font-bold">{filename}</span>
+                  <span className="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 border border-blue-200 px-2.5 py-0.5 text-xs font-semibold text-blue-700">
                     <span>{LANGUAGE_CONFIG[language.toLowerCase()]?.icon || '🔹'}</span>
                     <span>{LANGUAGE_CONFIG[language.toLowerCase()]?.label || language.toUpperCase()}</span>
                   </span>
@@ -1613,7 +1631,7 @@ export const WorkspacePage: React.FC = () => {
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-[11px] text-slate-500 font-mono">{code.split('\n').length} lines</span>
+                  <span className="text-[11px] text-slate-500 font-mono font-medium">{code.split('\n').length} lines</span>
                 </div>
               </div>
               <CodeEditor
@@ -1625,151 +1643,54 @@ export const WorkspacePage: React.FC = () => {
                 targetLine={targetLine}
                 executionErrorLine={executionResult?.error_detail?.line_number || null}
                 executionErrorMessage={executionResult?.error_detail?.raw_message || executionResult?.error_detail?.what_went_wrong || null}
-                height="600px"
+                height="620px"
               />
             </div>
 
-            {/* Right: Mode Switcher & Dynamic Output Panel */}
+            {/* Right: Collapsible Standard Input & White Results Panel */}
             <div className="lg:col-span-5 space-y-4">
-              {/* Workspace View Mode Switcher */}
-              <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/60 p-1.5 gap-1">
-                <button
-                  type="button"
-                  onClick={() => setActiveWorkspaceMode('compiler')}
-                  className={`flex-1 flex items-center justify-center gap-1.5 rounded-lg py-2 text-xs font-bold transition ${
-                    currentMode === 'compiler'
-                      ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-500/20'
-                      : 'text-slate-400 hover:text-slate-200'
-                  }`}
-                >
-                  <Terminal className="h-3.5 w-3.5" />
-                  <span>Compiler & Output</span>
-                </button>
+              {/* Custom Input (stdin) Panel for Runtime User Input */}
+              <CustomInputPanel
+                value={programStdin}
+                onChange={setProgramStdin}
+                disabled={isExecuting}
+                language={language}
+              />
 
-                {isWebPreviewLang && (
-                  <button
-                    type="button"
-                    onClick={() => setActiveWorkspaceMode('preview')}
-                    className={`flex-1 flex items-center justify-center gap-1.5 rounded-lg py-2 text-xs font-bold transition ${
-                      currentMode === 'preview'
-                        ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-500/20'
-                        : 'text-slate-400 hover:text-slate-200'
-                    }`}
-                  >
-                    <ExternalLink className="h-3.5 w-3.5" />
-                    <span>Live Preview</span>
-                  </button>
-                )}
-
-                <button
-                  type="button"
-                  onClick={() => setActiveWorkspaceMode('audit')}
-                  className={`flex-1 flex items-center justify-center gap-1.5 rounded-lg py-2 text-xs font-bold transition ${
-                    currentMode === 'audit'
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
-                      : 'text-slate-400 hover:text-slate-200'
-                  }`}
-                >
-                  <ShieldCheck className="h-3.5 w-3.5" />
-                  <span>Security Audit ({analysisResult?.findings_count || 0})</span>
-                </button>
-              </div>
-
-              {/* View 0: Browser Live Preview for HTML/CSS/JS */}
-              {currentMode === 'preview' && isWebPreviewLang && (
-                <ErrorBoundary
-                  fallbackTitle="Live Preview Notice"
-                  fallbackMessage="A rendering issue occurred in the preview container. Click below to reset."
-                >
-                  <div className="flex flex-col rounded-xl border border-slate-800 bg-slate-950/80 shadow-2xl backdrop-blur-md overflow-hidden">
-                    <div className="flex items-center justify-between border-b border-slate-800/80 bg-slate-900/70 px-4 py-2.5">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-white">
-                        <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                        <span>Interactive Browser Preview</span>
-                      </div>
-                      <span className="text-[11px] text-slate-400">Sandbox Iframe</span>
-                    </div>
-                    <div className="p-2 bg-slate-900/40">
-                      <iframe
-                        title="Browser Live Preview"
-                        srcDoc={getPreviewDocument()}
-                        sandbox="allow-scripts allow-modals"
-                        className="w-full h-[480px] rounded-lg bg-white border border-slate-700 shadow-inner"
-                      />
-                    </div>
-                  </div>
-                </ErrorBoundary>
-              )}
-
-              {/* View 1: Real Sandboxed Compiler Output Panel & Runtime Input */}
-              {currentMode === 'compiler' && (
-                <div className="space-y-3">
-                  {/* Custom Input (stdin) Panel for Runtime User Input */}
-                  <CustomInputPanel
-                    value={programStdin}
-                    onChange={setProgramStdin}
-                    disabled={isExecuting}
-                    language={language}
-                  />
-
-                  <CompilerOutputPanel
-                    result={executionResult}
-                    code={code}
-                    isExecuting={isExecuting}
-                    stdin={programStdin}
-                    onStdinChange={setProgramStdin}
-                    onApplyFix={handleApplyCompilerFix}
-                    onRunCorrectedCode={handleRunCorrectedCode}
-                    onClearOutput={() => {
-                      setExecutionResult(null)
-                    }}
-                    onJumpToLine={(line) => setTargetLine(line)}
-                    testCases={testCases}
-                    testResults={testResults}
-                    isRunningTests={isRunningTests}
-                    isGeneratingTests={isGeneratingTests}
-                    onRunTests={handleRunTests}
-                    onRunSingleTest={handleRunSingleTest}
-                    onAddTestCase={handleAddTestCase}
-                    onUpdateTestCase={handleUpdateTestCase}
-                    onDeleteTestCase={handleDeleteTestCase}
-                    onClearTestCases={handleClearTestCases}
-                    onGenerateTestCases={handleGenerateTestCases}
-                    onExplainTestFailure={handleExplainTestFailure}
-                    activeTabOverride={compilerTab}
-                    onTabChange={setCompilerTab}
-                  />
-                </div>
-              )}
-
-
-
-              {/* View 2: Security Findings & Duplicate Clusters */}
-              {currentMode === 'audit' && (
-                <>
-                  {/* Duplicate Groups view if present */}
-                  {analysisResult && analysisResult.duplicate_groups.length > 0 && (
-                    <DuplicateGroupsView groups={analysisResult.duplicate_groups} />
-                  )}
-
-                  {/* Findings List */}
-                  <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
-                    <div className="mb-3 flex items-center justify-between">
-                      <h3 className="text-sm font-bold text-white">Audit Findings</h3>
-                      <span className="text-xs text-slate-400">
-                        {analysisResult?.findings_count || 0} Issues Detected
-                      </span>
-                    </div>
-
-                    <FindingsList
-                      findings={analysisResult?.findings || []}
-                      onJumpToLine={(line) => setTargetLine(line)}
-                      onReviewFix={handleReviewFix}
-                      onGenerateTests={(finding) => handleGenerateTests(finding)}
-                    />
-                  </div>
-                </>
-              )}
+              {/* White Results Panel with Tabs for Output, Errors, Test Results, Build Logs, Security Audit & Preview */}
+              <CompilerOutputPanel
+                result={executionResult}
+                code={code}
+                isExecuting={isExecuting}
+                stdin={programStdin}
+                onStdinChange={setProgramStdin}
+                onApplyFix={handleApplyCompilerFix}
+                onRunCorrectedCode={handleRunCorrectedCode}
+                onClearOutput={() => {
+                  setExecutionResult(null)
+                }}
+                onJumpToLine={(line) => setTargetLine(line)}
+                testCases={testCases}
+                testResults={testResults}
+                isRunningTests={isRunningTests}
+                isGeneratingTests={isGeneratingTests}
+                onRunTests={handleRunTests}
+                onRunSingleTest={handleRunSingleTest}
+                onAddTestCase={handleAddTestCase}
+                onUpdateTestCase={handleUpdateTestCase}
+                onDeleteTestCase={handleDeleteTestCase}
+                onClearTestCases={handleClearTestCases}
+                onGenerateTestCases={handleGenerateTestCases}
+                onExplainTestFailure={handleExplainTestFailure}
+                activeTabOverride={compilerTab}
+                onTabChange={setCompilerTab}
+                findings={analysisResult?.findings || []}
+                duplicateGroups={analysisResult?.duplicate_groups || []}
+                onReviewFix={handleReviewFix}
+                onGenerateFindingTests={(finding) => handleGenerateTests(finding)}
+                previewDocument={getPreviewDocument()}
+                isWebPreview={isWebPreviewLang}
+              />
             </div>
           </div>
 
@@ -1814,35 +1735,35 @@ export const WorkspacePage: React.FC = () => {
 
         {/* Authentication Gate Modal (Requires Sign In to Test Code) */}
         {showAuthGateModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div className="w-full max-w-md rounded-2xl border border-slate-700/80 bg-white dark:bg-slate-900 p-6 shadow-2xl space-y-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500 mx-auto">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4">
+            <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl space-y-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600 border border-blue-200 mx-auto">
                 <ShieldCheck className="h-6 w-6" />
               </div>
               <div className="text-center">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                <h3 className="text-lg font-bold text-slate-900">
                   Authentication Required
                 </h3>
-                <p className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
                   To test code and generate AI security audits, you must be signed in. All your analyzed code and vulnerability reports are encrypted and tied securely to your user account.
                 </p>
               </div>
               <div className="flex flex-col gap-2.5 pt-2">
                 <button
                   onClick={() => navigate('/signin')}
-                  className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-2.5 text-xs font-semibold text-white shadow-lg shadow-blue-500/25 hover:from-blue-500 hover:to-indigo-500 transition"
+                  className="w-full rounded-xl bg-blue-600 py-2.5 text-xs font-semibold text-white shadow-xs hover:bg-blue-700 transition cursor-pointer"
                 >
                   Sign In to Continue
                 </button>
                 <button
                   onClick={() => navigate('/signup')}
-                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-750 transition"
+                  className="w-full rounded-xl border border-slate-200 bg-white py-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer shadow-2xs"
                 >
                   Create New Account
                 </button>
                 <button
                   onClick={() => setShowAuthGateModal(false)}
-                  className="text-xs text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 py-1"
+                  className="text-xs text-slate-500 hover:text-slate-800 py-1 cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -1879,6 +1800,22 @@ export const WorkspacePage: React.FC = () => {
               runAnalysis(fixedCode, language, filename, false)
             }}
           />
+        )}
+
+        {/* AI Copilot Side Panel Drawer */}
+        {showCopilot && (
+          <div className="fixed inset-y-0 right-0 z-50 w-full max-w-lg shadow-2xl transition-transform duration-300">
+            <AiCopilotPanel
+              code={code}
+              language={language}
+              filename={filename}
+              findings={analysisResult?.findings || []}
+              onApplyFix={handleApplyFix}
+              onUndoFix={handleUndoFix}
+              canUndo={codeHistory.length > 0}
+              onClose={() => setShowCopilot(false)}
+            />
+          </div>
         )}
 
 

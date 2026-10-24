@@ -39,29 +39,29 @@ export const AiFixModal: React.FC<AiFixModalProps> = ({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
-      <div className="relative w-full max-w-4xl rounded-2xl border border-slate-800 bg-slate-950 p-6 shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4 overflow-y-auto">
+      <div className="relative w-full max-w-4xl rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl">
         {/* Header */}
-        <div className="flex items-start justify-between border-b border-slate-800 pb-4">
+        <div className="flex items-start justify-between border-b border-slate-200 pb-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 border border-blue-200">
               <Sparkles className="h-5 w-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-base font-bold text-white">AI Fix Assistant</h3>
+                <h3 className="text-base font-bold text-slate-900">AI Fix Assistant</h3>
                 {fixResult && (
-                  <span className="rounded-full bg-blue-500/10 px-2.5 py-0.5 text-[10px] font-semibold text-blue-400 border border-blue-500/20">
+                  <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-[10px] font-semibold text-blue-700 border border-blue-200">
                     {fixResult.is_ai_generated ? 'Live AI Generated' : 'Automated Secure Patch'}
                   </span>
                 )}
               </div>
-              <p className="text-xs text-slate-400">{finding.title} (Line {finding.line_start})</p>
+              <p className="text-xs text-slate-500">{finding.title} (Line {finding.line_start})</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-900 hover:text-white transition"
+            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition cursor-pointer"
           >
             <X className="h-5 w-5" />
           </button>
@@ -70,9 +70,9 @@ export const AiFixModal: React.FC<AiFixModalProps> = ({
         {/* Content Body */}
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="h-10 w-10 animate-spin rounded-full border-2 border-blue-500 border-t-transparent" />
-            <p className="mt-4 text-sm font-semibold text-white">Synthesizing Secure Patch...</p>
-            <p className="mt-1 text-xs text-slate-400">
+            <div className="h-10 w-10 animate-spin rounded-full border-3 border-blue-600 border-t-transparent" />
+            <p className="mt-4 text-sm font-bold text-slate-900">Synthesizing Secure Patch...</p>
+            <p className="mt-1 text-xs text-slate-500">
               Analyzing AST structure, control-flow risks, and generating regression validations.
             </p>
           </div>
@@ -80,45 +80,45 @@ export const AiFixModal: React.FC<AiFixModalProps> = ({
           <div className="mt-5 space-y-5">
             {/* Explanations Grid */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
-                <h4 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-red-400">
-                  <AlertTriangle className="h-4 w-4" /> Why Original Code is Unsafe
+              <div className="rounded-xl border border-rose-200 bg-rose-50/50 p-4">
+                <h4 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-rose-800">
+                  <AlertTriangle className="h-4 w-4 text-rose-600" /> Why Original Code is Unsafe
                 </h4>
-                <p className="mt-2 text-xs text-slate-300 leading-relaxed">
+                <p className="mt-2 text-xs text-slate-700 leading-relaxed">
                   {fixResult.why_unsafe}
                 </p>
               </div>
 
-              <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
-                <h4 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-400">
-                  <ShieldCheck className="h-4 w-4" /> Explanation of Remediation
+              <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4">
+                <h4 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-800">
+                  <ShieldCheck className="h-4 w-4 text-emerald-600" /> Explanation of Remediation
                 </h4>
-                <p className="mt-2 text-xs text-slate-300 leading-relaxed">
+                <p className="mt-2 text-xs text-slate-700 leading-relaxed">
                   {fixResult.explanation}
                 </p>
               </div>
             </div>
 
             {/* Code Diff Tabs */}
-            <div className="rounded-xl border border-slate-800 bg-slate-900/30 overflow-hidden">
-              <div className="flex items-center justify-between border-b border-slate-800 bg-slate-900/80 px-4 py-2">
+            <div className="rounded-xl border border-slate-200 bg-slate-50 overflow-hidden shadow-2xs">
+              <div className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-2">
                 <div className="flex gap-2">
                   <button
                     onClick={() => setActiveTab('diff')}
-                    className={`rounded-lg px-3 py-1 text-xs font-semibold transition ${
+                    className={`rounded-lg px-3 py-1 text-xs font-semibold transition cursor-pointer ${
                       activeTab === 'diff'
-                        ? 'bg-blue-600 text-white'
-                        : 'text-slate-400 hover:text-white'
+                        ? 'bg-blue-600 text-white shadow-2xs'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                     }`}
                   >
                     Unified Diff
                   </button>
                   <button
                     onClick={() => setActiveTab('code')}
-                    className={`rounded-lg px-3 py-1 text-xs font-semibold transition ${
+                    className={`rounded-lg px-3 py-1 text-xs font-semibold transition cursor-pointer ${
                       activeTab === 'code'
-                        ? 'bg-blue-600 text-white'
-                        : 'text-slate-400 hover:text-white'
+                        ? 'bg-blue-600 text-white shadow-2xs'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                     }`}
                   >
                     Remediated Code
@@ -127,16 +127,16 @@ export const AiFixModal: React.FC<AiFixModalProps> = ({
 
                 <button
                   onClick={handleCopy}
-                  className="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-white transition"
+                  className="inline-flex items-center gap-1 text-xs text-slate-600 hover:text-slate-900 transition cursor-pointer"
                 >
-                  {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+                  {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
                   {copied ? 'Copied' : 'Copy'}
                 </button>
               </div>
 
-              <div className="max-h-80 overflow-y-auto p-4 font-mono text-xs">
+              <div className="max-h-80 overflow-y-auto p-4 font-mono text-xs bg-white">
                 {activeTab === 'diff' ? (
-                  <pre className="text-slate-300 leading-relaxed">
+                  <pre className="text-slate-800 leading-relaxed">
                     {fixResult.diff.split('\n').map((line, idx) => {
                       const isAdded = line.startsWith('+') && !line.startsWith('+++')
                       const isRemoved = line.startsWith('-') && !line.startsWith('---')
@@ -146,13 +146,13 @@ export const AiFixModal: React.FC<AiFixModalProps> = ({
                           key={idx}
                           className={`${
                             isAdded
-                              ? 'bg-emerald-950/60 text-emerald-300'
+                              ? 'bg-emerald-50 text-emerald-800 font-semibold'
                               : isRemoved
-                              ? 'bg-rose-950/60 text-rose-300 line-through'
+                              ? 'bg-rose-50 text-rose-800 line-through'
                               : isHeader
-                              ? 'text-blue-400 font-semibold'
-                              : 'text-slate-400'
-                          } px-2 py-0.5 rounded-sm`}
+                              ? 'text-blue-700 font-semibold bg-blue-50/50'
+                              : 'text-slate-600'
+                          } px-2 py-0.5 rounded-xs`}
                         >
                           {line}
                         </div>
@@ -160,7 +160,7 @@ export const AiFixModal: React.FC<AiFixModalProps> = ({
                     })}
                   </pre>
                 ) : (
-                  <pre className="text-slate-200">
+                  <pre className="text-slate-800">
                     <code>{fixResult.corrected_code}</code>
                   </pre>
                 )}
@@ -169,17 +169,17 @@ export const AiFixModal: React.FC<AiFixModalProps> = ({
 
             {/* Side-effects & Validation Tests */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 text-xs">
-              <div className="rounded-lg border border-slate-800/80 bg-slate-900/30 p-3">
-                <span className="font-semibold text-slate-300">Side Effects & Migration:</span>
-                <p className="mt-1 text-slate-400">{fixResult.side_effects}</p>
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <span className="font-semibold text-slate-800">Side Effects & Migration:</span>
+                <p className="mt-1 text-slate-600">{fixResult.side_effects}</p>
               </div>
 
-              <div className="rounded-lg border border-slate-800/80 bg-slate-900/30 p-3">
-                <span className="font-semibold text-slate-300">Recommended Tests to Validate:</span>
-                <ul className="mt-1 space-y-1 text-slate-400">
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <span className="font-semibold text-slate-800">Recommended Tests to Validate:</span>
+                <ul className="mt-1 space-y-1 text-slate-600">
                   {fixResult.recommended_tests.map((t, idx) => (
                     <li key={idx} className="flex items-center gap-1.5">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
                       <span>{t}</span>
                     </li>
                   ))}
@@ -188,10 +188,10 @@ export const AiFixModal: React.FC<AiFixModalProps> = ({
             </div>
 
             {/* Footer Buttons */}
-            <div className="flex items-center justify-end gap-3 border-t border-slate-800 pt-4">
+            <div className="flex items-center justify-end gap-3 border-t border-slate-200 pt-4">
               <button
                 onClick={onClose}
-                className="rounded-xl border border-slate-700 px-4 py-2 text-xs font-semibold text-slate-300 transition hover:bg-slate-800"
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-50 cursor-pointer shadow-2xs"
               >
                 Close Without Applying
               </button>
@@ -200,7 +200,7 @@ export const AiFixModal: React.FC<AiFixModalProps> = ({
                   onApplyFix(fixResult.corrected_code)
                   onClose()
                 }}
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-2 text-xs font-semibold text-white shadow-lg shadow-blue-600/30 transition hover:from-blue-500 hover:to-indigo-500"
+                className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2 text-xs font-semibold text-white shadow-xs transition hover:bg-blue-700 cursor-pointer"
               >
                 <Check className="h-4 w-4" />
                 Apply Fix to Editor
@@ -208,7 +208,7 @@ export const AiFixModal: React.FC<AiFixModalProps> = ({
             </div>
           </div>
         ) : (
-          <div className="py-10 text-center text-slate-400">
+          <div className="py-10 text-center text-slate-500">
             Failed to generate fix recommendations.
           </div>
         )}
@@ -216,3 +216,4 @@ export const AiFixModal: React.FC<AiFixModalProps> = ({
     </div>
   )
 }
+export default AiFixModal

@@ -54,13 +54,13 @@ export const FindingsList: React.FC<FindingsListProps> = ({
       {/* Search and Filters Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
           <input
             type="text"
             placeholder="Search findings by keyword, CWE, or rule..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-xl border border-slate-800 bg-slate-950/80 py-2 pl-9 pr-4 text-xs text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none"
+            className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-4 text-xs text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none transition"
           />
         </div>
 
@@ -70,8 +70,8 @@ export const FindingsList: React.FC<FindingsListProps> = ({
             onClick={() => setSelectedSeverity('all')}
             className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition ${
               selectedSeverity === 'all'
-                ? 'bg-blue-600 text-white'
-                : 'bg-slate-900 text-slate-400 hover:text-white'
+                ? 'bg-blue-600 text-white shadow-2xs'
+                : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
             }`}
           >
             All ({findings.length})
@@ -81,7 +81,7 @@ export const FindingsList: React.FC<FindingsListProps> = ({
             className={`rounded-lg px-2 py-1 text-xs font-semibold transition ${
               selectedSeverity === 'critical'
                 ? 'bg-red-600 text-white'
-                : 'bg-red-500/10 text-red-400 hover:bg-red-500/20'
+                : 'border border-red-200 bg-red-50 text-red-700 hover:bg-red-100'
             }`}
           >
             Critical ({counts.critical})
@@ -91,7 +91,7 @@ export const FindingsList: React.FC<FindingsListProps> = ({
             className={`rounded-lg px-2 py-1 text-xs font-semibold transition ${
               selectedSeverity === 'high'
                 ? 'bg-amber-600 text-white'
-                : 'bg-amber-500/10 text-amber-400 hover:bg-amber-500/20'
+                : 'border border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100'
             }`}
           >
             High ({counts.high})
@@ -101,7 +101,7 @@ export const FindingsList: React.FC<FindingsListProps> = ({
             className={`rounded-lg px-2 py-1 text-xs font-semibold transition ${
               selectedSeverity === 'medium'
                 ? 'bg-yellow-600 text-white'
-                : 'bg-yellow-500/10 text-yellow-400 hover:bg-yellow-500/20'
+                : 'border border-yellow-200 bg-yellow-50 text-yellow-700 hover:bg-yellow-100'
             }`}
           >
             Medium ({counts.medium})
@@ -110,15 +110,15 @@ export const FindingsList: React.FC<FindingsListProps> = ({
       </div>
 
       {/* Category Pills */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-slate-800/80 pb-2">
+      <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-2">
         {['all', 'Security', 'Bug', 'Code Smell', 'Maintainability'].map((cat) => (
           <button
             key={cat}
             onClick={() => setSelectedCategory(cat)}
             className={`rounded-md px-2 py-0.5 text-[11px] font-medium transition ${
               selectedCategory.toLowerCase() === cat.toLowerCase()
-                ? 'bg-slate-700 text-white font-semibold'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-slate-900 text-white font-semibold shadow-2xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
             }`}
           >
             {cat === 'all' ? 'All Categories' : cat}
