@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import {
   Terminal,
   CheckCircle2,
@@ -21,10 +21,16 @@ import {
   Layers,
   ChevronDown,
   ChevronUp,
+  Download,
+  Edit3,
+  Filter,
+  HelpCircle,
+  Zap,
 } from 'lucide-react'
 import {
   ExecuteResponse,
   TestCaseItem,
+  TestCaseResultItem,
   RunTestsResponse,
 } from '@/types/execution'
 
@@ -44,9 +50,13 @@ interface CompilerOutputPanelProps {
   isRunningTests: boolean
   isGeneratingTests: boolean
   onRunTests: () => void
+  onRunSingleTest?: (item: TestCaseItem) => void
   onAddTestCase: (item: TestCaseItem) => void
+  onUpdateTestCase?: (item: TestCaseItem) => void
   onDeleteTestCase: (id: string) => void
+  onClearTestCases?: () => void
   onGenerateTestCases: () => void
+  onExplainTestFailure?: (tc: TestCaseResultItem) => void
   activeTabOverride?: 'output' | 'errors' | 'tests' | 'logs' | 'stdin'
   onTabChange?: (tab: 'output' | 'errors' | 'tests' | 'logs' | 'stdin') => void
 }
@@ -66,9 +76,13 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
   isRunningTests,
   isGeneratingTests,
   onRunTests,
+  onRunSingleTest,
   onAddTestCase,
+  onUpdateTestCase,
   onDeleteTestCase,
+  onClearTestCases,
   onGenerateTestCases,
+  onExplainTestFailure,
   activeTabOverride,
   onTabChange,
 }) => {
@@ -78,6 +92,14 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
   const [newCaseName, setNewCaseName] = useState<string>('')
   const [newCaseInput, setNewCaseInput] = useState<string>('')
   const [newCaseExpected, setNewCaseExpected] = useState<string>('')
+  const [newCaseCategory, setNewCaseCategory] = useState<string>('Normal')
+  const [newCaseReason, setNewCaseReason] = useState<string>('')
+  const [selectedCategory, setSelectedCategory] = useState<string>('All')
+
+  // Inline editing state for test cases
+  const [editingCaseId, setEditingCaseId] = useState<string | null>(null)
+  const [editInputVal, setEditInputVal] = useState<string>('')
+  const [editExpectedVal, setEditExpectedVal] = useState<string>('')
 
   const activeTab = activeTabOverride || internalTab
   const setActiveTab = (tab: 'output' | 'errors' | 'tests' | 'logs' | 'stdin') => {
@@ -101,12 +123,35 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
       name: newCaseName.trim(),
       input: newCaseInput,
       expected_output: newCaseExpected,
+      category: newCaseCategory,
+      reason: newCaseReason.trim() || undefined,
+      is_user_edited: true,
     })
     setNewCaseName('')
     setNewCaseInput('')
     setNewCaseExpected('')
+    setNewCaseCategory('Normal')
+    setNewCaseReason('')
     setShowAddModal(false)
   }
+
+  const handleExportTests = () => {
+    if (testCases.length === 0) return
+    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(testCases, null, 2))
+    const downloadAnchor = document.createElement('a')
+    downloadAnchor.setAttribute('href', dataStr)
+    downloadAnchor.setAttribute('download', `test_cases_${Date.now()}.json`)
+    document.body.appendChild(downloadAnchor)
+    downloadAnchor.click()
+    downloadAnchor.remove()
+  }
+
+  const filteredTestCases = useMemo(() => {
+    if (selectedCategory === 'All') return testCases
+    return testCases.filter(
+      (tc) => (tc.category || 'Normal').toLowerCase() === selectedCategory.toLowerCase()
+    )
+  }, [testCases, selectedCategory])
 
   // Helper to synthesize client-side fix if backend didn't provide one
   const getClientSynthesizedFix = (): string | null => {
@@ -507,17 +552,17 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                   Automated Test Verification Bench
                 </h4>
                 <p className="text-[11px] text-slate-400 mt-0.5">
-                  Verify actual output against expected output to guarantee functional correctness.
+                  Verify runtime output against assertions across normal, edge, invalid, and branch coverage categories.
                 </p>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <button
                   type="button"
                   onClick={onGenerateTestCases}
                   disabled={isGeneratingTests}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-purple-500/40 bg-purple-500/10 px-3 py-1.5 text-xs font-semibold text-purple-300 hover:bg-purple-500/20 disabled:opacity-50 transition"
-                  title="Generate structured test cases using AI"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-purple-500/40 bg-purple-500/10 px-3 py-1.5 text-xs font-semibold text-purple-300 hover:bg-purple-500/20 disabled:opacity-50 transition cursor-pointer"
+                  title="Dynamically generate structured test suite using AI & AST analysis"
                 >
                   {isGeneratingTests ? (
                     <div className="h-3 w-3 animate-spin rounded-full border-2 border-purple-400 border-t-transparent" />
@@ -530,11 +575,36 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                 <button
                   type="button"
                   onClick={() => setShowAddModal(true)}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-700 transition"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-700 transition cursor-pointer"
                 >
                   <Plus className="h-3.5 w-3.5" />
                   <span>Add Case</span>
                 </button>
+
+                {testCases.length > 0 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={handleExportTests}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800/80 px-2.5 py-1.5 text-xs font-medium text-slate-300 hover:bg-slate-700 transition"
+                      title="Export test suite as JSON"
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                      <span>Export</span>
+                    </button>
+
+                    {onClearTestCases && (
+                      <button
+                        type="button"
+                        onClick={onClearTestCases}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-slate-800 px-2.5 py-1.5 text-xs text-slate-400 hover:text-rose-400 hover:border-rose-500/30 transition"
+                        title="Clear all test cases"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    )}
+                  </>
+                )}
 
                 <button
                   type="button"
@@ -545,7 +615,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                   {isRunningTests ? (
                     <>
                       <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                      <span>Testing...</span>
+                      <span>Executing Suite...</span>
                     </>
                   ) : (
                     <>
@@ -557,47 +627,122 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
               </div>
             </div>
 
-            {/* Test Results Progress Bar */}
+            {/* Test Results Progress & Telemetry */}
             {testResults && (
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between text-xs font-semibold">
-                  <span className={testResults.all_passed ? 'text-emerald-400' : 'text-rose-400'}>
-                    {testResults.all_passed
-                      ? '✓ All Test Assertions Passed'
-                      : `✗ ${testResults.failed} Failed, ${testResults.errors} Errors`}
-                  </span>
-                  <span className="text-slate-400">
-                    Passed {testResults.passed} of {testResults.total} (
-                    {Math.round((testResults.passed / testResults.total) * 100)}%)
-                  </span>
+              <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-3 space-y-2.5">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                  <div className="flex items-center gap-3">
+                    <span className={`font-bold flex items-center gap-1.5 ${testResults.all_passed ? 'text-emerald-400' : 'text-rose-400'}`}>
+                      {testResults.all_passed ? (
+                        <>
+                          <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                          All Tests Passed ({testResults.passed}/{testResults.total})
+                        </>
+                      ) : (
+                        <>
+                          <XCircle className="h-4 w-4 text-rose-400" />
+                          Test Failures Detected: {testResults.failed} failed, {testResults.errors} errors
+                        </>
+                      )}
+                    </span>
+                    {testResults.timeouts !== undefined && testResults.timeouts > 0 && (
+                      <span className="flex items-center gap-1 rounded bg-amber-500/20 px-2 py-0.5 text-[11px] font-bold text-amber-400">
+                        <Clock className="h-3 w-3" />
+                        {testResults.timeouts} Timed Out
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-3 text-slate-400 text-[11px]">
+                    {testResults.duration_seconds !== undefined && (
+                      <span className="flex items-center gap-1">
+                        <Zap className="h-3 w-3 text-amber-400" />
+                        {testResults.duration_seconds}s
+                      </span>
+                    )}
+                    {testResults.estimated_coverage !== undefined && (
+                      <span className="rounded-md border border-indigo-500/30 bg-indigo-500/10 px-2 py-0.5 font-semibold text-indigo-300">
+                        ~{testResults.estimated_coverage}% Est. Coverage
+                      </span>
+                    )}
+                    <span className="font-semibold text-white">
+                      Pass Rate: {testResults.pass_percentage ?? Math.round((testResults.passed / testResults.total) * 100)}%
+                    </span>
+                  </div>
                 </div>
-                <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
+
+                <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden flex">
                   <div
-                    className={`h-full transition-all duration-500 ${
-                      testResults.all_passed ? 'bg-emerald-500' : 'bg-rose-500'
-                    }`}
-                    style={{
-                      width: `${(testResults.passed / testResults.total) * 100}%`,
-                    }}
+                    className="bg-emerald-500 h-full transition-all duration-500"
+                    style={{ width: `${(testResults.passed / testResults.total) * 100}%` }}
+                    title={`Passed: ${testResults.passed}`}
+                  />
+                  <div
+                    className="bg-rose-500 h-full transition-all duration-500"
+                    style={{ width: `${(testResults.failed / testResults.total) * 100}%` }}
+                    title={`Failed: ${testResults.failed}`}
+                  />
+                  <div
+                    className="bg-amber-500 h-full transition-all duration-500"
+                    style={{ width: `${(testResults.errors / testResults.total) * 100}%` }}
+                    title={`Errors: ${testResults.errors}`}
                   />
                 </div>
               </div>
             )}
 
+            {/* Category Filter Pills */}
+            {testCases.length > 0 && (
+              <div className="flex flex-wrap items-center gap-1.5 pb-1">
+                <span className="text-[11px] font-medium text-slate-500 flex items-center gap-1 mr-1">
+                  <Filter className="h-3 w-3" /> Filter:
+                </span>
+                {['All', 'Normal', 'Boundary / Edge', 'Invalid Input', 'Branch Coverage', 'Regression'].map((cat) => {
+                  const count = cat === 'All'
+                    ? testCases.length
+                    : testCases.filter((tc) => (tc.category || 'Normal').toLowerCase() === cat.toLowerCase()).length
+                  if (cat !== 'All' && count === 0) return null
+                  const isSelected = selectedCategory.toLowerCase() === cat.toLowerCase()
+                  return (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium transition cursor-pointer ${
+                        isSelected
+                          ? 'bg-purple-600 text-white shadow-sm shadow-purple-600/30'
+                          : 'border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                      }`}
+                    >
+                      <span>{cat}</span>
+                      <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-purple-800 text-purple-200' : 'bg-slate-800 text-slate-400'}`}>
+                        {count}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            )}
+
             {/* Test Case Cards List */}
-            {testCases.length === 0 ? (
+            {filteredTestCases.length === 0 ? (
               <div className="flex flex-col items-center justify-center rounded-xl border border-slate-800/80 bg-slate-900/40 p-8 text-center text-slate-400">
                 <TestTube2 className="h-8 w-8 text-slate-600 mb-2" />
-                <p className="font-semibold text-slate-300 text-xs">No Test Cases Configured</p>
+                <p className="font-semibold text-slate-300 text-xs">
+                  {testCases.length === 0 ? 'No Test Cases Configured' : 'No Test Cases in This Category'}
+                </p>
                 <p className="text-[11px] text-slate-500 mt-1 max-w-sm">
-                  Click <strong>&quot;Generate Test Cases&quot;</strong> or <strong>&quot;Add Case&quot;</strong> to define inputs and expected outputs.
+                  {testCases.length === 0
+                    ? 'Click "Generate Test Cases" or "Add Case" to define test inputs and expected outputs.'
+                    : 'Select "All" to view test cases in other categories.'}
                 </p>
               </div>
             ) : (
               <div className="space-y-3">
-                {testCases.map((tc, idx) => {
+                {filteredTestCases.map((tc, idx) => {
                   const resItem = testResults?.results.find((r) => r.id === tc.id)
                   const status = resItem ? resItem.status : 'not_run'
+                  const isEditing = editingCaseId === tc.id
 
                   return (
                     <div
@@ -607,78 +752,199 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                           ? 'border-emerald-500/30 bg-emerald-500/5'
                           : status === 'failed'
                           ? 'border-rose-500/30 bg-rose-500/5'
+                          : status === 'timeout'
+                          ? 'border-amber-500/40 bg-amber-500/10'
                           : status === 'error'
                           ? 'border-amber-500/30 bg-amber-500/5'
                           : 'border-slate-800 bg-slate-900/40'
                       }`}
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
                           <span className="font-semibold text-xs text-white">
                             #{idx + 1} {tc.name}
                           </span>
+
+                          {/* Status Badge */}
                           <span
-                            className={`rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+                            className={`rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 ${
                               status === 'passed'
                                 ? 'bg-emerald-500/20 text-emerald-400'
                                 : status === 'failed'
                                 ? 'bg-rose-500/20 text-rose-400'
+                                : status === 'timeout'
+                                ? 'bg-amber-500/20 text-amber-400'
                                 : status === 'error'
                                 ? 'bg-amber-500/20 text-amber-400'
                                 : 'bg-slate-800 text-slate-400'
                             }`}
                           >
-                            {status === 'not_run' ? 'Not Run' : status}
+                            {status === 'passed' && <Check className="h-3 w-3" />}
+                            {status === 'failed' && <XCircle className="h-3 w-3" />}
+                            {status === 'timeout' && <Clock className="h-3 w-3" />}
+                            <span>{status === 'not_run' ? 'Not Run' : status}</span>
                           </span>
-                        </div>
 
-                        <button
-                          type="button"
-                          onClick={() => onDeleteTestCase(tc.id)}
-                          className="text-slate-500 hover:text-rose-400 transition"
-                          title="Remove test case"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
-
-                      {/* Stdin and Expected vs Actual Output */}
-                      <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 text-xs font-mono">
-                        {tc.input && (
-                          <div className="sm:col-span-2 rounded-lg bg-slate-950 p-2 text-slate-300">
-                            <span className="text-[10px] text-slate-500 uppercase block font-sans">
-                              Test Input (Stdin):
+                          {/* Category Badge */}
+                          {tc.category && (
+                            <span className="rounded border border-purple-500/30 bg-purple-500/10 px-2 py-0.5 text-[10px] font-medium text-purple-300">
+                              {tc.category}
                             </span>
-                            <pre className="mt-0.5 whitespace-pre-wrap">{tc.input}</pre>
-                          </div>
-                        )}
+                          )}
 
-                        <div className="rounded-lg bg-slate-950 p-2 text-slate-300">
-                          <span className="text-[10px] text-slate-500 uppercase block font-sans">
-                            Expected Output:
-                          </span>
-                          <pre className="mt-0.5 whitespace-pre-wrap text-emerald-300">
-                            {tc.expected_output || '(Empty / Any)'}
-                          </pre>
+                          {tc.is_user_edited && (
+                            <span className="rounded border border-blue-500/30 bg-blue-500/10 px-1.5 py-0.5 text-[10px] text-blue-300">
+                              Edited
+                            </span>
+                          )}
+
+                          {tc.is_verified && (
+                            <span className="rounded border border-emerald-500/30 bg-emerald-500/10 px-1.5 py-0.5 text-[10px] text-emerald-300" title="Output verified by runtime sandbox execution">
+                              Verified Oracle
+                            </span>
+                          )}
                         </div>
 
-                        <div className="rounded-lg bg-slate-950 p-2 text-slate-300">
-                          <span className="text-[10px] text-slate-500 uppercase block font-sans">
-                            Actual Output:
-                          </span>
-                          <pre
-                            className={`mt-0.5 whitespace-pre-wrap ${
-                              status === 'passed'
-                                ? 'text-emerald-300'
-                                : status === 'failed'
-                                ? 'text-rose-300'
-                                : 'text-slate-400'
-                            }`}
+                        {/* Action buttons */}
+                        <div className="flex items-center gap-1">
+                          {onRunSingleTest && (
+                            <button
+                              type="button"
+                              onClick={() => onRunSingleTest(tc)}
+                              disabled={isRunningTests}
+                              className="rounded-lg border border-slate-700 bg-slate-800 p-1.5 text-slate-300 hover:bg-purple-600 hover:text-white transition disabled:opacity-50 cursor-pointer"
+                              title="Run only this test case"
+                            >
+                              <Play className="h-3.5 w-3.5 fill-current" />
+                            </button>
+                          )}
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (isEditing) {
+                                setEditingCaseId(null)
+                              } else {
+                                setEditingCaseId(tc.id)
+                                setEditInputVal(tc.input || '')
+                                setEditExpectedVal(tc.expected_output || '')
+                              }
+                            }}
+                            className="rounded-lg border border-slate-700 bg-slate-800 p-1.5 text-slate-300 hover:bg-slate-700 transition"
+                            title={isEditing ? 'Cancel Edit' : 'Edit Input & Expected Output'}
                           >
-                            {resItem ? resItem.actual_output || '(No output)' : 'Pending test run...'}
-                          </pre>
+                            <Edit3 className="h-3.5 w-3.5" />
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => onDeleteTestCase(tc.id)}
+                            className="rounded-lg border border-slate-700 bg-slate-800 p-1.5 text-slate-400 hover:text-rose-400 hover:border-rose-500/40 transition"
+                            title="Remove test case"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
                         </div>
                       </div>
+
+                      {/* Reason / Target Hypothesis */}
+                      {tc.reason && (
+                        <p className="mt-1.5 text-[11px] text-slate-400 italic">
+                          Target: {tc.reason}
+                        </p>
+                      )}
+
+                      {/* Inline Editing Form */}
+                      {isEditing ? (
+                        <div className="mt-3 rounded-lg border border-slate-700 bg-slate-950 p-3 space-y-2.5">
+                          <div>
+                            <label className="text-[10px] uppercase font-bold text-slate-400 block mb-1">
+                              Stdin Input:
+                            </label>
+                            <textarea
+                              rows={2}
+                              value={editInputVal}
+                              onChange={(e) => setEditInputVal(e.target.value)}
+                              className="w-full rounded-lg border border-slate-800 bg-slate-900 p-2 font-mono text-xs text-white placeholder-slate-600 focus:border-purple-500 focus:outline-none"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] uppercase font-bold text-slate-400 block mb-1">
+                              Expected Output:
+                            </label>
+                            <textarea
+                              rows={2}
+                              value={editExpectedVal}
+                              onChange={(e) => setEditExpectedVal(e.target.value)}
+                              className="w-full rounded-lg border border-slate-800 bg-slate-900 p-2 font-mono text-xs text-emerald-300 placeholder-slate-600 focus:border-purple-500 focus:outline-none"
+                            />
+                          </div>
+                          <div className="flex justify-end gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setEditingCaseId(null)}
+                              className="rounded-md border border-slate-800 px-2.5 py-1 text-xs text-slate-400 hover:bg-slate-900"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                onUpdateTestCase?.({
+                                  ...tc,
+                                  input: editInputVal,
+                                  expected_output: editExpectedVal,
+                                  is_user_edited: true,
+                                })
+                                setEditingCaseId(null)
+                              }}
+                              className="rounded-md bg-purple-600 px-3 py-1 text-xs font-semibold text-white hover:bg-purple-500"
+                            >
+                              Save Changes
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        /* Stdin and Expected vs Actual Output Display */
+                        <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 text-xs font-mono">
+                          {tc.input && (
+                            <div className="sm:col-span-2 rounded-lg bg-slate-950 p-2 text-slate-300">
+                              <span className="text-[10px] text-slate-500 uppercase block font-sans font-semibold">
+                                Test Input (Stdin):
+                              </span>
+                              <pre className="mt-0.5 whitespace-pre-wrap">{tc.input}</pre>
+                            </div>
+                          )}
+
+                          <div className="rounded-lg bg-slate-950 p-2 text-slate-300">
+                            <span className="text-[10px] text-slate-500 uppercase block font-sans font-semibold">
+                              Expected Output:
+                            </span>
+                            <pre className="mt-0.5 whitespace-pre-wrap text-emerald-300">
+                              {tc.expected_output || '(Empty / Any)'}
+                            </pre>
+                          </div>
+
+                          <div className="rounded-lg bg-slate-950 p-2 text-slate-300">
+                            <span className="text-[10px] text-slate-500 uppercase block font-sans font-semibold">
+                              Actual Output:
+                            </span>
+                            <pre
+                              className={`mt-0.5 whitespace-pre-wrap ${
+                                status === 'passed'
+                                  ? 'text-emerald-300'
+                                  : status === 'failed'
+                                  ? 'text-rose-300 font-semibold'
+                                  : status === 'timeout'
+                                  ? 'text-amber-300'
+                                  : 'text-slate-400'
+                              }`}
+                            >
+                              {resItem ? resItem.actual_output || '(No output)' : 'Pending test run...'}
+                            </pre>
+                          </div>
+                        </div>
+                      )}
 
                       {/* Mismatch Callout */}
                       {resItem?.mismatch_line && (
@@ -687,10 +953,27 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                         </div>
                       )}
 
-                      {/* Error details */}
+                      {/* Error / Timeout details */}
                       {resItem?.error_message && (
                         <div className="mt-2.5 rounded-lg border border-amber-500/30 bg-amber-500/10 p-2 text-xs font-mono text-amber-300 whitespace-pre-wrap">
                           {resItem.error_message}
+                        </div>
+                      )}
+
+                      {/* AI Explain Failure Button (for failed / timeout / error results) */}
+                      {(status === 'failed' || status === 'error' || status === 'timeout') && (
+                        <div className="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between">
+                          <span className="text-[11px] text-slate-400">
+                            Execution diverged from assertion. Diagnose root cause and generate a verified patch:
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => onExplainTestFailure && resItem && onExplainTestFailure(resItem)}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-purple-500/40 bg-purple-500/10 px-3 py-1.5 text-xs font-bold text-purple-300 hover:bg-purple-500/20 transition cursor-pointer shadow-sm shadow-purple-900/30"
+                          >
+                            <Sparkles className="h-3.5 w-3.5 text-purple-400" />
+                            <span>Explain Failure with AI</span>
+                          </button>
                         </div>
                       )}
                     </div>
@@ -718,6 +1001,34 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
                         onChange={(e) => setNewCaseName(e.target.value)}
                         className="w-full rounded-xl border border-slate-800 bg-slate-900 py-2 px-3 text-white placeholder-slate-500 focus:border-purple-500 focus:outline-none"
                       />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="font-semibold text-slate-300 block mb-1">Category</label>
+                        <select
+                          value={newCaseCategory}
+                          onChange={(e) => setNewCaseCategory(e.target.value)}
+                          className="w-full rounded-xl border border-slate-800 bg-slate-900 py-2 px-3 text-white focus:border-purple-500 focus:outline-none"
+                        >
+                          <option value="Normal">Normal</option>
+                          <option value="Boundary / Edge">Boundary / Edge</option>
+                          <option value="Invalid Input">Invalid Input</option>
+                          <option value="Branch Coverage">Branch Coverage</option>
+                          <option value="Regression">Regression</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="font-semibold text-slate-300 block mb-1">Reason / Purpose</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. Zero division guard"
+                          value={newCaseReason}
+                          onChange={(e) => setNewCaseReason(e.target.value)}
+                          className="w-full rounded-xl border border-slate-800 bg-slate-900 py-2 px-3 text-white placeholder-slate-500 focus:border-purple-500 focus:outline-none"
+                        />
+                      </div>
                     </div>
 
                     <div>

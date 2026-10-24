@@ -8,6 +8,7 @@ from sqlalchemy.orm import selectinload
 
 from app.analyzers.ai_analyzer import AIAnalyzer
 from app.analyzers.bandit_analyzer import BanditAnalyzer
+from app.analyzers.code_smell_analyzer import CodeSmellAnalyzer
 from app.analyzers.polyglot_scanner import PolyglotScanner
 from app.analyzers.python_ast import PythonAstAnalyzer
 from app.core.database import get_db
@@ -24,6 +25,8 @@ from app.schemas.analysis import (
     FindingSchema,
     FixRequest,
     FixResponse,
+    RefactorRequest,
+    RefactorResponse,
     TestGenerateRequest,
     TestGenerateResponse,
 )
@@ -31,6 +34,7 @@ from app.security.auth import get_current_user, get_optional_current_user
 from app.services.ai_explainer import AIExplainer
 from app.services.ai_fix_assistant import AIFixAssistant
 from app.services.duplicate_detector import DuplicateDetector
+from app.services.refactoring_service import RefactoringService
 from app.services.report_generator import ReportGenerator
 from app.services.scoring_engine import ScoringEngine
 from app.services.test_generator import TestGenerator
@@ -69,28 +73,52 @@ async def analyze_code(
     poly_results = await poly_scanner.analyze(code, req.language, req.filename or "main")
     raw_findings.extend(poly_results)
 
-    # 4. Run AI Reasoning Engine if requested or configured
+    # 4. Run Dedicated Code Smell & Maintainability Analyzer (20 smell types)
+    smell_analyzer = CodeSmellAnalyzer()
+    smell_results = await smell_analyzer.analyze(code, req.language, req.filename or "main")
+    raw_findings.extend(smell_results)
+
+    # 5. Run AI Reasoning Engine if requested or configured
     if req.run_ai:
         ai_analyzer = AIAnalyzer()
         ai_results, ai_status_msg = await ai_analyzer.analyze_with_status(code, req.language, req.filename or "main")
         raw_findings.extend(ai_results)
     else:
-        ai_status_msg = "Static analysis completed. AI reasoning toggle was disabled."
+        ai_status_msg = "Static analysis & code smell detection completed. AI reasoning toggle was disabled."
 
-    # 5. Group and Deduplicate findings
+    # 6. Group and Deduplicate findings
     deduped_findings, duplicate_groups = DuplicateDetector.group_duplicates(raw_findings)
 
-    # 6. Calculate transparent Quality and Risk Scores
+    # 7. Calculate transparent Quality and Risk Scores
     lines_count = len(code.split("\n"))
     quality_score, risk_score, risk_breakdown = ScoringEngine.calculate(deduped_findings, lines_count)
 
     duration_ms = int((time.time() - start_time) * 1000)
 
-    # Severity counts
+    # Categorical breakdown counts
     critical_count = sum(1 for f in deduped_findings if f.severity == "Critical")
     high_count = sum(1 for f in deduped_findings if f.severity == "High")
     medium_count = sum(1 for f in deduped_findings if f.severity == "Medium")
     low_count = sum(1 for f in deduped_findings if f.severity == "Low")
+
+    code_smells_count = sum(1 for f in deduped_findings if "smell" in (f.category or "").lower())
+    maintainability_count = sum(
+        1 for f in deduped_findings
+        if "maintain" in (f.category or "").lower() or "smell" in (f.category or "").lower() or "complexity" in (f.rule_id or "").lower()
+    )
+    performance_count = sum(
+        1 for f in deduped_findings
+        if "perf" in (f.title or "").lower() or "perf" in (f.explanation or "").lower() or "leak" in (f.title or "").lower()
+    )
+    security_count = sum(1 for f in deduped_findings if (f.category or "").lower() == "security")
+
+    # Complexity indicators
+    complexity_metrics = {
+        "loc": lines_count,
+        "cyclomatic_estimate": max(1, len([l for l in code.split("\n") if any(kw in l for kw in ["if ", "for ", "while ", "elif ", "except ", "catch"])])),
+        "max_nesting_depth": max([(len(l) - len(l.lstrip())) // 4 for l in code.split("\n")] or [0]),
+        "findings_density": round((len(deduped_findings) / max(1, lines_count)) * 100, 1),
+    }
 
     analysis_id = str(uuid.uuid4())
     title = f"{req.language.capitalize()} Analysis - {req.filename or 'Snippet'}"
@@ -169,11 +197,32 @@ async def analyze_code(
         high_count=analysis.high_count,
         medium_count=analysis.medium_count,
         low_count=analysis.low_count,
+        code_smells_count=code_smells_count,
+        maintainability_count=maintainability_count,
+        performance_count=performance_count,
+        security_count=security_count,
+        complexity_metrics=complexity_metrics,
         findings=deduped_findings,
         duplicate_groups=duplicate_groups,
         risk_breakdown=risk_breakdown,
         ai_status=ai_status_msg,
     )
+
+
+@router.post("/refactor", response_model=RefactorResponse)
+async def refactor_code(
+    req: RefactorRequest,
+    current_user: Optional[User] = Depends(get_optional_current_user),
+):
+    """
+    Intelligent AI-Powered Code Refactoring:
+    Analyzes code smells, generates idiomatic refactored code while preserving exact runtime
+    behavior and signatures, produces unified diff, and evaluates before/after quality scores.
+    """
+    code = req.code.strip()
+    if not code:
+        raise HTTPException(status_code=400, detail="Provided code string is empty.")
+    return await RefactoringService.refactor_code(req)
 
 
 

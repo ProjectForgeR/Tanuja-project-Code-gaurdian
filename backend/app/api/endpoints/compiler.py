@@ -1,6 +1,7 @@
 import logging
 import time
 import uuid
+from typing import Optional
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -12,10 +13,14 @@ from app.schemas.execution import (
     ExecuteResponse,
     RunTestsRequest,
     RunTestsResponse,
+    RunSingleTestRequest,
+    TestCaseResultItem,
     GenerateTestCasesRequest,
     GenerateTestCasesResponse,
+    ExplainTestFailureRequest,
+    ExplainTestFailureResponse,
 )
-from app.security.auth import get_current_user
+from app.security.auth import get_current_user, get_optional_current_user
 from app.services.execution_service import ExecutionService
 
 logger = logging.getLogger(__name__)
@@ -27,7 +32,7 @@ router = APIRouter(prefix="/compiler", tags=["Compiler & Code Execution"])
 async def execute_code(
     req: ExecuteRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: Optional[User] = Depends(get_optional_current_user),
 ):
     """
     Executes source code in a sandboxed, isolated environment (Judge0 / Safe SQL sandbox),
@@ -97,7 +102,7 @@ async def execute_code(
                 explanation=err_msg,
                 impact="Program halted or terminated abnormally.",
                 recommended_fix=err_fix,
-                confidence=0.98,
+                confidence="High",
                 detection_method="Sandbox Execution Engine",
                 suggested_patch=res.error_detail.corrected_code if res.error_detail else None,
                 rule_id=f"EXEC-{lang_normalized.upper()}",
@@ -114,7 +119,7 @@ async def execute_code(
 @router.post("/test-cases", response_model=RunTestsResponse)
 async def run_test_cases(
     req: RunTestsRequest,
-    current_user: User = Depends(get_current_user),
+    current_user: Optional[User] = Depends(get_optional_current_user),
 ):
     """
     Runs automated test cases against user code in the execution sandbox,
@@ -123,12 +128,38 @@ async def run_test_cases(
     return await ExecutionService.run_test_cases(req)
 
 
+@router.post("/test-cases/run-single", response_model=TestCaseResultItem)
+async def run_single_test(
+    req: RunSingleTestRequest,
+    current_user: Optional[User] = Depends(get_optional_current_user),
+):
+    """
+    Runs a single individual test case in the sandbox.
+    """
+    return await ExecutionService.run_single_test(req)
+
+
 @router.post("/generate-test-cases", response_model=GenerateTestCasesResponse)
 async def generate_test_cases(
     req: GenerateTestCasesRequest,
-    current_user: User = Depends(get_current_user),
+    current_user: Optional[User] = Depends(get_optional_current_user),
 ):
     """
-    Generates structured test cases (Normal, Edge, Zero/Empty, Negative) for the active code.
+    Dynamically analyzes user program structure (inputs, branches, edge cases)
+    and generates structured test cases across Normal, Boundary/Edge, Invalid, Branch Coverage,
+    and Regression categories, with runtime execution verification.
     """
     return await ExecutionService.generate_test_cases(req)
+
+
+@router.post("/explain-test-failure", response_model=ExplainTestFailureResponse)
+async def explain_test_failure(
+    req: ExplainTestFailureRequest,
+    current_user: Optional[User] = Depends(get_optional_current_user),
+):
+    """
+    AI Diagnostic Assistant for failed test cases.
+    Explains the exact root cause divergence between actual and expected output,
+    identifies faulty code lines, and suggests precise corrections.
+    """
+    return await ExecutionService.explain_test_failure(req)

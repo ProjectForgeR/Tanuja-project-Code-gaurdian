@@ -67,12 +67,52 @@ class AnalyzeResponse(BaseModel):
     high_count: int
     medium_count: int
     low_count: int
+    code_smells_count: int = 0
+    maintainability_count: int = 0
+    performance_count: int = 0
+    security_count: int = 0
+    complexity_metrics: Dict[str, Any] = Field(default_factory=dict)
     findings: List[FindingSchema] = []
     duplicate_groups: List[DuplicateGroupSchema] = []
     risk_breakdown: RiskBreakdownSchema
     ai_status: Optional[str] = None
 
     model_config = {"from_attributes": True}
+
+
+class RefactorImprovement(BaseModel):
+    title: str
+    code_smell: str
+    category: str = "Maintainability"
+    description: str
+
+
+class RefactorModification(BaseModel):
+    description: str
+    line_range: str
+    before_snippet: str
+    after_snippet: str
+
+
+class RefactorRequest(BaseModel):
+    code: str
+    language: str
+    finding_ids: Optional[List[str]] = None
+    target_smell: Optional[str] = None
+
+
+class RefactorResponse(BaseModel):
+    original_code: str
+    refactored_code: str
+    diff: str
+    original_quality_score: float
+    refactored_quality_score: float
+    improvements: List[RefactorImprovement] = []
+    modifications: List[RefactorModification] = []
+    smells_resolved: List[str] = []
+    syntax_valid: bool = True
+    behavior_notes: str = ""
+    is_ai_generated: bool = True
 
 
 class FixRequest(BaseModel):

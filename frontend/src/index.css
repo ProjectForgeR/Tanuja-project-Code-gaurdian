@@ -666,47 +666,7 @@ html.dark .landing-page-root .languages-section {
   position: relative !important;
 }
 
-.languages-section img,
-.languages-section .languages-bg-img,
-html.light .languages-section img,
-html.dark .languages-section img {
-  opacity: 0.95 !important;
-  filter: contrast(1.08) brightness(1.06) !important;
-  display: block !important;
-}
 
-.languages-section .languages-bg-overlay,
-html.light .languages-section .languages-bg-overlay,
-html.dark .languages-section .languages-bg-overlay {
-  position: absolute !important;
-  inset: 0 !important;
-  background-color: rgba(2, 6, 23, 0.40) !important;
-  pointer-events: none !important;
-}
-
-.languages-section .languages-edge-top,
-html.light .languages-section .languages-edge-top,
-html.dark .languages-section .languages-edge-top {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  height: 4rem !important;
-  background: linear-gradient(to bottom, #020617, transparent) !important;
-  pointer-events: none !important;
-}
-
-.languages-section .languages-edge-bottom,
-html.light .languages-section .languages-edge-bottom,
-html.dark .languages-section .languages-edge-bottom {
-  position: absolute !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  height: 4rem !important;
-  background: linear-gradient(to top, #020617, transparent) !important;
-  pointer-events: none !important;
-}
 
 .languages-section .carousel-edge-left,
 html.light .languages-section .carousel-edge-left,
@@ -861,47 +821,7 @@ html.dark .landing-page-root .how-it-works-section {
   position: relative !important;
 }
 
-.how-it-works-section img,
-.how-it-works-section .how-it-works-bg-img,
-html.light .how-it-works-section img,
-html.dark .how-it-works-section img {
-  opacity: 0.38 !important;
-  filter: contrast(1.15) brightness(1.08) !important;
-  display: block !important;
-}
 
-.how-it-works-section .how-it-works-overlay,
-html.light .how-it-works-section .how-it-works-overlay,
-html.dark .how-it-works-section .how-it-works-overlay {
-  position: absolute !important;
-  inset: 0 !important;
-  background-color: rgba(2, 6, 23, 0.72) !important;
-  pointer-events: none !important;
-}
-
-.how-it-works-section .how-it-works-edge-top,
-html.light .how-it-works-section .how-it-works-edge-top,
-html.dark .how-it-works-section .how-it-works-edge-top {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  height: 5rem !important;
-  background: linear-gradient(to bottom, #020617, transparent) !important;
-  pointer-events: none !important;
-}
-
-.how-it-works-section .how-it-works-edge-bottom,
-html.light .how-it-works-section .how-it-works-edge-bottom,
-html.dark .how-it-works-section .how-it-works-edge-bottom {
-  position: absolute !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  height: 5rem !important;
-  background: linear-gradient(to top, #020617, transparent) !important;
-  pointer-events: none !important;
-}
 
 /* Titles and Text in How It Works Section */
 .how-it-works-section h2,

@@ -5,6 +5,7 @@ import {
   ExplainResult,
   Finding,
   FixResult,
+  RefactorResult,
   TestResult,
 } from '@/types/analysis'
 
@@ -17,6 +18,18 @@ export const analysisService = {
     demo_mode?: boolean
   }): Promise<AnalysisResult> {
     return apiRequest<AnalysisResult>('/analyses/analyze', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+  },
+
+  async refactorCode(data: {
+    code: string
+    language: string
+    finding_ids?: string[]
+    target_smell?: string
+  }): Promise<RefactorResult> {
+    return apiRequest<RefactorResult>('/analyses/refactor', {
       method: 'POST',
       body: JSON.stringify(data),
     })

@@ -3,8 +3,10 @@ import {
   ExecuteRequest,
   ExecuteResponse,
   TestCaseItem,
+  TestCaseResultItem,
   RunTestsResponse,
   GenerateTestCasesResponse,
+  ExplainTestFailureResponse,
 } from '@/types/execution'
 
 export const compilerService = {
@@ -30,17 +32,39 @@ export const compilerService = {
     })
   },
 
+  async runSingleTest(data: {
+    code: string
+    language: string
+    test_case: TestCaseItem
+  }): Promise<TestCaseResultItem> {
+    return apiRequest<TestCaseResultItem>('/compiler/test-cases/run-single', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+  },
+
   async generateTestCases(
     params: { code: string; language: string; count?: number } | string,
     language?: string
   ): Promise<GenerateTestCasesResponse> {
     const payload =
       typeof params === 'object'
-        ? { code: params.code, language: params.language, count: params.count || 4 }
-        : { code: params, language: language || '', count: 4 }
+        ? { code: params.code, language: params.language }
+        : { code: params, language: language || '' }
     return apiRequest<GenerateTestCasesResponse>('/compiler/generate-test-cases', {
       method: 'POST',
       body: JSON.stringify(payload),
+    })
+  },
+
+  async explainTestFailure(data: {
+    code: string
+    language: string
+    test_case: TestCaseResultItem
+  }): Promise<ExplainTestFailureResponse> {
+    return apiRequest<ExplainTestFailureResponse>('/compiler/explain-test-failure', {
+      method: 'POST',
+      body: JSON.stringify(data),
     })
   },
 }

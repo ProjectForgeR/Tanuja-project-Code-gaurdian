@@ -40,6 +40,11 @@ class TestCaseItem(BaseModel):
     name: str
     input: str = ""
     expected_output: str = ""
+    category: str = "Normal"  # "Normal" | "Boundary / Edge" | "Invalid Input" | "Branch Coverage" | "Regression"
+    reason: str = ""
+    is_verified: bool = False
+    is_user_edited: bool = False
+    target_branch: Optional[str] = None
 
 
 class RunTestsRequest(BaseModel):
@@ -48,16 +53,27 @@ class RunTestsRequest(BaseModel):
     test_cases: List[TestCaseItem]
 
 
+class RunSingleTestRequest(BaseModel):
+    code: str
+    language: str
+    test_case: TestCaseItem
+
+
 class TestCaseResultItem(BaseModel):
     id: str
     name: str
     input: str
     expected_output: str
     actual_output: str = ""
-    status: str = "not_run"  # "passed" | "failed" | "error"
+    status: str = "not_run"  # "passed" | "failed" | "error" | "timeout"
+    category: str = "Normal"
+    reason: str = ""
+    is_verified: bool = False
+    is_user_edited: bool = False
     execution_time: Optional[float] = None
     mismatch_line: Optional[str] = None
     error_message: Optional[str] = None
+    failure_explanation: Optional[str] = None
 
 
 class RunTestsResponse(BaseModel):
@@ -65,14 +81,36 @@ class RunTestsResponse(BaseModel):
     passed: int
     failed: int
     errors: int
+    timeouts: int = 0
     all_passed: bool
+    pass_percentage: float = 0.0
+    duration_seconds: float = 0.0
+    estimated_coverage: float = 0.0
     results: List[TestCaseResultItem]
 
 
 class GenerateTestCasesRequest(BaseModel):
     code: str
     language: str
+    focus_category: Optional[str] = None
 
 
 class GenerateTestCasesResponse(BaseModel):
     test_cases: List[TestCaseItem]
+    detected_inputs: List[str] = []
+    estimated_branches: int = 0
+    language: str = "python"
+
+
+class ExplainTestFailureRequest(BaseModel):
+    code: str
+    language: str
+    test_case: TestCaseResultItem
+
+
+class ExplainTestFailureResponse(BaseModel):
+    test_id: str
+    explanation: str
+    root_cause: str
+    suggested_fix: str
+    corrected_code: Optional[str] = None

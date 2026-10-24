@@ -43,6 +43,8 @@ import { AIExplanationPanel } from '@/features/analysis/AIExplanationPanel'
 import { CompilerOutputPanel } from '@/features/analysis/CompilerOutputPanel'
 import { CustomInputPanel } from '@/features/analysis/CustomInputPanel'
 import { LanguageSelector } from '@/features/analysis/LanguageSelector'
+import { AiRefactorModal } from '@/features/analysis/AiRefactorModal'
+import { ExplainFailureModal } from '@/features/analysis/ExplainFailureModal'
 import { CODE_SAMPLES } from '@/lib/samples'
 import { EXECUTABLE_SAMPLES } from '@/lib/compilerSamples'
 import { getDefaultTestCases } from '@/lib/defaultTestCases'
@@ -50,8 +52,8 @@ import { getStarterTemplate, STARTER_TEMPLATES } from '@/lib/starterTemplates'
 import { LANGUAGE_CONFIG } from '@/lib/languages'
 import { analysisService } from '@/services/analysisService'
 import { compilerService } from '@/services/compilerService'
-import { AnalysisResult, ExplainResult, Finding, FixResult, TestResult } from '@/types/analysis'
-import { ExecuteResponse, TestCaseItem, RunTestsResponse } from '@/types/execution'
+import { AnalysisResult, ExplainResult, Finding, FixResult, TestResult, RefactorResponse } from '@/types/analysis'
+import { ExecuteResponse, TestCaseItem, TestCaseResultItem, RunTestsResponse, ExplainTestFailureResponse } from '@/types/execution'
 
 export const WorkspacePage: React.FC = () => {
   const { theme, toggleTheme } = useTheme()
@@ -121,6 +123,17 @@ export const WorkspacePage: React.FC = () => {
   const [isExplaining, setIsExplaining] = useState<boolean>(false)
   const [explainError, setExplainError] = useState<string | null>(null)
   const [showExplanationPanel, setShowExplanationPanel] = useState<boolean>(false)
+
+  // AI Refactoring state
+  const [isRefactoring, setIsRefactoring] = useState<boolean>(false)
+  const [refactorResult, setRefactorResult] = useState<RefactorResponse | null>(null)
+  const [showRefactorModal, setShowRefactorModal] = useState<boolean>(false)
+
+  // Explain Test Failure state
+  const [selectedFailedTest, setSelectedFailedTest] = useState<TestCaseResultItem | null>(null)
+  const [failureDiagnosis, setFailureDiagnosis] = useState<ExplainTestFailureResponse | null>(null)
+  const [isExplainingFailure, setIsExplainingFailure] = useState<boolean>(false)
+  const [showFailureModal, setShowFailureModal] = useState<boolean>(false)
   // Track code snapshot at time of last analysis (to detect stale state)
   const codeAtLastAnalysis = useRef<string>('')
 
@@ -539,6 +552,119 @@ export const WorkspacePage: React.FC = () => {
 
   const handleDeleteTestCase = (id: string) => {
     setTestCases((prev) => prev.filter((t) => t.id !== id))
+  }
+
+  const handleUpdateTestCase = (updated: TestCaseItem) => {
+    setTestCases((prev) => prev.map((tc) => (tc.id === updated.id ? updated : tc)))
+  }
+
+  const handleClearTestCases = () => {
+    setTestCases([])
+    setTestResults(null)
+  }
+
+  // Run a single test case through the local/sandbox runner
+  const handleRunSingleTest = async (tc: TestCaseItem) => {
+    if (!isAuthenticated) {
+      setShowAuthGateModal(true)
+      return
+    }
+    try {
+      const res = await compilerService.runSingleTest({
+        code,
+        language,
+        test_case: tc,
+      })
+      setTestResults((prev) => {
+        if (!prev) {
+          return {
+            total: 1,
+            passed: res.status === 'passed' ? 1 : 0,
+            failed: res.status === 'failed' ? 1 : 0,
+            errors: res.status === 'error' ? 1 : 0,
+            timeouts: res.status === 'timeout' ? 1 : 0,
+            all_passed: res.status === 'passed',
+            pass_percentage: res.status === 'passed' ? 100 : 0,
+            duration_seconds: 0.1,
+            results: [res],
+          }
+        }
+        const otherResults = prev.results.filter((r) => r.id !== res.id)
+        const updatedList = [...otherResults, res]
+        const passed = updatedList.filter((r) => r.status === 'passed').length
+        const failed = updatedList.filter((r) => r.status === 'failed').length
+        const errors = updatedList.filter((r) => r.status === 'error').length
+        const timeouts = updatedList.filter((r) => r.status === 'timeout').length
+        return {
+          ...prev,
+          total: updatedList.length,
+          passed,
+          failed,
+          errors,
+          timeouts,
+          all_passed: failed === 0 && errors === 0 && timeouts === 0,
+          pass_percentage: Math.round((passed / updatedList.length) * 100),
+          results: updatedList,
+        }
+      })
+    } catch (err: unknown) {
+      console.error('Single test run error:', err)
+      const msg = err instanceof Error ? err.message : 'Single test execution error'
+      setErrorMsg(`Single test run failed: ${msg}`)
+    }
+  }
+
+  // Explain why a test assertion failed using AI root cause analysis
+  const handleExplainTestFailure = async (testItem: TestCaseResultItem) => {
+    setSelectedFailedTest(testItem)
+    setShowFailureModal(true)
+    setIsExplainingFailure(true)
+    setFailureDiagnosis(null)
+    try {
+      const diag = await compilerService.explainTestFailure({
+        code,
+        language,
+        test_case: testItem,
+      })
+      setFailureDiagnosis(diag)
+    } catch (err: unknown) {
+      console.error('Explain test failure error:', err)
+      const msg = err instanceof Error ? err.message : 'Diagnosis error'
+      setErrorMsg(`AI Failure explanation failed: ${msg}`)
+    } finally {
+      setIsExplainingFailure(false)
+    }
+  }
+
+  // AI-Driven Refactoring Engine
+  const handleRefactorCode = async () => {
+    if (!isAuthenticated) {
+      setShowAuthGateModal(true)
+      return
+    }
+    setIsRefactoring(true)
+    setShowRefactorModal(true)
+    setRefactorResult(null)
+    try {
+      const res = await analysisService.refactorCode({
+        code,
+        language,
+      })
+      setRefactorResult(res)
+    } catch (err: unknown) {
+      console.error('Refactoring error:', err)
+      const msg = err instanceof Error ? err.message : 'Refactoring engine error'
+      setErrorMsg(`AI Refactoring failed: ${msg}`)
+    } finally {
+      setIsRefactoring(false)
+    }
+  }
+
+  const handleApplyRefactor = (refactoredCode: string) => {
+    setCodeHistory((h) => [...h, code])
+    setCode(refactoredCode)
+    setShowRefactorModal(false)
+    runAnalysis(refactoredCode, language, filename, false)
   }
 
   // Format Code via Monaco
@@ -1149,6 +1275,27 @@ export const WorkspacePage: React.FC = () => {
                 <span>Fix Error</span>
               </button>
 
+              {/* 3.5 AI REFACTOR Button — Code Smells & Architectural Refactoring */}
+              <button
+                type="button"
+                onClick={handleRefactorCode}
+                disabled={isRefactoring}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-cyan-600 via-teal-600 to-emerald-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-cyan-600/20 transition hover:from-cyan-500 hover:to-emerald-500 disabled:opacity-50 cursor-pointer"
+                title="Detect code smells and perform behavior-preserving AI refactoring"
+              >
+                {isRefactoring ? (
+                  <>
+                    <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    <span>Refactoring...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="h-3.5 w-3.5 text-cyan-200" />
+                    <span>AI Refactor</span>
+                  </>
+                )}
+              </button>
+
               {/* 4. RUN TESTS Button */}
               <button
                 type="button"
@@ -1436,6 +1583,11 @@ export const WorkspacePage: React.FC = () => {
               riskScore={analysisResult.risk_score}
               durationMs={analysisResult.duration_ms}
               riskBreakdown={analysisResult.risk_breakdown}
+              codeSmellsCount={analysisResult.code_smells_count}
+              maintainabilityCount={analysisResult.maintainability_count}
+              performanceCount={analysisResult.performance_count}
+              securityCount={analysisResult.security_count}
+              complexityMetrics={analysisResult.complexity_metrics}
             />
           )}
 
@@ -1577,9 +1729,13 @@ export const WorkspacePage: React.FC = () => {
                     isRunningTests={isRunningTests}
                     isGeneratingTests={isGeneratingTests}
                     onRunTests={handleRunTests}
+                    onRunSingleTest={handleRunSingleTest}
                     onAddTestCase={handleAddTestCase}
+                    onUpdateTestCase={handleUpdateTestCase}
                     onDeleteTestCase={handleDeleteTestCase}
+                    onClearTestCases={handleClearTestCases}
                     onGenerateTestCases={handleGenerateTestCases}
+                    onExplainTestFailure={handleExplainTestFailure}
                     activeTabOverride={compilerTab}
                     onTabChange={setCompilerTab}
                   />
@@ -1693,6 +1849,36 @@ export const WorkspacePage: React.FC = () => {
               </div>
             </div>
           </div>
+        )}
+
+        {/* AI Refactor Modal with Side-by-Side Diff & Quality Metrics */}
+        {showRefactorModal && (
+          <AiRefactorModal
+            result={refactorResult}
+            isLoading={isRefactoring}
+            onClose={() => setShowRefactorModal(false)}
+            onApplyRefactoring={handleApplyRefactor}
+          />
+        )}
+
+        {/* Explain Test Failure Modal */}
+        {showFailureModal && selectedFailedTest && (
+          <ExplainFailureModal
+            testCase={selectedFailedTest}
+            diagnosis={failureDiagnosis}
+            isLoading={isExplainingFailure}
+            onClose={() => {
+              setShowFailureModal(false)
+              setSelectedFailedTest(null)
+              setFailureDiagnosis(null)
+            }}
+            onApplyFix={(fixedCode) => {
+              setCodeHistory((h) => [...h, code])
+              setCode(fixedCode)
+              setShowFailureModal(false)
+              runAnalysis(fixedCode, language, filename, false)
+            }}
+          />
         )}
 
 

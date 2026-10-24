@@ -7,7 +7,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from 'lucide-react'
-import { RiskBreakdown } from '@/types/analysis'
+import { RiskBreakdown, ComplexityMetrics } from '@/types/analysis'
 import { getScoreColor } from '@/lib/utils'
 
 interface ScoreCardProps {
@@ -15,6 +15,11 @@ interface ScoreCardProps {
   riskScore: number
   durationMs: number
   riskBreakdown?: RiskBreakdown
+  codeSmellsCount?: number
+  maintainabilityCount?: number
+  performanceCount?: number
+  securityCount?: number
+  complexityMetrics?: ComplexityMetrics
 }
 
 export const ScoreCard: React.FC<ScoreCardProps> = ({
@@ -22,13 +27,18 @@ export const ScoreCard: React.FC<ScoreCardProps> = ({
   riskScore,
   durationMs,
   riskBreakdown,
+  codeSmellsCount = 0,
+  maintainabilityCount = 0,
+  performanceCount = 0,
+  securityCount = 0,
+  complexityMetrics,
 }) => {
   const [showFactors, setShowFactors] = useState(false)
 
   const scoreColor = getScoreColor(qualityScore)
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 shadow-xl backdrop-blur-md">
+    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 shadow-xl backdrop-blur-md space-y-4">
       <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-center">
         {/* Quality Score Gauge */}
         <div className="flex items-center gap-5">
@@ -44,18 +54,18 @@ export const ScoreCard: React.FC<ScoreCardProps> = ({
             <div className="flex items-center gap-2">
               <h3 className="text-base font-bold text-white">Code Quality Score</h3>
               <span className="rounded-md border border-slate-700 bg-slate-800/60 px-2 py-0.5 text-[10px] font-semibold text-slate-300">
-                {qualityScore >= 80 ? 'Grade A (Secure)' : qualityScore >= 60 ? 'Grade B (Moderate)' : 'Grade C (High Risk)'}
+                {qualityScore >= 80 ? 'Grade A (Optimal)' : qualityScore >= 60 ? 'Grade B (Refactor Recommended)' : 'Grade C (High Technical Debt)'}
               </span>
             </div>
             <p className="mt-1 text-xs text-slate-400">
-              {riskBreakdown?.summary || 'Calculated using static analysis, AST rules, and vulnerability weighting.'}
+              {riskBreakdown?.summary || 'Calculated using static analysis, AST code smell rules, and security weighting.'}
             </p>
           </div>
         </div>
 
         {/* Risk & Scan Time Metrics */}
-        <div className="flex flex-wrap items-center gap-4 sm:justify-end">
-          <div className="rounded-xl border border-slate-800/80 bg-slate-950/60 px-4 py-2.5 text-center">
+        <div className="flex flex-wrap items-center gap-3 sm:justify-end">
+          <div className="rounded-xl border border-slate-800/80 bg-slate-950/60 px-3.5 py-2 text-center">
             <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
               Calculated Risk
             </div>
@@ -64,9 +74,9 @@ export const ScoreCard: React.FC<ScoreCardProps> = ({
             </div>
           </div>
 
-          <div className="rounded-xl border border-slate-800/80 bg-slate-950/60 px-4 py-2.5 text-center">
+          <div className="rounded-xl border border-slate-800/80 bg-slate-950/60 px-3.5 py-2 text-center">
             <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
-              Scan Latency
+              Latency
             </div>
             <div className="text-lg font-bold text-purple-400">
               {durationMs}ms
@@ -74,6 +84,78 @@ export const ScoreCard: React.FC<ScoreCardProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Code Smell & Quality Categorical Metrics Bar */}
+      <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800/60 sm:grid-cols-4">
+        <div className="rounded-lg border border-purple-500/20 bg-purple-500/5 px-3 py-2">
+          <div className="text-[10px] font-bold uppercase text-purple-400 tracking-wider">
+            Code Smells
+          </div>
+          <div className="text-base font-bold text-white mt-0.5 flex items-center justify-between">
+            <span>{codeSmellsCount}</span>
+            <span className="text-[10px] font-normal text-purple-300/70">Anti-patterns</span>
+          </div>
+        </div>
+
+        <div className="rounded-lg border border-blue-500/20 bg-blue-500/5 px-3 py-2">
+          <div className="text-[10px] font-bold uppercase text-blue-400 tracking-wider">
+            Maintainability
+          </div>
+          <div className="text-base font-bold text-white mt-0.5 flex items-center justify-between">
+            <span>{maintainabilityCount}</span>
+            <span className="text-[10px] font-normal text-blue-300/70">Readability</span>
+          </div>
+        </div>
+
+        <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2">
+          <div className="text-[10px] font-bold uppercase text-amber-400 tracking-wider">
+            Performance
+          </div>
+          <div className="text-base font-bold text-white mt-0.5 flex items-center justify-between">
+            <span>{performanceCount}</span>
+            <span className="text-[10px] font-normal text-amber-300/70">Hotspots</span>
+          </div>
+        </div>
+
+        <div className="rounded-lg border border-rose-500/20 bg-rose-500/5 px-3 py-2">
+          <div className="text-[10px] font-bold uppercase text-rose-400 tracking-wider">
+            Security
+          </div>
+          <div className="text-base font-bold text-white mt-0.5 flex items-center justify-between">
+            <span>{securityCount}</span>
+            <span className="text-[10px] font-normal text-rose-300/70">Vulnerabilities</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Complexity Metrics (if available) */}
+      {complexityMetrics && (
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-slate-800/80 bg-slate-950/40 px-3.5 py-2 text-[11px] text-slate-400 font-mono">
+          <span className="font-sans font-semibold text-slate-300">Complexity Telemetry:</span>
+          <div className="flex flex-wrap items-center gap-4">
+            <span>
+              Cyclomatic:{' '}
+              <strong className={((complexityMetrics.cyclomatic_complexity ?? complexityMetrics.cyclomatic_estimate ?? 1) > 10) ? 'text-amber-400 font-bold' : 'text-slate-200'}>
+                {complexityMetrics.cyclomatic_complexity ?? complexityMetrics.cyclomatic_estimate ?? 1}
+              </strong>
+            </span>
+            <span>
+              Cognitive:{' '}
+              <strong className={((complexityMetrics.cognitive_complexity ?? 1) > 15) ? 'text-amber-400 font-bold' : 'text-slate-200'}>
+                {complexityMetrics.cognitive_complexity ?? complexityMetrics.max_nesting_depth ?? 1}
+              </strong>
+            </span>
+            <span>
+              Halstead Vol:{' '}
+              <strong className="text-slate-200">{complexityMetrics.halstead_volume ?? '-'}</strong>
+            </span>
+            <span>
+              Lines of Code:{' '}
+              <strong className="text-slate-200">{complexityMetrics.lines_of_code ?? complexityMetrics.loc ?? 0}</strong>
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Factor Breakdown Accordion Toggle */}
       {riskBreakdown && riskBreakdown.factors.length > 0 && (

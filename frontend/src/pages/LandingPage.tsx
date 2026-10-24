@@ -859,17 +859,10 @@ export const LandingPage: React.FC = () => {
       {/* 3. SUPPORTED LANGUAGES SECTION (Dark Mode) */}
       {/* ============================================================== */}
       <section id="languages" className="languages-section relative border-t border-slate-800 bg-slate-950 py-20 sm:py-28 overflow-hidden text-slate-100">
-        {/* Background Image with Transparent Overlays */}
+        {/* Clean Ambient Gradient (No Photographic Background Image) */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-          <img
-            src="/languages-bg.png"
-            alt="Developer coding on laptop with code on screen"
-            className="languages-bg-img h-full w-full object-cover object-center scale-100 opacity-95 transition-all duration-700"
-          />
-          {/* Transparent Gradient Overlays for High Card Contrast & Visual Depth */}
-          <div className="languages-bg-overlay absolute inset-0 bg-slate-950/40" />
-          <div className="languages-edge-top absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-slate-950/80 to-transparent" />
-          <div className="languages-edge-bottom absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-950/80 to-transparent" />
+          <div className="absolute top-1/4 left-1/4 h-96 w-96 rounded-full bg-blue-600/10 blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-cyan-600/10 blur-3xl" />
         </div>
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
@@ -1131,17 +1124,10 @@ export const LandingPage: React.FC = () => {
         id="how-it-works"
         className="how-it-works-section relative border-t border-slate-900 bg-slate-950 py-20 sm:py-28 overflow-hidden text-slate-100"
       >
-        {/* Transparent AI Network Infrastructure Background Image */}
+        {/* Clean Ambient Gradient (No Photographic Background Image) */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-          <img
-            src="/how-it-works-bg.png"
-            alt="AI Neural Infrastructure and Automated Processing Network"
-            className="how-it-works-bg-img h-full w-full object-cover object-center scale-100 opacity-40 transition-all duration-700"
-          />
-          {/* Multi-layered transparent dark gradients for clean card contrast & depth */}
-          <div className="how-it-works-overlay absolute inset-0 bg-slate-950/75" />
-          <div className="how-it-works-edge-top absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-slate-950 via-slate-950/90 to-transparent" />
-          <div className="how-it-works-edge-bottom absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent" />
+          <div className="absolute top-1/3 left-1/3 h-96 w-96 rounded-full bg-indigo-600/10 blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 h-80 w-80 rounded-full bg-blue-600/10 blur-3xl" />
         </div>
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">

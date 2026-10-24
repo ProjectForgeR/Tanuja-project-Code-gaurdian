@@ -39,6 +39,17 @@ export interface RiskBreakdown {
   factors: string[]
 }
 
+export interface ComplexityMetrics {
+  loc?: number
+  cyclomatic_estimate?: number
+  max_nesting_depth?: number
+  findings_density?: number
+  cyclomatic_complexity?: number
+  cognitive_complexity?: number
+  halstead_volume?: number
+  lines_of_code?: number
+}
+
 export interface AnalysisResult {
   id: string
   title: string
@@ -53,11 +64,46 @@ export interface AnalysisResult {
   high_count: number
   medium_count: number
   low_count: number
+  code_smells_count?: number
+  maintainability_count?: number
+  performance_count?: number
+  security_count?: number
+  complexity_metrics?: ComplexityMetrics
   findings: Finding[]
   duplicate_groups: DuplicateGroup[]
   risk_breakdown: RiskBreakdown
   ai_status?: string
 }
+
+export interface RefactorImprovement {
+  title: string
+  code_smell: string
+  category: string
+  description: string
+}
+
+export interface RefactorModification {
+  description: string
+  line_range: string
+  before_snippet: string
+  after_snippet: string
+}
+
+export interface RefactorResult {
+  original_code: string
+  refactored_code: string
+  diff: string
+  original_quality_score: number
+  refactored_quality_score: number
+  improvements: RefactorImprovement[]
+  modifications: RefactorModification[]
+  smells_resolved: string[]
+  syntax_valid: boolean
+  behavior_notes: string
+  is_ai_generated: boolean
+}
+
+export type RefactorResponse = RefactorResult
 
 export interface FixResult {
   explanation: string
