@@ -1116,102 +1116,102 @@ export const LandingPage: React.FC = () => {
       {/* ============================================================== */}
       <section
         id="how-it-works"
-        className="how-it-works-section relative border-t border-slate-900 bg-slate-950 py-20 sm:py-28 overflow-hidden text-slate-100"
+        className="how-it-works-section relative border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-20 sm:py-28 overflow-hidden text-slate-900 dark:text-slate-100"
       >
-        {/* Clean Ambient Gradient (No Photographic Background Image) */}
+        {/* Subtle Ambient Glow */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-          <div className="absolute top-1/3 left-1/3 h-96 w-96 rounded-full bg-indigo-600/10 blur-3xl" />
-          <div className="absolute bottom-1/4 right-1/4 h-80 w-80 rounded-full bg-blue-600/10 blur-3xl" />
+          <div className="absolute top-1/3 left-1/3 h-96 w-96 rounded-full bg-indigo-500/5 dark:bg-indigo-600/10 blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 h-80 w-80 rounded-full bg-blue-500/5 dark:bg-blue-600/10 blur-3xl" />
         </div>
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="how-it-works-title text-3xl font-black tracking-tight text-white sm:text-5xl">
+            <h2 className="how-it-works-title text-3xl font-serif font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
               How CodeGuardian AI Works
             </h2>
-            <p className="how-it-works-desc mt-4 text-base text-slate-300 max-w-2xl mx-auto leading-relaxed font-normal">
+            <p className="how-it-works-desc mt-4 text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed font-normal">
               A reliable workflow: Write Code &rarr; Analyze &rarr; Fix &rarr; Test.
             </p>
           </div>
 
           <div className="mt-16 grid grid-cols-1 md:grid-cols-4 gap-6">
             {/* Step 1: Write Code */}
-            <div className="how-it-works-card ui-hover-card rounded-3xl border border-slate-800/80 bg-slate-900/75 p-6 flex flex-col justify-between backdrop-blur-xl shadow-xl shadow-black/40 group hover:border-cyan-500/50 transition-all duration-300">
+            <div className="how-it-works-card ui-hover-card rounded-3xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900/75 p-6 flex flex-col justify-between shadow-sm hover:shadow-xl dark:shadow-black/40 group hover:border-cyan-500/50 transition-all duration-300">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 shadow-md shadow-cyan-500/10 group-hover:scale-105 transition-transform">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-500 dark:text-cyan-300 shadow-md shadow-cyan-500/10 group-hover:scale-105 transition-transform">
                     <FileCode className="h-6 w-6" />
                   </div>
-                  <span className="font-mono text-2xl font-black text-slate-500 group-hover:text-cyan-400 transition-colors">01</span>
+                  <span className="font-mono text-2xl font-black text-slate-300 dark:text-slate-500 group-hover:text-cyan-500 dark:group-hover:text-cyan-400 transition-colors">01</span>
                 </div>
-                <h3 className="text-base font-bold text-white group-hover:text-cyan-200 transition-colors">Write or Paste Code</h3>
-                <p className="mt-2.5 text-xs text-slate-300 leading-relaxed font-normal">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-200 transition-colors">Write or Paste Code</h3>
+                <p className="mt-2.5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
                   Select your language from the searchable selector and write or upload code in Monaco Editor with syntax highlighting.
                 </p>
               </div>
-              <div className="mt-5 pt-3 border-t border-slate-800/70 text-[11px] font-semibold text-cyan-400 flex items-center justify-between">
+              <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/70 text-[11px] font-semibold text-cyan-600 dark:text-cyan-400 flex items-center justify-between">
                 <span>Monaco Editor</span>
-                <span className="text-slate-400">• 12+ Languages</span>
+                <span className="text-slate-500 dark:text-slate-400">• 12+ Languages</span>
               </div>
             </div>
 
             {/* Step 2: Analyze */}
-            <div className="how-it-works-card ui-hover-card rounded-3xl border border-slate-800/80 bg-slate-900/75 p-6 flex flex-col justify-between backdrop-blur-xl shadow-xl shadow-black/40 group hover:border-blue-500/50 transition-all duration-300">
+            <div className="how-it-works-card ui-hover-card rounded-3xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900/75 p-6 flex flex-col justify-between shadow-sm hover:shadow-xl dark:shadow-black/40 group hover:border-blue-500/50 transition-all duration-300">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/15 border border-blue-500/30 text-blue-300 shadow-md shadow-blue-500/10 group-hover:scale-105 transition-transform">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/15 border border-blue-500/30 text-blue-500 dark:text-blue-300 shadow-md shadow-blue-500/10 group-hover:scale-105 transition-transform">
                     <Cpu className="h-6 w-6" />
                   </div>
-                  <span className="font-mono text-2xl font-black text-slate-500 group-hover:text-blue-400 transition-colors">02</span>
+                  <span className="font-mono text-2xl font-black text-slate-300 dark:text-slate-500 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">02</span>
                 </div>
-                <h3 className="text-base font-bold text-white group-hover:text-blue-200 transition-colors">Analyze &amp; Scan</h3>
-                <p className="mt-2.5 text-xs text-slate-300 leading-relaxed font-normal">
-                  Click <strong className="text-white font-semibold">Analyze Code</strong> to trigger AST parsing, Bandit security audits, syntax error detection, and quality metrics.
+                <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-200 transition-colors">Analyze &amp; Scan</h3>
+                <p className="mt-2.5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                  Click <strong className="text-slate-900 dark:text-white font-semibold">Analyze Code</strong> to trigger AST parsing, Bandit security audits, syntax error detection, and quality metrics.
                 </p>
               </div>
-              <div className="mt-5 pt-3 border-t border-slate-800/70 text-[11px] font-semibold text-blue-400 flex items-center justify-between">
+              <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/70 text-[11px] font-semibold text-blue-600 dark:text-blue-400 flex items-center justify-between">
                 <span>Deterministic AST</span>
-                <span className="text-slate-400">• Security &amp; Bugs</span>
+                <span className="text-slate-500 dark:text-slate-400">• Security &amp; Bugs</span>
               </div>
             </div>
 
             {/* Step 3: Fix */}
-            <div className="how-it-works-card ui-hover-card rounded-3xl border border-slate-800/80 bg-slate-900/75 p-6 flex flex-col justify-between backdrop-blur-xl shadow-xl shadow-black/40 group hover:border-purple-500/50 transition-all duration-300">
+            <div className="how-it-works-card ui-hover-card rounded-3xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900/75 p-6 flex flex-col justify-between shadow-sm hover:shadow-xl dark:shadow-black/40 group hover:border-purple-500/50 transition-all duration-300">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-500/15 border border-purple-500/30 text-purple-300 shadow-md shadow-purple-500/10 group-hover:scale-105 transition-transform">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-500/15 border border-purple-500/30 text-purple-500 dark:text-purple-300 shadow-md shadow-purple-500/10 group-hover:scale-105 transition-transform">
                     <Sparkles className="h-6 w-6" />
                   </div>
-                  <span className="font-mono text-2xl font-black text-slate-500 group-hover:text-purple-400 transition-colors">03</span>
+                  <span className="font-mono text-2xl font-black text-slate-300 dark:text-slate-500 group-hover:text-purple-500 dark:group-hover:text-purple-400 transition-colors">03</span>
                 </div>
-                <h3 className="text-base font-bold text-white group-hover:text-purple-200 transition-colors">Fix Error with AI</h3>
-                <p className="mt-2.5 text-xs text-slate-300 leading-relaxed font-normal">
-                  Click <strong className="text-white font-semibold">Fix Error</strong> to generate corrected code. Review side-by-side diffs, apply them, and revert via Undo if needed.
+                <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-200 transition-colors">Fix Error with AI</h3>
+                <p className="mt-2.5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                  Click <strong className="text-slate-900 dark:text-white font-semibold">Fix Error</strong> to generate corrected code. Review side-by-side diffs, apply them, and revert via Undo if needed.
                 </p>
               </div>
-              <div className="mt-5 pt-3 border-t border-slate-800/70 text-[11px] font-semibold text-purple-400 flex items-center justify-between">
+              <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/70 text-[11px] font-semibold text-purple-600 dark:text-purple-400 flex items-center justify-between">
                 <span>Unified Diffs</span>
-                <span className="text-slate-400">• Undo Stack</span>
+                <span className="text-slate-500 dark:text-slate-400">• Undo Stack</span>
               </div>
             </div>
 
             {/* Step 4: Test */}
-            <div className="how-it-works-card ui-hover-card rounded-3xl border border-slate-800/80 bg-slate-900/75 p-6 flex flex-col justify-between backdrop-blur-xl shadow-xl shadow-black/40 group hover:border-emerald-500/50 transition-all duration-300">
+            <div className="how-it-works-card ui-hover-card rounded-3xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900/75 p-6 flex flex-col justify-between shadow-sm hover:shadow-xl dark:shadow-black/40 group hover:border-emerald-500/50 transition-all duration-300">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 shadow-md shadow-emerald-500/10 group-hover:scale-105 transition-transform">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-500 dark:text-emerald-300 shadow-md shadow-emerald-500/10 group-hover:scale-105 transition-transform">
                     <TestTube2 className="h-6 w-6" />
                   </div>
-                  <span className="font-mono text-2xl font-black text-slate-500 group-hover:text-emerald-400 transition-colors">04</span>
+                  <span className="font-mono text-2xl font-black text-slate-300 dark:text-slate-500 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors">04</span>
                 </div>
-                <h3 className="text-base font-bold text-white group-hover:text-emerald-200 transition-colors">Test &amp; Verify Output</h3>
-                <p className="mt-2.5 text-xs text-slate-300 leading-relaxed font-normal">
-                  Click <strong className="text-white font-semibold">Run Code</strong> or <strong className="text-white font-semibold">Run Tests</strong> to execute in the sandbox and verify real outputs against assertions.
+                <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-200 transition-colors">Test &amp; Verify Output</h3>
+                <p className="mt-2.5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                  Click <strong className="text-slate-900 dark:text-white font-semibold">Run Code</strong> or <strong className="text-slate-900 dark:text-white font-semibold">Run Tests</strong> to execute in the sandbox and verify real outputs against assertions.
                 </p>
               </div>
-              <div className="mt-5 pt-3 border-t border-slate-800/70 text-[11px] font-semibold text-emerald-400 flex items-center justify-between">
+              <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/70 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 flex items-center justify-between">
                 <span>Sandbox Execution</span>
-                <span className="text-slate-400">• Assertion Bench</span>
+                <span className="text-slate-500 dark:text-slate-400">• Assertion Bench</span>
               </div>
             </div>
           </div>
