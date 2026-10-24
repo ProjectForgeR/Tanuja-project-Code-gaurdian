@@ -419,15 +419,15 @@ html.light .landing-page-root {
   color: #0f172a !important;
 }
 
-html.light .landing-page-root section:not(.languages-section):not(.hero-section):not(.how-it-works-section),
-html.light .landing-page-root .bg-slate-950:not(.languages-section):not(.languages-section *):not(.hero-section):not(.hero-section *):not(.how-it-works-section):not(.how-it-works-section *) {
+html.light .landing-page-root section:not(.languages-section):not(.how-it-works-section),
+html.light .landing-page-root .bg-slate-950:not(.languages-section):not(.languages-section *):not(.how-it-works-section):not(.how-it-works-section *) {
   background-color: #ffffff !important;
   color: #0f172a !important;
   border-color: #e2e8f0 !important;
 }
 
-html.light .landing-page-root .bg-slate-900:not(.languages-section *):not(.hero-section *):not(.how-it-works-section *),
-html.light .landing-page-root [class*="bg-slate-900"]:not(.languages-section *):not(.hero-section *):not(.how-it-works-section *) {
+html.light .landing-page-root .bg-slate-900:not(.languages-section *):not(.how-it-works-section *),
+html.light .landing-page-root [class*="bg-slate-900"]:not(.languages-section *):not(.how-it-works-section *) {
   background-color: #f8fafc !important;
   border-color: #e2e8f0 !important;
   color: #0f172a !important;
@@ -464,75 +464,43 @@ html.dark .landing-page-root header {
   border-color: #1e293b !important;
 }
 
-/* Hero Section: Permanent Dark Mode Theme */
-.hero-section,
-html.dark .hero-section,
+/* Hero Section: Dynamic Theme (Clean Light Mode & Dark Mode matching Screenshot 3) */
 html.light .hero-section {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  position: relative !important;
+}
+
+html.dark .hero-section {
   background-color: #020617 !important;
   color: #f8fafc !important;
   position: relative !important;
 }
 
-.hero-section img,
-html.dark .hero-section img,
-html.light .hero-section img {
-  opacity: 1 !important;
-  filter: contrast(1.06) brightness(1.03) !important;
-  display: block !important;
-}
-
-.hero-overlay-left,
-html.light .hero-overlay-left,
-html.dark .hero-overlay-left {
-  background: linear-gradient(to right, #020617 0%, rgba(2, 6, 23, 0.92) 50%, rgba(2, 6, 23, 0.5) 75%, transparent 100%) !important;
-}
-
-.hero-edge-top,
-html.light .hero-edge-top,
-html.dark .hero-edge-top {
-  background: linear-gradient(to bottom, #020617, transparent) !important;
-}
-
-.hero-edge-bottom,
-html.light .hero-edge-bottom,
-html.dark .hero-edge-bottom {
-  background: linear-gradient(to top, #020617, transparent) !important;
-}
-
-.hero-section h1,
-.hero-section .hero-title,
-.hero-section .hero-title-text,
-.hero-section .hero-bright-title,
-.landing-page-root .hero-section h1,
-.landing-page-root .hero-section .hero-title,
-.landing-page-root .hero-section .hero-title-text,
 html.light .landing-page-root .hero-section h1,
 html.light .landing-page-root .hero-section .hero-title,
-html.light .landing-page-root .hero-section .hero-title-text,
-html.light .landing-page-root .hero-section .hero-bright-title,
-html.light .landing-page-root .hero-section .text-white,
+html.light .landing-page-root .hero-section .hero-title-text {
+  color: #0f172a !important;
+  text-shadow: none !important;
+}
+
 html.dark .landing-page-root .hero-section h1,
 html.dark .landing-page-root .hero-section .hero-title,
 html.dark .landing-page-root .hero-section .hero-title-text {
   color: #ffffff !important;
-  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.95), 0 1px 3px rgba(0, 0, 0, 0.9) !important;
+  text-shadow: none !important;
 }
 
-.hero-section p,
-.hero-section .hero-desc,
-.hero-section .hero-bright-desc,
-.landing-page-root .hero-section p,
-.landing-page-root .hero-section .hero-desc,
 html.light .landing-page-root .hero-section p,
-html.light .landing-page-root .hero-section .hero-desc,
-html.light .landing-page-root .hero-section .hero-bright-desc,
-html.light .landing-page-root .hero-section .text-slate-100,
-html.light .landing-page-root .hero-section .text-slate-200,
-html.light .landing-page-root .hero-section .text-slate-300,
+html.light .landing-page-root .hero-section .hero-desc {
+  color: #475569 !important;
+  text-shadow: none !important;
+}
+
 html.dark .landing-page-root .hero-section p,
 html.dark .landing-page-root .hero-section .hero-desc {
-  color: #f1f5f9 !important;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85) !important;
+  color: #94a3b8 !important;
+  text-shadow: none !important;
 }
 
 /* Hero "Ship Faster." Gradient: 100% Identical in both Bright Mode & Dark Mode */
@@ -551,8 +519,22 @@ html.dark .landing-page-root .hero-ship-faster {
   filter: drop-shadow(0 2px 12px rgba(37, 99, 235, 0.4)) !important;
 }
 
-.hero-secondary-btn,
-html.light .hero-section .hero-secondary-btn,
+html.light .hero-secondary-btn,
+html.light .hero-section .hero-secondary-btn {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #334155 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light .hero-secondary-btn:hover,
+html.light .hero-section .hero-secondary-btn:hover {
+  background-color: #f8fafc !important;
+  border-color: #94a3b8 !important;
+  color: #0f172a !important;
+}
+
+html.dark .hero-secondary-btn,
 html.dark .hero-section .hero-secondary-btn {
   background-color: rgba(15, 23, 42, 0.85) !important;
   border: 1px solid rgba(51, 65, 85, 0.8) !important;
@@ -560,8 +542,7 @@ html.dark .hero-section .hero-secondary-btn {
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
 }
 
-.hero-secondary-btn:hover,
-html.light .hero-section .hero-secondary-btn:hover,
+html.dark .hero-secondary-btn:hover,
 html.dark .hero-section .hero-secondary-btn:hover {
   background-color: #1e293b !important;
   color: #38bdf8 !important;
@@ -615,27 +596,27 @@ html.dark .navbar-pill-nav a:hover {
 }
 
 /* Light Mode: Headings & Typography */
-html.light .landing-page-root h1:not(.languages-section *):not(.hero-section *):not(.how-it-works-section *),
-html.light .landing-page-root h2:not(.languages-section *):not(.hero-section *):not(.how-it-works-section *),
-html.light .landing-page-root h3:not(.languages-section *):not(.hero-section *):not(.how-it-works-section *),
-html.light .landing-page-root h4:not(.languages-section *):not(.hero-section *):not(.how-it-works-section *) {
+html.light .landing-page-root h1:not(.languages-section *):not(.how-it-works-section *),
+html.light .landing-page-root h2:not(.languages-section *):not(.how-it-works-section *),
+html.light .landing-page-root h3:not(.languages-section *):not(.how-it-works-section *),
+html.light .landing-page-root h4:not(.languages-section *):not(.how-it-works-section *) {
   color: #0f172a !important;
   text-shadow: none !important;
 }
 
-html.light .landing-page-root p:not(.languages-section *):not(.hero-section *):not(.how-it-works-section *),
-html.light .landing-page-root .text-slate-200:not(.languages-section *):not(.hero-section *):not(.how-it-works-section *),
-html.light .landing-page-root .text-slate-300:not(.languages-section *):not(.hero-section *):not(.how-it-works-section *),
-html.light .landing-page-root .text-slate-400:not(.languages-section *):not(.hero-section *):not(.how-it-works-section *) {
+html.light .landing-page-root p:not(.languages-section *):not(.how-it-works-section *),
+html.light .landing-page-root .text-slate-200:not(.languages-section *):not(.how-it-works-section *),
+html.light .landing-page-root .text-slate-300:not(.languages-section *):not(.how-it-works-section *),
+html.light .landing-page-root .text-slate-400:not(.languages-section *):not(.how-it-works-section *) {
   color: #334155 !important;
   text-shadow: none !important;
 }
 
-html.light .landing-page-root .text-white:not(.languages-section *):not(.hero-section *):not(.hero-title *):not(.hero-title-text):not(.how-it-works-section *) {
+html.light .landing-page-root .text-white:not(.languages-section *):not(.hero-title *):not(.hero-title-text):not(.how-it-works-section *) {
   color: #0f172a !important;
 }
 
-html.light .landing-page-root .text-slate-100:not(.languages-section *):not(.hero-section *):not(.hero-desc):not(.how-it-works-section *) {
+html.light .landing-page-root .text-slate-100:not(.languages-section *):not(.hero-desc):not(.how-it-works-section *) {
   color: #1e293b !important;
 }
 

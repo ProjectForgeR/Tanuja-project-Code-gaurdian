@@ -503,53 +503,93 @@ export const LandingPage: React.FC = () => {
       {/* 1. Navigation Bar with CodeGuardian AI Logo */}
       <Navbar />
 
-      {/* 2. Full-Screen Cinematic Hero Section (~100vh on Desktop) */}
-      <section className="hero-section relative w-full min-h-[calc(100vh-4rem)] lg:min-h-screen flex flex-col justify-center items-start overflow-hidden px-4 sm:px-6 lg:px-8 py-16 sm:py-24 bg-slate-950 text-slate-100">
-        {/* Hero Background Image with Responsive Overlays */}
+      {/* 2. Hero Section (Matches Screenshot 3 Reference with 2nd Image) */}
+      <section className="hero-section relative w-full min-h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24 bg-white dark:bg-slate-950 transition-colors">
+        {/* Subtle ambient light gradient in background */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-          <img
-            src="/hero-bg.png"
-            alt="Magnifying glass inspecting source code with glowing red cyber bug"
-            className="h-full w-full object-cover object-[70%_center] md:object-[65%_center] scale-100 transition-all duration-700"
-          />
-          {/* Directional gradient overlay: covers the left side for crisp text, leaving magnifying glass & cyber bug visible on the right */}
-          <div className="hero-overlay-left absolute inset-y-0 left-0 w-full md:w-[65%] lg:w-[58%] bg-gradient-to-r from-slate-950 via-slate-950/85 to-transparent" />
-          {/* Subtle top & bottom edge blend */}
-          <div className="hero-edge-top absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-slate-950/70 to-transparent" />
-          <div className="hero-edge-bottom absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-slate-950 to-transparent" />
+          <div className="absolute -top-32 right-10 h-96 w-96 rounded-full bg-blue-500/10 dark:bg-blue-600/10 blur-3xl" />
+          <div className="absolute top-1/2 left-0 h-96 w-96 rounded-full bg-indigo-500/10 dark:bg-indigo-600/10 blur-3xl -translate-y-1/2" />
         </div>
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full z-10">
-          <div className="max-w-2xl text-left flex flex-col items-start">
-            {/* Master Heading: Build Smarter. Ship Faster. */}
-            <h1
-              className="hero-title hero-animate-fade-in hero-delay-1 mt-4 sm:mt-6 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-white leading-[1.08]"
-            >
-              <span className="hero-title-text text-white">Build Smarter.</span>{' '}
-              <br />
-              <span className="hero-ship-faster">
-                Ship Faster.
-              </span>
-            </h1>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            {/* Left Column: Heading, Description & Action Buttons */}
+            <div className="lg:col-span-6 flex flex-col items-start text-left">
+              {/* Master Heading: Build Smarter. Ship Faster. */}
+              <h1 className="hero-title hero-animate-fade-in hero-delay-1 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 dark:text-white leading-[1.12]">
+                <span className="hero-title-text block text-slate-900 dark:text-white font-serif">
+                  Build Smarter.
+                </span>
+                <span className="hero-ship-faster block mt-1">
+                  Ship Faster.
+                </span>
+              </h1>
 
-            {/* Description */}
-            <p
-              className="hero-desc hero-animate-fade-in hero-delay-2 mt-6 max-w-xl text-base sm:text-lg md:text-xl text-slate-100 font-normal leading-relaxed"
-            >
-              Turn ambitious ideas into powerful digital experiences with modern tools, intelligent workflows, and technology built for what comes next.
-            </p>
+              {/* Subtitle / Description */}
+              <p className="hero-desc hero-animate-fade-in hero-delay-2 mt-5 sm:mt-6 text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-300 font-normal leading-relaxed max-w-xl">
+                Turn ambitious ideas into powerful digital experiences with modern tools, intelligent workflows, and technology built for what comes next.
+              </p>
 
-            {/* CTA Buttons on Left Side */}
-            <div className="hero-animate-fade-in hero-delay-3 mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-start gap-4 w-full sm:w-auto">
-              {/* Secondary CTA: Explore Features */}
-              <button
-                type="button"
-                onClick={() => handleScrollToSection('features')}
-                className="hero-secondary-btn ui-button-lift w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-900/80 px-8 py-4 text-sm font-semibold text-slate-200 shadow-md transition-all duration-200 hover:border-cyan-400 hover:bg-slate-800 hover:text-cyan-400 active:scale-[0.98] cursor-pointer"
-              >
-                <Sparkles className="h-4 w-4 text-cyan-400" />
-                <span>Explore Features</span>
-              </button>
+              {/* CTA Buttons Row */}
+              <div className="hero-animate-fade-in hero-delay-3 mt-8 sm:mt-10 flex flex-wrap items-center gap-3.5 sm:gap-4 w-full sm:w-auto">
+                {/* Primary CTA: Start Free Trial */}
+                <button
+                  type="button"
+                  onClick={() => navigate('/workspace')}
+                  className="hero-primary-btn inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-[0.98] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition-all duration-200 cursor-pointer"
+                >
+                  <span>Start Free Trial</span>
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+
+                {/* Secondary CTA: How It Works */}
+                <button
+                  type="button"
+                  onClick={() => handleScrollToSection('how-it-works')}
+                  className="hero-secondary-btn inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 active:scale-[0.98] px-7 py-3.5 text-sm font-semibold shadow-xs transition-all duration-200 cursor-pointer"
+                >
+                  <Sparkles className="h-4 w-4 text-blue-600 dark:text-cyan-400" />
+                  <span>How it works</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Right Column: Sleek Application Window containing 2nd Image */}
+            <div className="lg:col-span-6 w-full flex items-center justify-center">
+              <div className="relative w-full max-w-lg lg:max-w-none">
+                {/* Ambient drop shadow / glow */}
+                <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-600/20 via-indigo-600/20 to-cyan-500/20 blur-xl opacity-70 dark:opacity-40" />
+
+                {/* Window Mock Container matching Screenshot 3 */}
+                <div className="relative rounded-2xl sm:rounded-3xl border border-slate-800/90 dark:border-slate-800 bg-[#0c121e] shadow-2xl overflow-hidden">
+                  {/* Top Window Bar (traffic light dots + center address pill) */}
+                  <div className="flex items-center justify-between px-4 py-3 bg-[#111827] border-b border-slate-800">
+                    {/* Left: Window control dots */}
+                    <div className="flex items-center gap-1.5 sm:gap-2">
+                      <div className="h-3 w-3 rounded-full bg-rose-500 shadow-xs" />
+                      <div className="h-3 w-3 rounded-full bg-amber-400 shadow-xs" />
+                      <div className="h-3 w-3 rounded-full bg-emerald-500 shadow-xs" />
+                    </div>
+
+                    {/* Center: Search / Address Header Pill */}
+                    <div className="h-5 w-32 sm:w-44 rounded-md bg-slate-800/90 border border-slate-700/60 flex items-center justify-center px-2">
+                      <div className="h-1.5 w-16 sm:w-24 rounded-full bg-slate-600/60" />
+                    </div>
+
+                    {/* Right spacer for symmetrical centering */}
+                    <div className="w-10 sm:w-12" />
+                  </div>
+
+                  {/* Window Content: 2nd image (FAIL terminal test inspection) */}
+                  <div className="relative aspect-[4/3] sm:aspect-[16/11] bg-black overflow-hidden flex items-center justify-center">
+                    <img
+                      src="/hero-preview.jpg"
+                      alt="Code debugging failure test suite under magnifying glass inspection"
+                      className="w-full h-full object-cover object-center select-none"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
