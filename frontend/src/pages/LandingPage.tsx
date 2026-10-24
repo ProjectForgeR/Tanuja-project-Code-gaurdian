@@ -856,102 +856,115 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* ============================================================== */}
-      {/* 3. SUPPORTED LANGUAGES SECTION (Dark Mode) */}
+      {/* 3. SUPPORTED LANGUAGES SECTION (Light / Dark Adaptive) */}
       {/* ============================================================== */}
-      <section id="languages" className="languages-section relative border-t border-slate-800 bg-slate-950 py-20 sm:py-28 overflow-hidden text-slate-100">
-        {/* Clean Ambient Gradient (No Photographic Background Image) */}
+      <section id="languages" className="languages-section relative border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-20 sm:py-28 overflow-hidden text-slate-900 dark:text-slate-100">
+        {/* Clean Ambient Gradient */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-          <div className="absolute top-1/4 left-1/4 h-96 w-96 rounded-full bg-blue-600/10 blur-3xl" />
-          <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-cyan-600/10 blur-3xl" />
+          <div className="absolute top-1/4 left-1/4 h-96 w-96 rounded-full bg-blue-500/5 dark:bg-blue-600/10 blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-cyan-500/5 dark:bg-cyan-600/10 blur-3xl" />
         </div>
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
-          {/* Section Header with Title & Carousel Controls at Top-Right */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div className="max-w-3xl">
-              <h2
-                style={{ color: '#ffffff' }}
-                className="languages-title text-3xl font-black tracking-tight text-white sm:text-5xl"
-              >
+          {/* Section Header with Left Content & Right Corner Inset Image + Controls */}
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+            <div className="max-w-2xl">
+              <h2 className="languages-title text-3xl font-serif font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
                 Supported Programming Languages & Technologies
               </h2>
-              <p
-                style={{ color: '#cbd5e1' }}
-                className="languages-desc mt-4 text-base text-slate-300 font-medium leading-relaxed"
-              >
+              <p className="languages-desc mt-4 text-base text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
                 Native support for compiling, executing, and analyzing code across modern systems, web frontends, backend runtimes, and databases.
               </p>
+
+              {/* Filter Tabs */}
+              <div className="mt-8 flex flex-wrap items-center gap-2">
+                {(['All', 'Core', 'Web', 'Database'] as const).map((filter) => (
+                  <button
+                    key={filter}
+                    onClick={() => setLanguageFilter(filter)}
+                    className={`rounded-xl px-4 py-2 text-xs font-semibold transition cursor-pointer select-none ${
+                      languageFilter === filter
+                        ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
+                        : 'filter-tab-inactive border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-cyan-600 dark:hover:text-cyan-400'
+                    }`}
+                  >
+                    {filter === 'All' ? 'All Languages (12)' : filter}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            {/* Carousel Controls (Pause/Play, Left Arrow, Right Arrow) */}
-            <div className="carousel-controls-box flex items-center gap-2 self-start md:self-end shrink-0 bg-slate-900 border border-slate-800 p-1.5 rounded-xl shadow-md">
-              <button
-                type="button"
-                onClick={togglePlayPause}
-                aria-label={isPlaying ? 'Pause automatic scrolling' : 'Resume automatic scrolling'}
-                title={isPlaying ? 'Pause' : 'Play'}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-200 hover:text-cyan-400 bg-slate-800 hover:bg-slate-700 border border-slate-700 transition cursor-pointer"
-              >
-                {isPlaying ? (
-                  <>
-                    <Pause className="h-3.5 w-3.5 text-cyan-400" />
-                    <span>Pause</span>
-                  </>
-                ) : (
-                  <>
-                    <Play className="h-3.5 w-3.5 text-cyan-400 fill-cyan-400" />
-                    <span>Play</span>
-                  </>
-                )}
-              </button>
+            {/* Right Side Corner: Inset Image + Carousel Controls */}
+            <div className="flex flex-col sm:flex-row lg:flex-col items-start lg:items-end gap-3 shrink-0">
+              {/* Inset Image Card */}
+              <div className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 shadow-md hover:shadow-xl transition-all duration-300 w-72 sm:w-80 h-36 sm:h-44">
+                <img
+                  src="/languages-preview.jpg"
+                  alt="Code execution and compiler diagnostics preview"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
+                <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[11px] font-semibold text-white">
+                  <span className="bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-md border border-white/10 shadow-sm">
+                    Live Compiler Engine
+                  </span>
+                  <span className="text-cyan-300 drop-shadow">12+ Runtimes</span>
+                </div>
+              </div>
 
-              <div className="h-4 w-px bg-slate-700" />
+              {/* Carousel Controls (Pause/Play, Left Arrow, Right Arrow) */}
+              <div className="carousel-controls-box flex items-center gap-2 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1.5 rounded-xl shadow-sm">
+                <button
+                  type="button"
+                  onClick={togglePlayPause}
+                  aria-label={isPlaying ? 'Pause automatic scrolling' : 'Resume automatic scrolling'}
+                  title={isPlaying ? 'Pause' : 'Play'}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-cyan-600 dark:hover:text-cyan-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition cursor-pointer"
+                >
+                  {isPlaying ? (
+                    <>
+                      <Pause className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" />
+                      <span>Pause</span>
+                    </>
+                  ) : (
+                    <>
+                      <Play className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400 fill-cyan-600 dark:fill-cyan-400" />
+                      <span>Play</span>
+                    </>
+                  )}
+                </button>
 
-              <button
-                type="button"
-                onClick={handleScrollLeft}
-                aria-label="Scroll carousel to the left"
-                title="Scroll Left"
-                className="p-1.5 rounded-lg text-slate-200 hover:text-cyan-400 bg-slate-800 hover:bg-slate-700 border border-slate-700 transition cursor-pointer"
-              >
-                <ChevronLeft className="h-4 w-4 text-cyan-400" />
-              </button>
+                <div className="h-4 w-px bg-slate-300 dark:bg-slate-700" />
 
-              <button
-                type="button"
-                onClick={handleScrollRight}
-                aria-label="Scroll carousel to the right"
-                title="Scroll Right"
-                className="p-1.5 rounded-lg text-slate-200 hover:text-cyan-400 bg-slate-800 hover:bg-slate-700 border border-slate-700 transition cursor-pointer"
-              >
-                <ChevronRight className="h-4 w-4 text-cyan-400" />
-              </button>
+                <button
+                  type="button"
+                  onClick={handleScrollLeft}
+                  aria-label="Scroll carousel to the left"
+                  title="Scroll Left"
+                  className="p-1.5 rounded-lg text-slate-700 dark:text-slate-200 hover:text-cyan-600 dark:hover:text-cyan-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition cursor-pointer"
+                >
+                  <ChevronLeft className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleScrollRight}
+                  aria-label="Scroll carousel to the right"
+                  title="Scroll Right"
+                  className="p-1.5 rounded-lg text-slate-700 dark:text-slate-200 hover:text-cyan-600 dark:hover:text-cyan-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition cursor-pointer"
+                >
+                  <ChevronRight className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
+                </button>
+              </div>
             </div>
-          </div>
-
-          {/* Filter Tabs */}
-          <div className="mt-6 flex flex-wrap items-center gap-2">
-            {(['All', 'Core', 'Web', 'Database'] as const).map((filter) => (
-              <button
-                key={filter}
-                onClick={() => setLanguageFilter(filter)}
-                className={`rounded-xl px-4 py-2 text-xs font-semibold transition cursor-pointer select-none ${
-                  languageFilter === filter
-                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
-                    : 'filter-tab-inactive border border-slate-700 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-cyan-400'
-                }`}
-              >
-                {filter === 'All' ? 'All Languages (12)' : filter}
-              </button>
-            ))}
           </div>
         </div>
 
         {/* Single-Line Horizontal Carousel */}
         <div className="relative mt-8 w-full">
           {/* Edge fade overlays */}
-          <div className="carousel-edge-left pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-slate-950 to-transparent z-10" />
-          <div className="carousel-edge-right pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-slate-950 to-transparent z-10" />
+          <div className="carousel-edge-left pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-white dark:from-slate-950 to-transparent z-10" />
+          <div className="carousel-edge-right pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-white dark:from-slate-950 to-transparent z-10" />
 
           {/* Carousel Track Container */}
           <div

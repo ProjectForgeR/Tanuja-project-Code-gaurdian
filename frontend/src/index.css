@@ -419,15 +419,15 @@ html.light .landing-page-root {
   color: #0f172a !important;
 }
 
-html.light .landing-page-root section:not(.languages-section),
-html.light .landing-page-root .bg-slate-950:not(.languages-section):not(.languages-section *) {
+html.light .landing-page-root section,
+html.light .landing-page-root .bg-slate-950 {
   background-color: #ffffff !important;
   color: #0f172a !important;
   border-color: #e2e8f0 !important;
 }
 
-html.light .landing-page-root .bg-slate-900:not(.languages-section *),
-html.light .landing-page-root [class*="bg-slate-900"]:not(.languages-section *) {
+html.light .landing-page-root .bg-slate-900,
+html.light .landing-page-root [class*="bg-slate-900"] {
   background-color: #f8fafc !important;
   border-color: #e2e8f0 !important;
   color: #0f172a !important;
@@ -596,27 +596,27 @@ html.dark .navbar-pill-nav a:hover {
 }
 
 /* Light Mode: Headings & Typography */
-html.light .landing-page-root h1:not(.languages-section *),
-html.light .landing-page-root h2:not(.languages-section *),
-html.light .landing-page-root h3:not(.languages-section *),
-html.light .landing-page-root h4:not(.languages-section *) {
+html.light .landing-page-root h1,
+html.light .landing-page-root h2,
+html.light .landing-page-root h3,
+html.light .landing-page-root h4 {
   color: #0f172a !important;
   text-shadow: none !important;
 }
 
-html.light .landing-page-root p:not(.languages-section *),
-html.light .landing-page-root .text-slate-200:not(.languages-section *),
-html.light .landing-page-root .text-slate-300:not(.languages-section *),
-html.light .landing-page-root .text-slate-400:not(.languages-section *) {
+html.light .landing-page-root p,
+html.light .landing-page-root .text-slate-200,
+html.light .landing-page-root .text-slate-300,
+html.light .landing-page-root .text-slate-400 {
   color: #334155 !important;
   text-shadow: none !important;
 }
 
-html.light .landing-page-root .text-white:not(.languages-section *):not(.hero-title *):not(.hero-title-text) {
+html.light .landing-page-root .text-white:not(.hero-title *):not(.hero-title-text) {
   color: #0f172a !important;
 }
 
-html.light .landing-page-root .text-slate-100:not(.languages-section *):not(.hero-desc) {
+html.light .landing-page-root .text-slate-100:not(.hero-desc) {
   color: #1e293b !important;
 }
 
@@ -655,22 +655,125 @@ html.dark .landing-page-root .text-slate-400 {
 }
 
 /* ========================================================================= */
-/* SUPPORTED LANGUAGES SECTION & CARDS: PERMANENT DARK MODE THEME            */
+/* SUPPORTED LANGUAGES SECTION (Adaptive Light / Dark Theme)                 */
 /* ========================================================================= */
-.languages-section,
-html.light .landing-page-root .languages-section,
+.languages-section {
+  position: relative !important;
+}
+
+/* Light Mode: Supported Languages Section */
+html.light .landing-page-root .languages-section {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-top-color: #e2e8f0 !important;
+}
+
+html.light .landing-page-root .languages-section .carousel-edge-left {
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  background: linear-gradient(to right, #ffffff, transparent) !important;
+  pointer-events: none !important;
+}
+
+html.light .landing-page-root .languages-section .carousel-edge-right {
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  background: linear-gradient(to left, #ffffff, transparent) !important;
+  pointer-events: none !important;
+}
+
+html.light .landing-page-root .languages-section h2,
+html.light .landing-page-root .languages-section .languages-title {
+  color: #0f172a !important;
+  text-shadow: none !important;
+}
+
+html.light .landing-page-root .languages-section p,
+html.light .landing-page-root .languages-section .languages-desc {
+  color: #475569 !important;
+  text-shadow: none !important;
+}
+
+html.light .landing-page-root .languages-section .carousel-controls-box {
+  background-color: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light .landing-page-root .languages-section .carousel-controls-box button {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #334155 !important;
+}
+
+html.light .landing-page-root .languages-section .carousel-controls-box button:hover {
+  background-color: #f1f5f9 !important;
+  color: #0284c7 !important;
+}
+
+html.light .landing-page-root .languages-section .carousel-controls-box .h-4.w-px {
+  background-color: #e2e8f0 !important;
+}
+
+html.light .landing-page-root .languages-section .filter-tab-inactive {
+  background-color: #f1f5f9 !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #475569 !important;
+}
+
+html.light .landing-page-root .languages-section .filter-tab-inactive:hover {
+  background-color: #e2e8f0 !important;
+  color: #0284c7 !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light .landing-page-root .language-card {
+  background: #ffffff !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.06) !important;
+  color: #0f172a !important;
+}
+
+html.light .landing-page-root .language-card:hover {
+  background: #ffffff !important;
+  border-color: #0284c7 !important;
+  box-shadow: 0 10px 25px -4px rgba(2, 132, 199, 0.18) !important;
+}
+
+html.light .landing-page-root .language-card h3 {
+  color: #0f172a !important;
+  text-shadow: none !important;
+}
+
+html.light .landing-page-root .language-card p {
+  color: #64748b !important;
+  text-shadow: none !important;
+}
+
+html.light .landing-page-root .language-card span.rounded-full {
+  background-color: #f0f9ff !important;
+  border: 1px solid #bae6fd !important;
+  color: #0284c7 !important;
+}
+
+html.light .landing-page-root .language-card .border-t {
+  border-color: #f1f5f9 !important;
+}
+
+/* Dark Mode: Supported Languages Section */
 html.dark .landing-page-root .languages-section {
   background-color: #020617 !important;
   color: #f8fafc !important;
   border-top-color: #1e293b !important;
-  position: relative !important;
 }
 
-
-
-.languages-section .carousel-edge-left,
-html.light .languages-section .carousel-edge-left,
-html.dark .languages-section .carousel-edge-left {
+html.dark .landing-page-root .languages-section .carousel-edge-left {
   position: absolute !important;
   top: 0 !important;
   bottom: 0 !important;
@@ -679,9 +782,7 @@ html.dark .languages-section .carousel-edge-left {
   pointer-events: none !important;
 }
 
-.languages-section .carousel-edge-right,
-html.light .languages-section .carousel-edge-right,
-html.dark .languages-section .carousel-edge-right {
+html.dark .landing-page-root .languages-section .carousel-edge-right {
   position: absolute !important;
   top: 0 !important;
   bottom: 0 !important;
@@ -690,82 +791,51 @@ html.dark .languages-section .carousel-edge-right {
   pointer-events: none !important;
 }
 
-/* Titles and Text in Languages Section */
-.languages-section h2,
-.languages-section .languages-title,
-.landing-page-root .languages-section h2,
-.landing-page-root .languages-section .languages-title,
-html.light .landing-page-root .languages-section h2,
-html.light .landing-page-root .languages-section .languages-title,
 html.dark .landing-page-root .languages-section h2,
 html.dark .landing-page-root .languages-section .languages-title {
   color: #ffffff !important;
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.95), 0 1px 4px rgba(0, 0, 0, 0.9) !important;
 }
 
-.languages-section p,
-.languages-section .languages-desc,
-.landing-page-root .languages-section p,
-.landing-page-root .languages-section .languages-desc,
-html.light .landing-page-root .languages-section p,
-html.light .landing-page-root .languages-section .languages-desc,
 html.dark .landing-page-root .languages-section p,
 html.dark .landing-page-root .languages-section .languages-desc {
   color: #cbd5e1 !important;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85) !important;
 }
 
-/* Carousel Controls Box */
-.languages-section .carousel-controls-box,
-html.light .landing-page-root .languages-section .carousel-controls-box,
 html.dark .landing-page-root .languages-section .carousel-controls-box {
   background-color: #0b0f19 !important;
   border: 1px solid #1e293b !important;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
 }
 
-.languages-section .carousel-controls-box button,
-html.light .landing-page-root .languages-section .carousel-controls-box button,
 html.dark .landing-page-root .languages-section .carousel-controls-box button {
   background-color: #1e293b !important;
   border: 1px solid #334155 !important;
   color: #f1f5f9 !important;
 }
 
-.languages-section .carousel-controls-box button:hover,
-html.light .landing-page-root .languages-section .carousel-controls-box button:hover,
 html.dark .landing-page-root .languages-section .carousel-controls-box button:hover {
   background-color: #334155 !important;
   color: #38bdf8 !important;
 }
 
-.languages-section .carousel-controls-box .h-4.w-px,
-html.light .landing-page-root .languages-section .carousel-controls-box .h-4.w-px,
 html.dark .landing-page-root .languages-section .carousel-controls-box .h-4.w-px {
   background-color: #334155 !important;
 }
 
-/* Filter Tabs */
-.languages-section .filter-tab-inactive,
-html.light .landing-page-root .languages-section .filter-tab-inactive,
 html.dark .landing-page-root .languages-section .filter-tab-inactive {
   background-color: #0f172a !important;
   border: 1px solid #334155 !important;
   color: #cbd5e1 !important;
 }
 
-.languages-section .filter-tab-inactive:hover,
-html.light .landing-page-root .languages-section .filter-tab-inactive:hover,
 html.dark .landing-page-root .languages-section .filter-tab-inactive:hover {
   background-color: #1e293b !important;
   color: #38bdf8 !important;
   border-color: #475569 !important;
 }
 
-/* Language Cards (Dark Glassmorphism) */
-.languages-section .language-card,
-.language-card,
-html.light .landing-page-root .language-card,
 html.dark .landing-page-root .language-card {
   background: rgba(11, 15, 25, 0.88) !important;
   backdrop-filter: blur(14px) !important;
@@ -775,38 +845,30 @@ html.dark .landing-page-root .language-card {
   color: #f8fafc !important;
 }
 
-.languages-section .language-card:hover,
-.language-card:hover,
-html.light .landing-page-root .language-card:hover,
 html.dark .landing-page-root .language-card:hover {
   background: rgba(15, 23, 42, 0.95) !important;
   border-color: #38bdf8 !important;
   box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.28) !important;
 }
 
-.languages-section .language-card h3,
-.language-card h3,
-html.light .landing-page-root .language-card h3,
 html.dark .landing-page-root .language-card h3 {
   color: #ffffff !important;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6) !important;
 }
 
-.languages-section .language-card p,
-.language-card p,
-html.light .landing-page-root .language-card p,
 html.dark .landing-page-root .language-card p {
   color: #94a3b8 !important;
   text-shadow: none !important;
 }
 
-.languages-section .language-card span.rounded-full,
-.language-card span.rounded-full,
-html.light .landing-page-root .language-card span.rounded-full,
 html.dark .landing-page-root .language-card span.rounded-full {
   background-color: #1e293b !important;
   border: 1px solid #334155 !important;
   color: #38bdf8 !important;
+}
+
+html.dark .landing-page-root .language-card .border-t {
+  border-color: rgba(30, 41, 59, 0.8) !important;
 }
 
 /* ========================================================================= */
