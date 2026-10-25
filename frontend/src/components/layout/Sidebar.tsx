@@ -6,13 +6,10 @@ import {
   Terminal,
   History,
   ShieldAlert,
-  TestTube2,
   Settings,
-  BookOpen,
   LogOut,
   Sparkles,
   Home,
-  ArrowLeft,
 } from 'lucide-react'
 import { useAuth } from '@/features/auth/AuthContext'
 import { cn } from '@/lib/utils'
@@ -27,9 +24,7 @@ export const Sidebar: React.FC = () => {
     { name: 'New Analysis', to: '/workspace', icon: Terminal, highlight: true },
     { name: 'Analysis History', to: '/history', icon: History },
     { name: 'Vulnerabilities', to: '/vulnerabilities', icon: ShieldAlert },
-    { name: 'Test Generator', to: '/test-generator', icon: TestTube2 },
     { name: 'Settings', to: '/settings', icon: Settings },
-    { name: 'Help & Docs', to: '/docs', icon: BookOpen },
   ]
 
   return (
@@ -46,27 +41,6 @@ export const Sidebar: React.FC = () => {
           <div className="text-[10px] text-slate-500 dark:text-slate-400">Enterprise Audit</div>
         </div>
       </Link>
-
-      {/* Quick Navigation: Back & Home */}
-      <div className="mb-4 grid grid-cols-2 gap-2">
-        <button
-          type="button"
-          onClick={() => navigate(-1)}
-          className="flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 py-2 px-3 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition shadow-2xs cursor-pointer"
-          title="Go back to previous page"
-        >
-          <ArrowLeft className="h-3.5 w-3.5 text-blue-600" />
-          <span>Back</span>
-        </button>
-        <Link
-          to="/"
-          className="flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 py-2 px-3 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition shadow-2xs cursor-pointer"
-          title="Go to Home page"
-        >
-          <Home className="h-3.5 w-3.5 text-blue-600" />
-          <span>Home</span>
-        </Link>
-      </div>
 
       {/* Quick Analyze Button */}
       <Link

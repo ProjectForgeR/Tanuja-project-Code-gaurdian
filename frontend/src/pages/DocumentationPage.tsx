@@ -36,27 +36,8 @@ export const DocumentationPage: React.FC = () => {
       <Navbar />
 
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
-        {/* Breadcrumb / Back & Home Bar */}
+        {/* Breadcrumb Bar */}
         <div className="mb-6 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => navigate(-1)}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer shadow-sm"
-              title="Go back to previous page"
-            >
-              <ArrowLeft className="h-3.5 w-3.5 text-blue-500" />
-              <span>Back</span>
-            </button>
-            <Link
-              to="/"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer shadow-sm"
-              title="Go to Home page"
-            >
-              <Home className="h-3.5 w-3.5 text-blue-500" />
-              <span>Home</span>
-            </Link>
-          </div>
           <div className="text-xs text-slate-400">
             <span>Documentation</span> / <span className="font-semibold text-slate-700 dark:text-slate-200">Technical Specs</span>
           </div>

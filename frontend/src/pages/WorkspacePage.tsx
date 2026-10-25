@@ -1191,27 +1191,6 @@ export const WorkspacePage: React.FC = () => {
         <div className="border-b border-[#E2E8F0] dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-3 shadow-2xs">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              {/* Back & Home Navigation Buttons */}
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => navigate(-1)}
-                  className="inline-flex items-center justify-center h-8 w-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition cursor-pointer shadow-2xs"
-                  title="Go back to previous page"
-                >
-                  <ArrowLeft className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                </button>
-                <Link
-                  to="/"
-                  className="inline-flex items-center justify-center h-8 w-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition cursor-pointer shadow-2xs"
-                  title="Go to Home page"
-                >
-                  <Home className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                </Link>
-              </div>
-
-              <div className="h-5 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block" />
-
               <div className="flex items-center gap-2">
                 <ShieldCheck className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 <h1 className="text-base font-bold tracking-tight text-slate-900 dark:text-white">
