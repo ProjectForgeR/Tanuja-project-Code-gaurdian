@@ -157,12 +157,6 @@ export const Navbar: React.FC = () => {
           >
             About
           </button>
-          <Link
-            to="/docs"
-            className="nav-link-btn rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors hover:text-blue-600 dark:hover:text-cyan-400 cursor-pointer"
-          >
-            Docs
-          </Link>
           <a
             href="mailto:support@codeguardian.ai"
             className="nav-link-btn rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors hover:text-blue-600 dark:hover:text-cyan-400 cursor-pointer"
@@ -337,13 +331,6 @@ export const Navbar: React.FC = () => {
           >
             About
           </button>
-          <Link
-            to="/docs"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block rounded-xl px-3.5 py-2 text-sm font-medium text-slate-300 transition hover:bg-slate-900 hover:text-white"
-          >
-            Docs
-          </Link>
           <a
             href="mailto:support@codeguardian.ai"
             onClick={() => setMobileMenuOpen(false)}

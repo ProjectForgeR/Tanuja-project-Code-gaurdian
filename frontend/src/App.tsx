@@ -9,7 +9,6 @@ import { HistoryPage } from '@/pages/HistoryPage'
 import { VulnerabilitiesPage } from '@/pages/VulnerabilitiesPage'
 import { TestGeneratorPage } from '@/pages/TestGeneratorPage'
 import { SettingsPage } from '@/pages/SettingsPage'
-import { DocumentationPage } from '@/pages/DocumentationPage'
 import { PrivacyPolicyPage } from '@/pages/PrivacyPolicyPage'
 import { SecurityPracticesPage } from '@/pages/SecurityPracticesPage'
 import { ApiDocsPage } from '@/pages/ApiDocsPage'
@@ -86,7 +85,7 @@ const AnimatedRoutes: React.FC = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/docs" element={<DocumentationPage />} />
+        <Route path="/docs" element={<Navigate to="/" replace />} />
         <Route path="/privacy" element={<PrivacyPolicyPage />} />
         <Route path="/security" element={<SecurityPracticesPage />} />
         <Route path="/api-docs" element={<ApiDocsPage />} />

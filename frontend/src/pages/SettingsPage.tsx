@@ -128,7 +128,7 @@ export const SettingsPage: React.FC = () => {
                 <input
                   type="text"
                   disabled
-                  value={user?.email || 'developer@codeguardian.ai'}
+                  value={user?.email || 'Not signed in'}
                   className="mt-1 w-full rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-slate-400"
                 />
               </div>
@@ -137,7 +137,7 @@ export const SettingsPage: React.FC = () => {
                 <input
                   type="text"
                   disabled
-                  value={user?.full_name || 'Developer'}
+                  value={user?.full_name || 'Guest'}
                   className="mt-1 w-full rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-slate-400"
                 />
               </div>

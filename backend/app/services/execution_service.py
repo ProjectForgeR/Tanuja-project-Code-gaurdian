@@ -217,8 +217,20 @@ class ExecutionService:
             )
 
         # 1. Fast sandboxed local execution (Python / Node.js) with isolated subprocess
-        local_res = cls._execute_locally(code, lang_key, req.stdin or "")
+        # Run in worker thread to prevent blocking the async event loop
+        local_res = await asyncio.to_thread(cls._execute_locally_sync, code, lang_key, req.stdin or "")
         if local_res:
+            if not local_res.success:
+                combined_error = (local_res.stderr + "\n" + (local_res.output or "")).strip()
+                error_line, error_summary = cls._extract_error_location(combined_error, lang_key, code)
+                local_res.error_detail = await cls._generate_recommendation(
+                    code=code,
+                    language=lang_key,
+                    raw_error=combined_error,
+                    status=local_res.status,
+                    extracted_line=error_line,
+                    generate_ai=req.generate_ai_fix,
+                )
             return local_res
 
         # 2. Remote sandbox container (Judge0) for multi-language execution
@@ -358,7 +370,7 @@ class ExecutionService:
             return None, str(e)
 
     @classmethod
-    def _execute_locally(cls, code: str, language: str, stdin: str) -> Optional[ExecuteResponse]:
+    def _execute_locally_sync(cls, code: str, language: str, stdin: str) -> Optional[ExecuteResponse]:
         lang_lower = language.lower().strip()
         if lang_lower not in ["python", "py", "javascript", "js", "typescript", "ts", "nodejs"]:
             return None

@@ -180,7 +180,7 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
     const lineNo = result.error_detail?.line_number || 1
     const lines = code.split('\n')
     const lineIdx = Math.max(0, lineNo - 1)
-    if (lineIdx >= lines.length) return code
+    if (lineIdx >= lines.length) return null
     const errLine = lines[lineIdx]
     const errText = (result.error_detail?.raw_message || result.stderr || result.compile_output || '').toLowerCase()
     const linesCopy = [...lines]
@@ -193,7 +193,8 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
     ) {
       if (!errLine.trimEnd().endsWith(':')) {
         linesCopy[lineIdx] = errLine.trimEnd() + ':'
-        return linesCopy.join('\n')
+        const res = linesCopy.join('\n')
+        return res !== code ? res : null
       }
     }
 
@@ -204,20 +205,54 @@ export const CompilerOutputPanel: React.FC<CompilerOutputPanelProps> = ({
       (!errLine.trimEnd().endsWith(';') && !errLine.trimEnd().endsWith('{') && !errLine.trimEnd().endsWith('}'))
     ) {
       linesCopy[lineIdx] = errLine.trimEnd() + ';'
-      return linesCopy.join('\n')
+      const res = linesCopy.join('\n')
+      return res !== code ? res : null
+    }
+
+    // Missing parentheses in call to print (Python 3)
+    if (
+      errText.includes("missing parentheses in call to 'print'") ||
+      /^\s*print\s+[^\(]/.test(errLine)
+    ) {
+      linesCopy[lineIdx] = errLine.replace(/^(\s*print)\s+(.*)$/, '$1($2)')
+      const res = linesCopy.join('\n')
+      return res !== code ? res : null
+    }
+
+    // Dangling operator (+, -, *, /)
+    if (/[\+\-\*\/]\s*$/.test(errLine.trim())) {
+      linesCopy[lineIdx] = errLine.trimEnd() + ' 0'
+      const res = linesCopy.join('\n')
+      return res !== code ? res : null
+    }
+
+    // Unclosed string literal
+    if ((errLine.match(/"/g) || []).length % 2 !== 0) {
+      linesCopy[lineIdx] = errLine.trimEnd() + '"'
+      const res = linesCopy.join('\n')
+      return res !== code ? res : null
+    }
+    if ((errLine.match(/'/g) || []).length % 2 !== 0) {
+      linesCopy[lineIdx] = errLine.trimEnd() + "'"
+      const res = linesCopy.join('\n')
+      return res !== code ? res : null
     }
 
     // Unmatched parens
     const openP = (errLine.match(/\(/g) || []).length - (errLine.match(/\)/g) || []).length
     if (openP > 0) {
       linesCopy[lineIdx] = errLine.trimEnd() + ')'.repeat(openP)
-      return linesCopy.join('\n')
+      const res = linesCopy.join('\n')
+      return res !== code ? res : null
     }
 
-    return linesCopy.join('\n')
+    const synthesized = linesCopy.join('\n')
+    return synthesized !== code ? synthesized : null
   }
 
-  const effectiveFix = result?.error_detail?.corrected_code || getClientSynthesizedFix()
+  const effectiveFix = (result?.error_detail?.corrected_code && result.error_detail.corrected_code !== code)
+    ? result.error_detail.corrected_code
+    : getClientSynthesizedFix()
 
   // Determine badge color and icon based on status
   const getStatusBadge = () => {

@@ -692,8 +692,8 @@ export const WorkspacePage: React.FC = () => {
 
   // Fix First Error / AI Quick-Fix
   const handleFixFirstError = async () => {
-    // 1. If sandbox execution failed with an AI fix suggestion
-    if (executionResult?.error_detail?.corrected_code) {
+    // 1. If compiler execution failed with an AI fix suggestion
+    if (executionResult?.error_detail?.corrected_code && executionResult.error_detail.corrected_code !== code) {
       handleApplyCompilerFix(executionResult.error_detail.corrected_code)
       return
     }
@@ -707,10 +707,41 @@ export const WorkspacePage: React.FC = () => {
       return
     }
 
-    // 3. Otherwise run analysis to uncover any hidden issues
-    if (!analysisResult) {
-      await runAnalysis(code, language, filename, true)
-      return
+    // 3. If there is a compiler execution failure without corrected_code yet, synthesize fix
+    if (executionResult && !executionResult.success) {
+      const errLine = executionResult.error_detail?.line_number || 1
+      const lines = code.split('\n')
+      const lineIdx = Math.max(0, errLine - 1)
+      if (lineIdx < lines.length) {
+        const curr = lines[lineIdx]
+        const linesCopy = [...lines]
+        if (language === 'python' && !curr.trimEnd().endsWith(':') && /^\s*(if|elif|else|for|while|def|class|try|except|finally|with)\b/.test(curr)) {
+          linesCopy[lineIdx] = curr.trimEnd() + ':'
+          handleApplyCompilerFix(linesCopy.join('\n'))
+          return
+        }
+      }
+    }
+
+    // 4. Otherwise run analysis to uncover any hidden issues and trigger fix
+    setIsAnalyzing(true)
+    try {
+      const res = await analysisService.analyzeCode({
+        code,
+        language,
+        filename,
+        run_ai: true,
+      })
+      setAnalysisResult(res)
+      if (res.findings && res.findings.length > 0) {
+        const target = res.findings.find((f) => f.severity === 'Critical') || res.findings[0]
+        handleReviewFix(target)
+        return
+      }
+    } catch (e) {
+      console.warn('Auto-analysis for fix error:', e)
+    } finally {
+      setIsAnalyzing(false)
     }
 
     setErrorMsg('No errors or warnings currently detected to fix. Great job!')

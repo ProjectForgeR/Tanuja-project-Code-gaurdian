@@ -15,7 +15,7 @@ import { useAuth } from '@/features/auth/AuthContext'
 import { cn } from '@/lib/utils'
 
 export const Sidebar: React.FC = () => {
-  const { user, isDemoUser, logout } = useAuth()
+  const { user, isDemoUser, logout, isAuthenticated } = useAuth()
   const navigate = useNavigate()
 
   const navItems = [
@@ -74,36 +74,60 @@ export const Sidebar: React.FC = () => {
 
       {/* User profile & Sign out */}
       <div className="border-t border-slate-200 dark:border-slate-800 pt-3">
-        {isDemoUser && (
-          <div className="mb-2.5 rounded-lg border border-amber-200 bg-amber-50 px-3 py-1.5 text-center text-[11px] font-medium text-amber-700">
-            Guest Demo Mode
+        {isAuthenticated && user ? (
+          <>
+            {isDemoUser && (
+              <div className="mb-2.5 rounded-lg border border-amber-200 bg-amber-50 dark:bg-amber-950/40 px-3 py-1.5 text-center text-[11px] font-medium text-amber-700 dark:text-amber-400">
+                Guest Demo Mode
+              </div>
+            )}
+            <div className="flex items-center justify-between rounded-xl bg-slate-50 dark:bg-slate-900/60 p-2.5 border border-slate-200 dark:border-slate-800/80">
+              <div className="flex items-center gap-2.5 overflow-hidden">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-950/50 text-xs font-bold text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800">
+                  {user.full_name ? user.full_name[0].toUpperCase() : (user.email ? user.email[0].toUpperCase() : 'U')}
+                </div>
+                <div className="overflow-hidden">
+                  <div className="truncate text-xs font-semibold text-slate-900 dark:text-white">
+                    {user.full_name || 'Developer'}
+                  </div>
+                  <div className="truncate text-[10px] text-slate-500 dark:text-slate-400">
+                    {user.email}
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  logout()
+                  navigate('/')
+                }}
+                title="Sign out"
+                className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 transition hover:bg-red-50 dark:hover:bg-red-950/50 hover:text-red-600 cursor-pointer"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className="space-y-2">
+            <div className="rounded-xl border border-dashed border-slate-200 dark:border-slate-800 p-2.5 text-center">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">Not signed in</p>
+              <div className="mt-2 flex gap-1.5">
+                <Link
+                  to="/signin"
+                  className="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 py-1.5 text-center text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/signup"
+                  className="flex-1 rounded-lg bg-blue-600 py-1.5 text-center text-xs font-semibold text-white shadow-xs hover:bg-blue-700 transition"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            </div>
           </div>
         )}
-        <div className="flex items-center justify-between rounded-xl bg-slate-50 dark:bg-slate-900/60 p-2.5 border border-slate-200 dark:border-slate-800/80">
-          <div className="flex items-center gap-2.5 overflow-hidden">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-xs font-bold text-indigo-600 border border-indigo-200">
-              {user?.full_name ? user.full_name[0].toUpperCase() : 'U'}
-            </div>
-            <div className="overflow-hidden">
-              <div className="truncate text-xs font-semibold text-slate-900 dark:text-white">
-                {user?.full_name || 'Developer'}
-              </div>
-              <div className="truncate text-[10px] text-slate-500 dark:text-slate-400">
-                {user?.email || 'user@codeguardian.ai'}
-              </div>
-            </div>
-          </div>
-          <button
-            onClick={() => {
-              logout()
-              navigate('/')
-            }}
-            title="Sign out"
-            className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 transition hover:bg-red-50 hover:text-red-600"
-          >
-            <LogOut className="h-3.5 w-3.5" />
-          </button>
-        </div>
       </div>
     </aside>
   )

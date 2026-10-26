@@ -229,7 +229,7 @@ async def refactor_code(
 @router.post("/explain", response_model=ExplainResponse)
 async def explain_findings(
     req: ExplainRequest,
-    current_user: User = Depends(get_current_user),
+    current_user: Optional[User] = Depends(get_optional_current_user),
 ):
     """
     Explain detected findings in plain English using the AI provider.
@@ -260,7 +260,7 @@ async def explain_findings(
 @router.post("/fix/suggest", response_model=FixResponse)
 async def suggest_fix(
     req: FixRequest,
-    current_user: User = Depends(get_current_user),
+    current_user: Optional[User] = Depends(get_optional_current_user),
 ):
     return await AIFixAssistant.generate_fix(req.code, req.language, req.finding)
 
@@ -269,7 +269,7 @@ async def suggest_fix(
 @router.post("/tests/generate", response_model=TestGenerateResponse)
 async def generate_tests(
     req: TestGenerateRequest,
-    current_user: User = Depends(get_current_user),
+    current_user: Optional[User] = Depends(get_optional_current_user),
 ):
     return await TestGenerator.generate_tests(req.code, req.language, req.finding, req.framework)
 

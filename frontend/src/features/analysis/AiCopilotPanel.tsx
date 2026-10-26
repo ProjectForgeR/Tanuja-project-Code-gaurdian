@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import { Finding, ExplainResult } from '@/types/analysis'
 import { analysisService } from '@/services/analysisService'
+import { compilerService } from '@/services/compilerService'
 
 interface AiCopilotPanelProps {
   isOpen?: boolean
@@ -79,18 +80,55 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
           `Refactored ${language.toUpperCase()} code to resolve ${refRes.smells_resolved.length} detected code smells.\n\n` +
           `Quality score improved from ${Math.round(refRes.original_quality_score)} to ${Math.round(refRes.refactored_quality_score)}. Switch to the Diff tab to review and apply the patch.`
         )
-      } else if (findings.length > 0 && (lower.includes('fix') || lower.includes('bug') || lower.includes('security'))) {
-        const fixRes = await analysisService.suggestFix({ code, language, finding: findings[0] })
-        if (fixRes.corrected_code) {
-          setSuggestedCode(fixRes.corrected_code)
-          setActiveTab('diff')
+      } else if (lower.includes('fix') || lower.includes('bug') || lower.includes('security')) {
+        let targetFinding = findings.length > 0 ? findings[0] : null
+        if (!targetFinding) {
+          try {
+            const analysisRes = await analysisService.analyzeCode({ code, language, filename, run_ai: true })
+            if (analysisRes.findings && analysisRes.findings.length > 0) {
+              targetFinding = analysisRes.findings[0]
+            }
+          } catch (e) {
+            console.warn('Auto-analysis inside Copilot:', e)
+          }
         }
-        setCustomResponse(
-          `AI Security Fix for: ${findings[0].title}\n\n` +
-          `Why Unsafe: ${fixRes.why_unsafe}\n\n` +
-          `Remediation: ${fixRes.explanation}\n\n` +
-          `Switch to the Diff tab to preview side-by-side changes and apply the fix.`
-        )
+
+        if (targetFinding) {
+          const fixRes = await analysisService.suggestFix({ code, language, finding: targetFinding })
+          if (fixRes.corrected_code) {
+            setSuggestedCode(fixRes.corrected_code)
+            setActiveTab('diff')
+          }
+          setCustomResponse(
+            `AI Fix for: ${targetFinding.title}\n\n` +
+            `Why Unsafe: ${fixRes.why_unsafe}\n\n` +
+            `Remediation: ${fixRes.explanation}\n\n` +
+            `Switch to the Diff tab to preview side-by-side changes and click "Apply Fix to Code".`
+          )
+        } else {
+          // Check compiler execution fix
+          try {
+            const execRes = await compilerService.executeCode({ code, language, generate_ai_fix: true })
+            if (execRes.error_detail?.corrected_code) {
+              setSuggestedCode(execRes.error_detail.corrected_code)
+              setActiveTab('diff')
+              setCustomResponse(
+                `AI Diagnostic Fix for ${execRes.status}:\n\n` +
+                `${execRes.error_detail.what_went_wrong}\n\n` +
+                `Remediation: ${execRes.error_detail.how_to_fix}\n\n` +
+                `Switch to the Diff tab to review and apply the patch.`
+              )
+            } else {
+              setCustomResponse(
+                `Inspected ${filename} (${language.toUpperCase()}). No critical syntax errors or security vulnerabilities detected in the active buffer.`
+              )
+            }
+          } catch (e) {
+            setCustomResponse(
+              `Inspected ${filename} (${language.toUpperCase()}). No critical errors detected.`
+            )
+          }
+        }
       } else {
         const expRes = await analysisService.explainFindings({ code, language, findings })
         if (expRes.explanations.length > 0 && expRes.explanations[0].corrected_code) {

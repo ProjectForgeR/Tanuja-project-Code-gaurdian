@@ -47,15 +47,6 @@ export const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                <Link
-                  to="/docs"
-                  className="inline-flex items-center gap-2 transition hover:text-blue-400"
-                >
-                  <FileText className="h-3.5 w-3.5 text-blue-400" />
-                  <span>Developer Docs & Guides</span>
-                </Link>
-              </li>
-              <li>
                 <a
                   href="https://github.com/ganeshbabu999905-maker/Project-1/issues"
                   target="_blank"

@@ -59,7 +59,7 @@ export const CodeEditor = React.forwardRef<CodeEditorHandle, CodeEditorProps>(({
 
     // Configure editor layout & theme
     editor.updateOptions({
-      fontSize: 13,
+      fontSize: 15,
       fontFamily: "'Fira Code', 'JetBrains Mono', Consolas, monospace",
       minimap: { enabled: true },
       scrollBeyondLastLine: false,

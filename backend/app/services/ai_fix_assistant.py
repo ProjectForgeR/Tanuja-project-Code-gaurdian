@@ -212,9 +212,84 @@ Source code to fix:
             why_unsafe = "Bare `except:` catches `KeyboardInterrupt` and `SystemExit`, preventing clean shutdown."
             tests.append("Verify SIGINT (Ctrl+C) properly terminates the process")
 
+        elif "CMD-INJECT" in rule or "CMD" in rule or "OS.SYSTEM" in rule:
+            import re
+            cmd_match = re.search(r"os\.system\((.*?)\)", original_line)
+            if cmd_match:
+                inner = cmd_match.group(1).strip()
+                indent = " " * (len(original_line) - len(original_line.lstrip()))
+                corrected_lines[line_idx] = f"{indent}import subprocess, shlex\n{indent}subprocess.run(shlex.split({inner}), check=True)"
+            else:
+                corrected_lines[line_idx] = original_line.replace("shell=True", "shell=False")
+            explanation = "Replaced insecure shell command execution with safe `subprocess.run(..., shell=False)`."
+            why_unsafe = "`os.system()` and `shell=True` allow command injection and server takeover."
+            tests.append("Verify subprocess executes safely with argument array")
+
+        elif "INSECURE-TEMP" in rule or "TEMP" in rule:
+            corrected_lines[line_idx] = original_line.replace("tempfile.mktemp()", "tempfile.NamedTemporaryFile(delete=False).name")
+            explanation = "Replaced deprecated `tempfile.mktemp()` with secure `NamedTemporaryFile`."
+            why_unsafe = "`tempfile.mktemp()` creates temporary files vulnerable to race conditions (TOCTOU attacks)."
+            tests.append("Verify temporary file is created safely without race conditions")
+
+        elif "PICKLE" in rule or "DESER" in rule:
+            corrected_lines[line_idx] = original_line.replace("pickle.loads(", "json.loads(").replace("pickle.load(", "json.load(")
+            if "import json" not in code:
+                corrected_lines.insert(0, "import json")
+            explanation = "Replaced insecure `pickle` deserialization with safe `json` parsing."
+            why_unsafe = "Pickle unpickling allows remote arbitrary code execution via malicious serialized objects."
+            tests.append("Verify deserialization safely rejects non-JSON payloads")
+
+        elif "ASSERT-PROD" in rule or "ASSERT" in rule:
+            import re
+            cond = re.sub(r"^\s*assert\s+", "", original_line).strip()
+            indent = " " * (len(original_line) - len(original_line.lstrip()))
+            corrected_lines[line_idx] = f"{indent}if not ({cond}):\n{indent}    raise ValueError('Assertion failed: {cond}')"
+            explanation = "Replaced assert statement with explicit condition check and exception raising."
+            why_unsafe = "Assert statements are completely ignored in optimized Python runs (-O flag)."
+            tests.append("Verify validation fires even in optimized execution environments")
+
+        elif "SYNTAX" in rule or "syntax" in finding.title.lower():
+            err_line = original_line
+            import re
+            if any(err_line.strip().startswith(kw) for kw in ["def ", "class ", "if ", "elif ", "else", "for ", "while ", "try", "except", "finally", "with "]) and not err_line.rstrip().endswith(":"):
+                corrected_lines[line_idx] = err_line.rstrip() + ":"
+                explanation = f"Added missing colon ':' to Line {finding.line_start}."
+            elif re.search(r"^\s*print\s+[^\(]", err_line):
+                corrected_lines[line_idx] = re.sub(r"^(\s*print)\s+(.*)$", r"\1(\2)", err_line)
+                explanation = f"Converted Python 2 print statement to Python 3 `print(...)` function on Line {finding.line_start}."
+            elif re.search(r"[\+\-\*\/]\s*$", err_line.strip()):
+                var_names = re.findall(r"^[ \t]*([a-zA-Z_][a-zA-Z0-9_]*)\s*=", code, re.MULTILINE)
+                second_var = var_names[1] if len(var_names) >= 2 else (var_names[0] if var_names else "0")
+                corrected_lines[line_idx] = err_line.rstrip() + f" {second_var}"
+                explanation = f"Completed missing operand after operator on Line {finding.line_start}."
+            else:
+                open_p = err_line.count("(") - err_line.count(")")
+                open_b = err_line.count("[") - err_line.count("]")
+                open_c = err_line.count("{") - err_line.count("}")
+                closing = (")" * max(0, open_p)) + ("]" * max(0, open_b)) + ("}" * max(0, open_c))
+                if closing:
+                    corrected_lines[line_idx] = err_line.rstrip() + closing
+                    explanation = f"Balanced closing delimiter `{closing}` on Line {finding.line_start}."
+                elif err_line.count('"') % 2 != 0:
+                    corrected_lines[line_idx] = err_line.rstrip() + '"'
+                    explanation = f"Closed unterminated string quote on Line {finding.line_start}."
+                elif err_line.count("'") % 2 != 0:
+                    corrected_lines[line_idx] = err_line.rstrip() + "'"
+                    explanation = f"Closed unterminated single quote on Line {finding.line_start}."
+
         elif finding.suggested_patch:
             # Apply predefined suggested patch
             corrected_lines[line_idx] = finding.suggested_patch
+
+        # Universal fallback: ensure line is repaired if untouched
+        if corrected_lines == lines and line_idx < len(lines):
+            curr = lines[line_idx]
+            if language in ["c", "cpp", "java", "javascript", "js", "typescript", "ts", "csharp", "php"] and curr.strip() and not curr.rstrip().endswith(";") and not curr.rstrip().endswith("{") and not curr.rstrip().endswith("}"):
+                corrected_lines[line_idx] = curr.rstrip() + ";"
+                explanation = f"Added missing semicolon ';' to Line {finding.line_start}."
+            elif language in ["python", "py"] and any(curr.strip().startswith(kw) for kw in ["def ", "if ", "elif ", "else", "for ", "while ", "try", "except", "finally", "with ", "class "]) and not curr.rstrip().endswith(":"):
+                corrected_lines[line_idx] = curr.rstrip() + ":"
+                explanation = f"Added missing colon ':' to Line {finding.line_start}."
 
         corrected_code = "\n".join(corrected_lines)
         diff = cls._make_diff(code, corrected_code)
