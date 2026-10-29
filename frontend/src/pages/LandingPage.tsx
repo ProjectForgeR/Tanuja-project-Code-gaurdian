@@ -689,10 +689,6 @@ export const LandingPage: React.FC = () => {
       <section className="relative z-10 border-t border-slate-800/80 bg-[#040916]/80 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-14">
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3.5 py-1 text-xs font-semibold text-blue-300 mb-3 font-mono">
-              <Code2 className="h-3.5 w-3.5 text-cyan-400" />
-              <span>LIVE KERNEL PREVIEW</span>
-            </div>
             <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
               Instant Vulnerability Pinpointing &amp; Auto-Fix
             </h2>
@@ -959,9 +955,6 @@ export const LandingPage: React.FC = () => {
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 mb-10">
             <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3.5 py-1 text-xs font-semibold text-cyan-300 mb-3 font-mono">
-                <span>POLYGLOT ECOSYSTEM</span>
-              </div>
               <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
                 12+ Supported Programming Languages &amp; Frameworks
               </h2>
@@ -1100,10 +1093,6 @@ export const LandingPage: React.FC = () => {
       <section id="features" className="relative z-10 border-t border-slate-800/80 bg-[#040815]/90 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3.5 py-1 text-xs font-semibold text-cyan-300 mb-3 font-mono">
-              <ShieldAlert className="h-3.5 w-3.5" />
-              <span>DEFENSE-IN-DEPTH CODE SECURITY</span>
-            </div>
             <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
               From Vulnerability Detection to Production Peace of Mind
             </h2>
@@ -1224,9 +1213,6 @@ export const LandingPage: React.FC = () => {
       <section id="how-it-works" className="relative z-10 border-t border-slate-800/80 bg-[#030712] py-20 sm:py-28 overflow-hidden">
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3.5 py-1 text-xs font-semibold text-cyan-300 mb-3 font-mono">
-              <span>WORKFLOW PIPELINE</span>
-            </div>
             <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
               How CodeGuardian AI Works
             </h2>
@@ -1319,45 +1305,7 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ============================================================== */}
-      {/* 7. HIGH-IMPACT CALL TO ACTION (CTA) SECTION                     */}
-      {/* ============================================================== */}
-      <section className="relative z-10 border-t border-slate-800/80 bg-gradient-to-b from-[#030712] via-[#070e24] to-[#030712] py-20 sm:py-24">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center">
-          <div className="rounded-3xl border border-cyan-500/30 bg-[#081026]/90 p-8 sm:p-14 shadow-2xl relative overflow-hidden backdrop-blur-2xl">
-            <div className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full radial-glow-cyan blur-2xl opacity-60" />
-            <div className="pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full radial-glow-blue blur-2xl opacity-60" />
-
-            <div className="relative z-10 max-w-2xl mx-auto">
-              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
-                Ready to Secure Your Codebase?
-              </h2>
-              <p className="mt-4 text-base text-slate-300 leading-relaxed">
-                Launch the CodeGuardian AI workspace now. Upload your files, detect hidden vulnerabilities, and ship verified bug-free code today.
-              </p>
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-                <button
-                  type="button"
-                  onClick={() => navigate('/workspace')}
-                  className="cg-btn-primary px-8 py-3.5 text-base group"
-                >
-                  <span>Launch Code Workspace</span>
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleScrollToSection('languages')}
-                  className="cg-btn-secondary px-6 py-3.5 text-base"
-                >
-                  <span>View Supported Languages</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 8. Professional Cybersecurity Footer */}
+      {/* Professional Cybersecurity Footer */}
       <Footer />
 
       {/* 9. CodeGuardian AI Animated Robot Assistant Mascot & Speech Bubble */}
