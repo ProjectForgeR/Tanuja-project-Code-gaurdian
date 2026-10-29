@@ -627,9 +627,6 @@ export const LandingPage: React.FC = () => {
             <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               Instant Vulnerability Pinpointing &amp; Auto-Fix
             </h2>
-            <p className="mt-4 text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-              Compare vulnerable source code with verified AI-generated patches and real sandboxed stdout execution outputs.
-            </p>
           </div>
 
           {/* Interactive Code Preview Window */}
@@ -893,9 +890,6 @@ export const LandingPage: React.FC = () => {
               <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                 12+ Supported Programming Languages &amp; Frameworks
               </h2>
-              <p className="mt-4 text-base text-slate-600 dark:text-slate-300 font-normal leading-relaxed">
-                Native support for compiling, executing, and diagnosing code across modern systems, web frontends, backend microservices, and databases.
-              </p>
 
               {/* Filter Tabs */}
               <div className="mt-6 flex flex-wrap items-center gap-2">
@@ -1031,9 +1025,6 @@ export const LandingPage: React.FC = () => {
             <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               From Vulnerability Detection to Production Peace of Mind
             </h2>
-            <p className="mt-4 text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-              Explore how CodeGuardian AI inspects your code, flags hidden threats, and verifies clean execution before you commit.
-            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -1047,9 +1038,6 @@ export const LandingPage: React.FC = () => {
                     className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
-                  <div className="absolute top-3 left-3 bg-rose-500/90 text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded-md">
-                    CWE-89 / OWASP TOP 10
-                  </div>
                 </div>
                 <div className="mt-6">
                   <h3 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
@@ -1059,15 +1047,6 @@ export const LandingPage: React.FC = () => {
                     Identify injection vectors, weak cryptographic ciphers, and unvalidated inputs directly within your active workspace before commit.
                   </p>
                 </div>
-              </div>
-
-              <div className="mt-8 pt-4 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold">
-                <span className="border border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-300 px-2.5 py-1 rounded-lg">
-                  150+ Bandit &amp; OWASP Rules
-                </span>
-                <span className="border border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-cyan-300 px-2.5 py-1 rounded-lg">
-                  Zero Server Retained
-                </span>
               </div>
             </div>
 
@@ -1081,9 +1060,6 @@ export const LandingPage: React.FC = () => {
                     className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
-                  <div className="absolute top-3 left-3 bg-blue-600/90 text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded-md">
-                    SUB-SECOND PARSING
-                  </div>
                 </div>
                 <div className="mt-6">
                   <h3 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
@@ -1093,15 +1069,6 @@ export const LandingPage: React.FC = () => {
                     High-performance static parsing across Python, JavaScript, TypeScript, Java, C, C++, and SQL with instant editor squiggly markers.
                   </p>
                 </div>
-              </div>
-
-              <div className="mt-8 pt-4 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold">
-                <span className="border border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-300 px-2.5 py-1 rounded-lg">
-                  Deterministic AST
-                </span>
-                <span className="border border-purple-500/30 bg-purple-500/10 text-purple-600 dark:text-purple-300 px-2.5 py-1 rounded-lg">
-                  Polyglot Engine
-                </span>
               </div>
             </div>
 
@@ -1115,9 +1082,6 @@ export const LandingPage: React.FC = () => {
                     className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
-                  <div className="absolute top-3 left-3 bg-emerald-600/90 text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded-md">
-                    REGRESSION GUARD
-                  </div>
                 </div>
                 <div className="mt-6">
                   <h3 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
@@ -1127,15 +1091,6 @@ export const LandingPage: React.FC = () => {
                     Automated unit test generation (pytest, Jest, JUnit) covers malicious inputs, edge cases, and type violations to eliminate surprises.
                   </p>
                 </div>
-              </div>
-
-              <div className="mt-8 pt-4 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold">
-                <span className="border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 px-2.5 py-1 rounded-lg">
-                  Automated Test Suites
-                </span>
-                <span className="border border-cyan-500/30 bg-cyan-500/10 text-blue-600 dark:text-cyan-300 px-2.5 py-1 rounded-lg">
-                  Sandbox Verified
-                </span>
               </div>
             </div>
           </div>
@@ -1151,9 +1106,6 @@ export const LandingPage: React.FC = () => {
             <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               How CodeGuardian AI Works
             </h2>
-            <p className="mt-4 text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-              A seamless, developer-friendly 4-step workflow: Write Code &rarr; Analyze &rarr; Fix &rarr; Test.
-            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -1192,7 +1144,7 @@ export const LandingPage: React.FC = () => {
                 </p>
               </div>
               <div className="mt-5 pt-3 border-t border-slate-200 dark:border-slate-800 text-[11px] font-semibold text-blue-600 dark:text-blue-400 flex items-center justify-between">
-                <span>Deterministic AST</span>
+                <span>Deep Code Scan</span>
                 <span className="text-slate-500 dark:text-slate-400">Security &amp; Bugs</span>
               </div>
             </div>

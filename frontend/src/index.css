@@ -52,11 +52,10 @@
 }
 
 /* ========================================================================= */
-/* MODERN DEVELOPER SAAS TYPOGRAPHY                                          */
+/* TIMES NEW ROMAN TYPOGRAPHY                                                */
 /* ========================================================================= */
 html, body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, p, span, a, div, label, li, th, td {
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  letter-spacing: -0.012em;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 code, pre, kbd, samp, .font-mono, [class*="font-mono"] {
