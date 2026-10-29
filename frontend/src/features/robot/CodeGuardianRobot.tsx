@@ -15,7 +15,7 @@ export const CodeGuardianRobot: React.FC<CodeGuardianRobotProps> = ({
   size = 'md',
   mood = 'normal',
   isWaving = false,
-  showParticles = true,
+  showParticles = false,
   className = '',
   onClick,
 }) => {
@@ -41,33 +41,6 @@ export const CodeGuardianRobot: React.FC<CodeGuardianRobotProps> = ({
         className="absolute inset-0 rounded-full bg-cyan-500/20 dark:bg-cyan-400/25 blur-xl pointer-events-none animate-robot-glow"
         style={{ transform: 'scale(0.85)' }}
       />
-
-      {/* Floating Coding Symbols / Particles */}
-      {showParticles && size !== 'sm' && (
-        <>
-          {/* Symbol 1: Code Tag </> */}
-          <div
-            className="absolute -top-1 -left-2 text-[10px] md:text-xs font-mono font-bold text-cyan-400/90 dark:text-cyan-300 bg-slate-900/80 border border-cyan-500/30 rounded-md px-1.5 py-0.5 shadow-sm shadow-cyan-500/20 pointer-events-none animate-robot-particle-1 backdrop-blur-xs"
-          >
-            &lt;/&gt;
-          </div>
-
-          {/* Symbol 2: Braces { } */}
-          <div
-            className="absolute top-2 -right-3 text-[10px] md:text-xs font-mono font-bold text-blue-400/90 dark:text-blue-300 bg-slate-900/80 border border-blue-500/30 rounded-md px-1.5 py-0.5 shadow-sm shadow-blue-500/20 pointer-events-none animate-robot-particle-2 backdrop-blur-xs"
-          >
-            {'{ }'}
-          </div>
-
-          {/* Symbol 3: Shield / Security */}
-          <div
-            className="absolute bottom-6 -left-3 text-[9px] md:text-[10px] font-bold text-emerald-400 bg-slate-900/80 border border-emerald-500/30 rounded-md px-1 py-0.5 shadow-sm shadow-emerald-500/20 pointer-events-none animate-robot-particle-3 backdrop-blur-xs flex items-center gap-0.5"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping inline-block" />
-            <span>0-Bug</span>
-          </div>
-        </>
-      )}
 
       {/* Main SVG Vector Robot */}
       <svg

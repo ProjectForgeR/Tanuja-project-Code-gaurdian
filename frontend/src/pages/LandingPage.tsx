@@ -597,11 +597,14 @@ export const LandingPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Window Content: 2nd Image (Magnifying Glass Inspecting Code Error) */}
+                  {/* Window Content: Gemini Generated Inspection Video */}
                   <div className="relative aspect-[4/3] sm:aspect-[16/11] bg-slate-950 overflow-hidden flex items-center justify-center group">
-                    <img
-                      src="/hero-preview.jpg"
-                      alt="Code debugging failure test suite under magnifying glass inspection"
+                    <video
+                      src="/gemini_generated_video_c786a9e0.mp4"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
                       className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 select-none"
                     />
 
