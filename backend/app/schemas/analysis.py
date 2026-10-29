@@ -51,6 +51,7 @@ class AnalyzeRequest(BaseModel):
     filename: Optional[str] = "main"
     run_ai: bool = False
     demo_mode: bool = False
+    save_to_history: bool = True
 
 
 class AnalyzeResponse(BaseModel):

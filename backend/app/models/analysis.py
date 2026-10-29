@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
 from app.core.database import Base
@@ -22,7 +22,7 @@ class Analysis(Base):
     low_count = Column(Integer, default=0)
     duration_ms = Column(Integer, default=0)
     status = Column(String(50), default="completed")
-    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), index=True)
 
     user = relationship("User", back_populates="analyses")
     findings = relationship("Finding", back_populates="analysis", cascade="all, delete-orphan")

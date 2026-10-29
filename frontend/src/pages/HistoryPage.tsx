@@ -29,6 +29,7 @@ export const HistoryPage: React.FC = () => {
   const [compareId2, setCompareId2] = useState<string>('')
   const [compareResult, setCompareResult] = useState<CompareResult | null>(null)
   const [isComparing, setIsComparing] = useState(false)
+  const [isDeletingAll, setIsDeletingAll] = useState(false)
 
   useEffect(() => {
     loadHistory()
@@ -50,6 +51,28 @@ export const HistoryPage: React.FC = () => {
       setAnalyses(analyses.filter((a) => a.id !== id))
     } catch (err) {
       console.error('Delete error:', err)
+    }
+  }
+
+  const handleDeleteAll = async () => {
+    if (analyses.length === 0) return
+    const confirmed = window.confirm(
+      `Are you sure you want to permanently delete all ${analyses.length} analysis reports? This action cannot be undone.`
+    )
+    if (!confirmed) return
+
+    setIsDeletingAll(true)
+    try {
+      await analysisService.deleteAllAnalyses()
+      setAnalyses([])
+      setCompareId1('')
+      setCompareId2('')
+      setCompareResult(null)
+    } catch (err) {
+      console.error('Delete all error:', err)
+      alert('Failed to delete history. Please try again.')
+    } finally {
+      setIsDeletingAll(false)
     }
   }
 
@@ -273,6 +296,19 @@ export const HistoryPage: React.FC = () => {
                   <option value="markdown">📖 Markdown</option>
                 </optgroup>
               </select>
+
+              {analyses.length > 0 && (
+                <button
+                  type="button"
+                  onClick={handleDeleteAll}
+                  disabled={isDeletingAll}
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-red-500/40 bg-red-500/10 px-3.5 py-2 text-xs font-semibold text-red-400 hover:bg-red-500/20 hover:text-red-300 transition disabled:opacity-50 cursor-pointer shadow-xs"
+                  title="Permanently delete all analysis history records"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  <span>{isDeletingAll ? 'Deleting All...' : 'Delete All History'}</span>
+                </button>
+              )}
             </div>
           </div>
 
@@ -339,7 +375,7 @@ export const HistoryPage: React.FC = () => {
                           )}
                         </td>
                         <td className="py-3.5 text-purple-400 font-mono">{a.duration_ms}ms</td>
-                        <td className="py-3.5 text-slate-400">{formatDate(a.created_at)}</td>
+                        <td className="py-3.5 text-slate-400 font-medium whitespace-nowrap">{formatDate(a.created_at)}</td>
                         <td className="py-3.5 text-right">
                           <div className="flex items-center justify-end gap-2">
                             <a

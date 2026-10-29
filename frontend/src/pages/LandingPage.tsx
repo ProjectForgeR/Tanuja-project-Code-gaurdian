@@ -37,11 +37,14 @@ import {
   CheckSquare,
   Wrench,
   ExternalLink,
+  Volume2,
+  VolumeX,
 } from 'lucide-react'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { useAuth } from '@/features/auth/AuthContext'
 import { useTheme } from '@/features/theme/ThemeContext'
+import { RobotFloatingWidget } from '@/features/robot/RobotFloatingWidget'
 
 interface CodeSample {
   id: string
@@ -387,6 +390,8 @@ export const LandingPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'vuln' | 'fix' | 'output'>('vuln')
   const [copied, setCopied] = useState<boolean>(false)
   const [languageFilter, setLanguageFilter] = useState<'All' | 'Core' | 'Web' | 'Database'>('All')
+  const [isHeroVideoMuted, setIsHeroVideoMuted] = useState<boolean>(true)
+  const [activeHeroTab, setActiveHeroTab] = useState<'robot' | 'scanner'>('robot')
 
   // Language Carousel state and refs
   const [isPlaying, setIsPlaying] = useState<boolean>(true)
@@ -515,6 +520,16 @@ export const LandingPage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             {/* Left Column: Heading, Description & Action Buttons */}
             <div className="lg:col-span-6 flex flex-col items-start text-left">
+              {/* Mascot Welcome Badge */}
+              <div className="hero-animate-fade-in inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 dark:bg-cyan-950/40 px-3.5 py-1 text-xs font-semibold text-cyan-700 dark:text-cyan-300 mb-4 backdrop-blur-md">
+                <span className="flex h-2 w-2 rounded-full bg-cyan-500 animate-pulse" />
+                <span className="flex items-center gap-1.5 font-sans">
+                  <span>Meet GuardianBot</span>
+                  <span className="text-slate-400 dark:text-slate-500">•</span>
+                  <span className="font-normal text-slate-600 dark:text-slate-300">Your Animated AI Assistant Below 👋</span>
+                </span>
+              </div>
+
               {/* Master Heading: Build Smarter. Ship Faster. */}
               <h1 className="hero-title hero-animate-fade-in hero-delay-1 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 dark:text-white leading-[1.12]">
                 <span className="hero-title-text block text-slate-900 dark:text-white font-serif">
@@ -554,16 +569,16 @@ export const LandingPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Column: Sleek Application Window containing 2nd Image */}
+            {/* Right Column: Sleek Application Window containing 3D AI Robot Video & Debugger */}
             <div className="lg:col-span-6 w-full flex items-center justify-center">
               <div className="relative w-full max-w-lg lg:max-w-none">
                 {/* Ambient drop shadow / glow */}
-                <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-600/20 via-indigo-600/20 to-cyan-500/20 blur-xl opacity-70 dark:opacity-40" />
+                <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-600/25 via-cyan-500/25 to-indigo-600/25 blur-xl opacity-75 dark:opacity-50" />
 
                 {/* Window Mock Container matching Screenshot 3 */}
                 <div className="relative rounded-2xl sm:rounded-3xl border border-slate-800/90 dark:border-slate-800 bg-[#0c121e] shadow-2xl overflow-hidden">
-                  {/* Top Window Bar (traffic light dots + center address pill) */}
-                  <div className="flex items-center justify-between px-4 py-3 bg-[#111827] border-b border-slate-800">
+                  {/* Top Window Bar (traffic light dots + tabs + audio toggle) */}
+                  <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 bg-[#111827] border-b border-slate-800 gap-2">
                     {/* Left: Window control dots */}
                     <div className="flex items-center gap-1.5 sm:gap-2">
                       <div className="h-3 w-3 rounded-full bg-rose-500 shadow-xs" />
@@ -571,23 +586,102 @@ export const LandingPage: React.FC = () => {
                       <div className="h-3 w-3 rounded-full bg-emerald-500 shadow-xs" />
                     </div>
 
-                    {/* Center: Search / Address Header Pill */}
-                    <div className="h-5 w-32 sm:w-44 rounded-md bg-slate-800/90 border border-slate-700/60 flex items-center justify-center px-2">
-                      <div className="h-1.5 w-16 sm:w-24 rounded-full bg-slate-600/60" />
+                    {/* Center: Tabs to switch between 3D AI Mascot and Code Inspection */}
+                    <div className="flex items-center gap-1 bg-slate-900/90 border border-slate-700/60 rounded-xl p-0.5 text-xs font-semibold">
+                      <button
+                        type="button"
+                        onClick={() => setActiveHeroTab('robot')}
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg transition cursor-pointer ${
+                          activeHeroTab === 'robot'
+                            ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-xs font-bold'
+                            : 'text-slate-400 hover:text-white'
+                        }`}
+                      >
+                        <Sparkles className="h-3.5 w-3.5" />
+                        <span>AI Assistant</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setActiveHeroTab('scanner')}
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg transition cursor-pointer ${
+                          activeHeroTab === 'scanner'
+                            ? 'bg-blue-600 text-white shadow-xs font-bold'
+                            : 'text-slate-400 hover:text-white'
+                        }`}
+                      >
+                        <FileCode className="h-3.5 w-3.5" />
+                        <span>Code Scanner</span>
+                      </button>
                     </div>
 
-                    {/* Right spacer for symmetrical centering */}
-                    <div className="w-10 sm:w-12" />
+                    {/* Right: Audio Mute / Unmute Toggle */}
+                    {activeHeroTab === 'robot' ? (
+                      <button
+                        type="button"
+                        onClick={() => setIsHeroVideoMuted((prev) => !prev)}
+                        className="inline-flex items-center justify-center p-1.5 rounded-lg border border-slate-700 bg-slate-800/90 text-slate-300 hover:text-cyan-400 hover:border-cyan-500/40 transition cursor-pointer"
+                        title={isHeroVideoMuted ? 'Click to unmute robot voice' : 'Click to mute'}
+                        aria-label="Toggle robot sound"
+                      >
+                        {isHeroVideoMuted ? <VolumeX className="h-3.5 w-3.5 text-slate-400" /> : <Volume2 className="h-3.5 w-3.5 text-cyan-400 animate-pulse" />}
+                      </button>
+                    ) : (
+                      <div className="w-8" />
+                    )}
                   </div>
 
-                  {/* Window Content: 2nd image (FAIL terminal test inspection) */}
-                  <div className="relative aspect-[4/3] sm:aspect-[16/11] bg-black overflow-hidden flex items-center justify-center">
-                    <img
-                      src="/hero-preview.jpg"
-                      alt="Code debugging failure test suite under magnifying glass inspection"
-                      className="w-full h-full object-cover object-center select-none"
-                    />
-                  </div>
+                  {/* Window Content: 3D Robot Video (Autoplaying Looping) OR Code Debugger Image */}
+                  {activeHeroTab === 'robot' ? (
+                    <div className="relative aspect-[4/3] sm:aspect-[16/11] bg-slate-950 overflow-hidden flex items-center justify-center group">
+                      {/* Autoplaying continuous video */}
+                      <video
+                        src="/robot-assistant.mp4"
+                        autoPlay
+                        loop
+                        muted={isHeroVideoMuted}
+                        playsInline
+                        className="w-full h-full object-cover object-center select-none"
+                      />
+
+                      {/* Video ambient bottom overlay */}
+                      <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-2.5">
+                          <span className="relative flex h-3 w-3">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500" />
+                          </span>
+                          <div>
+                            <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                              <span>GuardianBot AI</span>
+                              <span className="rounded-full bg-cyan-500/20 border border-cyan-500/40 px-2 py-0.2 text-[9px] font-mono font-bold text-cyan-300">
+                                3D Companion
+                              </span>
+                            </div>
+                            <div className="text-[11px] text-slate-300 font-sans">
+                              Saying "Hiii! 👋" • Ready to detect bugs and fix code
+                            </div>
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => navigate('/workspace')}
+                          className="hidden sm:inline-flex items-center gap-1 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-3 py-1.5 text-xs font-bold shadow-md shadow-cyan-500/30 transition cursor-pointer"
+                        >
+                          <span>Try Live</span>
+                          <ArrowRight className="h-3 w-3" />
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="relative aspect-[4/3] sm:aspect-[16/11] bg-black overflow-hidden flex items-center justify-center">
+                      <img
+                        src="/hero-preview.jpg"
+                        alt="Code debugging failure test suite under magnifying glass inspection"
+                        className="w-full h-full object-cover object-center select-none"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -1237,6 +1331,9 @@ export const LandingPage: React.FC = () => {
 
       {/* 7. Professional Footer with Working Navigation Links */}
       <Footer />
+
+      {/* 8. CodeGuardian AI Animated Robot Assistant Mascot & Speech Bubble */}
+      <RobotFloatingWidget />
     </div>
   )
 }

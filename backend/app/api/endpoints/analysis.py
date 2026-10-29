@@ -1,5 +1,6 @@
 import time
 import uuid
+from datetime import datetime, timezone
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy import delete, desc, select
@@ -122,81 +123,120 @@ async def analyze_code(
 
     analysis_id = str(uuid.uuid4())
     title = f"{req.language.capitalize()} Analysis - {req.filename or 'Snippet'}"
+    now_utc = datetime.now(timezone.utc)
+    created_at_dt = now_utc
 
-    # 7. Persist analysis record
-    analysis = Analysis(
+    # 7. Persist analysis record if save_to_history is enabled
+    if req.save_to_history:
+        # Check if identical code and language already exists for this user to prevent duplicate clutter
+        user_filter = (Analysis.user_id == current_user.id) if current_user else (Analysis.user_id.is_(None))
+        existing_query = (
+            select(Analysis)
+            .where(
+                Analysis.language == req.language.lower(),
+                Analysis.code == code,
+                user_filter,
+            )
+            .order_by(desc(Analysis.created_at))
+        )
+        existing_res = await db.execute(existing_query)
+        existing_analysis = existing_res.scalars().first()
+
+        if existing_analysis:
+            # Update existing record in-place so one unique code snippet only occupies 1 entry in history
+            analysis_id = existing_analysis.id
+            existing_analysis.title = title
+            existing_analysis.quality_score = quality_score
+            existing_analysis.risk_score = risk_score
+            existing_analysis.findings_count = len(deduped_findings)
+            existing_analysis.critical_count = critical_count
+            existing_analysis.high_count = high_count
+            existing_analysis.medium_count = medium_count
+            existing_analysis.low_count = low_count
+            existing_analysis.duration_ms = duration_ms
+            existing_analysis.status = "completed"
+            existing_analysis.created_at = now_utc
+            created_at_dt = now_utc
+
+            # Clean up old findings and duplicate groups to update with new scan results
+            await db.execute(delete(Finding).where(Finding.analysis_id == existing_analysis.id))
+            await db.execute(delete(DuplicateGroup).where(DuplicateGroup.analysis_id == existing_analysis.id))
+            analysis = existing_analysis
+        else:
+            analysis = Analysis(
+                id=analysis_id,
+                user_id=current_user.id if current_user else None,
+                title=title,
+                language=req.language.lower(),
+                code=code,
+                quality_score=quality_score,
+                risk_score=risk_score,
+                findings_count=len(deduped_findings),
+                critical_count=critical_count,
+                high_count=high_count,
+                medium_count=medium_count,
+                low_count=low_count,
+                duration_ms=duration_ms,
+                status="completed",
+                created_at=now_utc,
+            )
+            db.add(analysis)
+            created_at_dt = now_utc
+
+        # Persist findings
+        for f in deduped_findings:
+            f_id = f.id or str(uuid.uuid4())
+            f.id = f_id
+            db_finding = Finding(
+                id=f_id,
+                analysis_id=analysis_id,
+                title=f.title,
+                severity=f.severity,
+                category=f.category,
+                line_start=f.line_start,
+                line_end=f.line_end,
+                col_start=f.col_start or 1,
+                col_end=f.col_end or 1,
+                snippet=f.snippet,
+                explanation=f.explanation,
+                impact=f.impact,
+                recommended_fix=f.recommended_fix,
+                confidence=f.confidence,
+                detection_method=f.detection_method,
+                suggested_patch=f.suggested_patch,
+                rule_id=f.rule_id,
+                duplicate_group_id=f.duplicate_group_id,
+            )
+            db.add(db_finding)
+
+        # Persist duplicate groups
+        for dg in duplicate_groups:
+            db_group = DuplicateGroup(
+                id=dg.id,
+                analysis_id=analysis_id,
+                title=dg.title,
+                description=dg.description,
+                count=dg.count,
+                similarity_score=dg.similarity_score,
+            )
+            db.add(db_group)
+
+        await db.commit()
+
+    return AnalyzeResponse(
         id=analysis_id,
-        user_id=current_user.id if current_user else None,
         title=title,
         language=req.language.lower(),
-        code=code,
         quality_score=quality_score,
         risk_score=risk_score,
+        duration_ms=duration_ms,
+        status="completed",
+        created_at=created_at_dt,
         findings_count=len(deduped_findings),
         critical_count=critical_count,
         high_count=high_count,
         medium_count=medium_count,
         low_count=low_count,
-        duration_ms=duration_ms,
-        status="completed",
-    )
-    db.add(analysis)
-
-    # Persist findings
-    for f in deduped_findings:
-        f_id = f.id or str(uuid.uuid4())
-        f.id = f_id
-        db_finding = Finding(
-            id=f_id,
-            analysis_id=analysis_id,
-            title=f.title,
-            severity=f.severity,
-            category=f.category,
-            line_start=f.line_start,
-            line_end=f.line_end,
-            col_start=f.col_start,
-            col_end=f.col_end,
-            snippet=f.snippet,
-            explanation=f.explanation,
-            impact=f.impact,
-            recommended_fix=f.recommended_fix,
-            confidence=f.confidence,
-            detection_method=f.detection_method,
-            suggested_patch=f.suggested_patch,
-            rule_id=f.rule_id,
-            duplicate_group_id=f.duplicate_group_id,
-        )
-        db.add(db_finding)
-
-    # Persist duplicate groups
-    for dg in duplicate_groups:
-        db_group = DuplicateGroup(
-            id=dg.id,
-            analysis_id=analysis_id,
-            title=dg.title,
-            description=dg.description,
-            count=dg.count,
-            similarity_score=dg.similarity_score,
-        )
-        db.add(db_group)
-
-    await db.commit()
-    await db.refresh(analysis)
-
-    return AnalyzeResponse(
-        id=analysis.id,
-        title=analysis.title,
-        language=analysis.language,
-        quality_score=analysis.quality_score,
-        risk_score=analysis.risk_score,
-        duration_ms=analysis.duration_ms,
-        status=analysis.status,
-        created_at=analysis.created_at,
-        findings_count=analysis.findings_count,
-        critical_count=analysis.critical_count,
-        high_count=analysis.high_count,
-        medium_count=analysis.medium_count,
-        low_count=analysis.low_count,
         code_smells_count=code_smells_count,
         maintainability_count=maintainability_count,
         performance_count=performance_count,
@@ -359,7 +399,7 @@ async def list_analyses(
     query = (
         select(Analysis)
         .options(selectinload(Analysis.findings), selectinload(Analysis.duplicate_groups))
-        .where(Analysis.user_id == current_user.id)
+        .where((Analysis.user_id == current_user.id) | (Analysis.user_id.is_(None)))
         .order_by(desc(Analysis.created_at))
         .limit(limit)
     )
@@ -373,6 +413,10 @@ async def list_analyses(
         dg_schemas = [DuplicateGroupSchema.model_validate(g) for g in a.duplicate_groups]
         _, _, breakdown = ScoringEngine.calculate(f_schemas)
 
+        created_at_val = a.created_at
+        if created_at_val and created_at_val.tzinfo is None:
+            created_at_val = created_at_val.replace(tzinfo=timezone.utc)
+
         responses.append(
             AnalyzeResponse(
                 id=a.id,
@@ -382,7 +426,7 @@ async def list_analyses(
                 risk_score=a.risk_score,
                 duration_ms=a.duration_ms,
                 status=a.status,
-                created_at=a.created_at,
+                created_at=created_at_val,
                 findings_count=a.findings_count,
                 critical_count=a.critical_count,
                 high_count=a.high_count,
@@ -405,7 +449,10 @@ async def get_analysis(
     query = (
         select(Analysis)
         .options(selectinload(Analysis.findings), selectinload(Analysis.duplicate_groups))
-        .where(Analysis.id == analysis_id, Analysis.user_id == current_user.id)
+        .where(
+            Analysis.id == analysis_id,
+            (Analysis.user_id == current_user.id) | (Analysis.user_id.is_(None)),
+        )
     )
 
     result = await db.execute(query)
@@ -417,6 +464,10 @@ async def get_analysis(
     dg_schemas = [DuplicateGroupSchema.model_validate(g) for g in analysis.duplicate_groups]
     _, _, breakdown = ScoringEngine.calculate(f_schemas)
 
+    created_at_val = analysis.created_at
+    if created_at_val and created_at_val.tzinfo is None:
+        created_at_val = created_at_val.replace(tzinfo=timezone.utc)
+
     return AnalyzeResponse(
         id=analysis.id,
         title=analysis.title,
@@ -425,7 +476,7 @@ async def get_analysis(
         risk_score=analysis.risk_score,
         duration_ms=analysis.duration_ms,
         status=analysis.status,
-        created_at=analysis.created_at,
+        created_at=created_at_val,
         findings_count=analysis.findings_count,
         critical_count=analysis.critical_count,
         high_count=analysis.high_count,
@@ -437,13 +488,37 @@ async def get_analysis(
     )
 
 
+@router.delete("/clear-all")
+@router.delete("")
+async def delete_all_analyses(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Permanently delete all analysis history records for the current user.
+    """
+    query = select(Analysis).where(
+        (Analysis.user_id == current_user.id) | (Analysis.user_id.is_(None))
+    )
+    result = await db.execute(query)
+    analyses = result.scalars().all()
+    count = len(analyses)
+    for a in analyses:
+        await db.delete(a)
+    await db.commit()
+    return {"message": f"Successfully deleted {count} analysis reports.", "deleted_count": count}
+
+
 @router.delete("/{analysis_id}")
 async def delete_analysis(
     analysis_id: str,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    query = select(Analysis).where(Analysis.id == analysis_id, Analysis.user_id == current_user.id)
+    query = select(Analysis).where(
+        Analysis.id == analysis_id,
+        (Analysis.user_id == current_user.id) | (Analysis.user_id.is_(None)),
+    )
 
     result = await db.execute(query)
     analysis = result.scalars().first()

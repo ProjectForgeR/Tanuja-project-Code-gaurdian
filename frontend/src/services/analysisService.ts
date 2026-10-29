@@ -16,6 +16,7 @@ export const analysisService = {
     filename?: string
     run_ai?: boolean
     demo_mode?: boolean
+    save_to_history?: boolean
   }): Promise<AnalysisResult> {
     return apiRequest<AnalysisResult>('/analyses/analyze', {
       method: 'POST',
@@ -91,6 +92,12 @@ export const analysisService = {
 
   async deleteAnalysis(id: string): Promise<{ message: string; id: string }> {
     return apiRequest<{ message: string; id: string }>(`/analyses/${id}`, {
+      method: 'DELETE',
+    })
+  },
+
+  async deleteAllAnalyses(): Promise<{ message: string; deleted_count: number }> {
+    return apiRequest<{ message: string; deleted_count: number }>('/analyses/clear-all', {
       method: 'DELETE',
     })
   },

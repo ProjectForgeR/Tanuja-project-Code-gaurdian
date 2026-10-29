@@ -179,7 +179,8 @@ export const WorkspacePage: React.FC = () => {
     lang: string,
     fname: string,
     includeAi: boolean = false,
-    bypassMismatch: boolean = false
+    bypassMismatch: boolean = false,
+    saveToHistory: boolean = false
   ) => {
     // SECURITY GATE: Code testing requires login
     if (!isAuthenticated) {
@@ -217,8 +218,13 @@ export const WorkspacePage: React.FC = () => {
         language: lang,
         filename: fname,
         run_ai: includeAi,
+        save_to_history: saveToHistory,
       })
       setAnalysisResult(res)
+      if (saveToHistory) {
+        window.dispatchEvent(new CustomEvent('codeguardian_analysis_updated', { detail: { language: lang } }))
+        localStorage.setItem('cg_last_analysis_ts', Date.now().toString())
+      }
     } catch (err: unknown) {
       if (err instanceof Error && err.name === 'AbortError') return // Silently ignore cancelled requests
       console.error('Analysis failed:', err)
@@ -277,8 +283,8 @@ export const WorkspacePage: React.FC = () => {
         memory_usage_kb: 0,
         exit_code: 0,
       })
-      // Trigger background analysis to update real-time dashboard for web languages
-      analysisService.analyzeCode({ code, language, filename, run_ai: false })
+      // Trigger background analysis to update real-time dashboard for web languages (without saving to audit history)
+      analysisService.analyzeCode({ code, language, filename, run_ai: false, save_to_history: false })
         .then(() => {
           window.dispatchEvent(new CustomEvent('codeguardian_analysis_updated', { detail: { language } }))
           localStorage.setItem('cg_last_analysis_ts', Date.now().toString())
@@ -1235,7 +1241,7 @@ export const WorkspacePage: React.FC = () => {
               {/* 1. ANALYZE CODE Button (Solid Primary Blue #2563EB) */}
               <button
                 type="button"
-                onClick={() => runAnalysis(code, language, filename, true)}
+                onClick={() => runAnalysis(code, language, filename, true, false, true)}
                 disabled={isAnalyzing}
                 className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
                 title="Analyze code for bugs, syntax errors, and security issues"

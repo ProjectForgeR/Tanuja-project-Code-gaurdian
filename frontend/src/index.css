@@ -1416,3 +1416,215 @@ input:focus, textarea:focus, select:focus, button:focus-visible {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* ========================================================================= */
+/* CODEGUARDIAN AI ROBOT MASCOT ANIMATIONS                                  */
+/* ========================================================================= */
+@keyframes robotFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-9px) rotate(1deg);
+  }
+}
+
+@keyframes robotHandWave {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  15% {
+    transform: rotate(-26deg);
+  }
+  30% {
+    transform: rotate(14deg);
+  }
+  45% {
+    transform: rotate(-22deg);
+  }
+  60% {
+    transform: rotate(10deg);
+  }
+  75% {
+    transform: rotate(-8deg);
+  }
+}
+
+@keyframes robotBlink {
+  0%, 92%, 100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.08);
+  }
+}
+
+@keyframes robotPulseGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.45)) drop-shadow(0 0 14px rgba(37, 99, 235, 0.25));
+  }
+  50% {
+    filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.8)) drop-shadow(0 0 24px rgba(37, 99, 235, 0.45));
+  }
+}
+
+@keyframes robotThrusterPulse {
+  0%, 100% {
+    opacity: 0.55;
+    transform: scaleX(0.9) scaleY(0.85);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scaleX(1.1) scaleY(1.15);
+  }
+}
+
+@keyframes robotParticleFloat1 {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(-12px, -18px) rotate(-15deg);
+    opacity: 0.85;
+  }
+}
+
+@keyframes robotParticleFloat2 {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translate(14px, -14px) rotate(20deg);
+    opacity: 0.9;
+  }
+}
+
+@keyframes robotParticleFloat3 {
+  0%, 100% {
+    transform: translate(0, 0) scale(0.9);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate(8px, 12px) scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes robotEntranceSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.92);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-6px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+  }
+}
+
+@keyframes speechBubblePop {
+  0% {
+    opacity: 0;
+    transform: scale(0.88) translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes typingCursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes robotThinkingScan {
+  0% {
+    transform: translateX(-16px);
+  }
+  50% {
+    transform: translateX(16px);
+  }
+  100% {
+    transform: translateX(-16px);
+  }
+}
+
+.animate-robot-float {
+  animation: robotFloat 3.6s ease-in-out infinite;
+}
+
+.animate-robot-wave {
+  transform-origin: 82% 48%;
+  animation: robotHandWave 2.2s ease-in-out infinite;
+}
+
+.animate-robot-wave-once {
+  transform-origin: 82% 48%;
+  animation: robotHandWave 2.2s ease-in-out 2;
+}
+
+.animate-robot-blink {
+  transform-origin: center;
+  animation: robotBlink 4.2s ease-in-out infinite;
+}
+
+.animate-robot-glow {
+  animation: robotPulseGlow 3s ease-in-out infinite;
+}
+
+.animate-robot-thruster {
+  transform-origin: center top;
+  animation: robotThrusterPulse 2s ease-in-out infinite;
+}
+
+.animate-robot-particle-1 {
+  animation: robotParticleFloat1 4.5s ease-in-out infinite;
+}
+
+.animate-robot-particle-2 {
+  animation: robotParticleFloat2 5.2s ease-in-out infinite 0.7s;
+}
+
+.animate-robot-particle-3 {
+  animation: robotParticleFloat3 3.8s ease-in-out infinite 1.4s;
+}
+
+.animate-robot-entrance {
+  animation: robotEntranceSlide 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-speech-bubble {
+  animation: speechBubblePop 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-typing-cursor {
+  animation: typingCursorBlink 0.9s infinite;
+}
+
+.animate-robot-thinking-scan {
+  animation: robotThinkingScan 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-robot-float,
+  .animate-robot-wave,
+  .animate-robot-wave-once,
+  .animate-robot-blink,
+  .animate-robot-glow,
+  .animate-robot-thruster,
+  .animate-robot-particle-1,
+  .animate-robot-particle-2,
+  .animate-robot-particle-3,
+  .animate-robot-entrance,
+  .animate-speech-bubble,
+  .animate-robot-thinking-scan {
+    animation: none !important;
+    transform: none !important;
+  }
+}
