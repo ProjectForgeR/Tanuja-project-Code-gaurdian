@@ -543,11 +543,6 @@ export const LandingPage: React.FC = () => {
                 <span className="gradient-text-cyan-blue">Confidence.</span>
               </h1>
 
-              {/* Subtitle / Description */}
-              <p className="mt-6 text-base sm:text-lg text-slate-600 dark:text-slate-300 font-normal leading-relaxed max-w-xl">
-                CodeGuardian AI detects bugs, explains runtime errors, audits security vulnerabilities (OWASP &amp; CWE), and applies verified one-click patches across 12+ polyglot languages.
-              </p>
-
               {/* Primary & Secondary Action Buttons with Floating Hover */}
               <div className="mt-8 sm:mt-10 flex flex-wrap items-center gap-4 w-full sm:w-auto">
                 {/* Primary CTA: Start Analyzing Code */}
