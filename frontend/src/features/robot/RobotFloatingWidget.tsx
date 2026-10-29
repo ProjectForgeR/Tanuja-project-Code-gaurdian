@@ -16,24 +16,38 @@ export const RobotFloatingWidget: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const [robotMood, setRobotMood] = useState<RobotMood>('waving')
   const [hasInteracted, setHasInteracted] = useState<boolean>(false)
+  const [bubbleKey, setBubbleKey] = useState<number>(0)
 
   useEffect(() => {
-    // 800ms entrance delay as requested in specification
+    // 800ms entrance delay
     const timer = setTimeout(() => {
       setIsVisible(true)
       setShowSpeechBubble(true)
+      setBubbleKey((k) => k + 1)
       setRobotMood('waving')
 
-      // Stop waving after initial greeting to transition to friendly happy
+      // Transition waving to happy
       const waveTimer = setTimeout(() => {
         setRobotMood('happy')
-      }, 4500)
+      }, 3000)
 
       return () => clearTimeout(waveTimer)
     }, 800)
 
     return () => clearTimeout(timer)
   }, [])
+
+  // Auto-close speech bubble after exactly 5 seconds whenever it opens
+  useEffect(() => {
+    if (!showSpeechBubble) return
+
+    const autoCloseTimer = setTimeout(() => {
+      setShowSpeechBubble(false)
+      setRobotMood('normal')
+    }, 5000)
+
+    return () => clearTimeout(autoCloseTimer)
+  }, [showSpeechBubble, bubbleKey])
 
   if (!isVisible) return null
 
@@ -64,15 +78,16 @@ export const RobotFloatingWidget: React.FC = () => {
       setRobotMood('normal')
     } else {
       setShowSpeechBubble(true)
-      setRobotMood('happy')
+      setBubbleKey((k) => k + 1)
+      setRobotMood('waving')
     }
   }
 
   return (
-    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 select-none">
+    <div className="fixed bottom-3 right-3 sm:bottom-5 sm:right-5 z-40 select-none">
       {/* 1. Welcoming Speech Bubble (Shown on entry or when active) */}
       {showSpeechBubble && !showAssistantPanel && (
-        <div className="mb-3 flex justify-end">
+        <div key={bubbleKey} className="mb-2 flex justify-end">
           <RobotSpeechBubble
             onClose={handleCloseSpeechBubble}
             onOpenAssistant={handleOpenAssistant}

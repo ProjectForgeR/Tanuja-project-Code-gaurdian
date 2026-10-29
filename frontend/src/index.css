@@ -556,6 +556,15 @@ html.light .cyber-dots-pattern {
   animation: speechBubblePop 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+@keyframes bubbleTimerCountdown {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+.animate-bubble-countdown {
+  animation: bubbleTimerCountdown 5s linear forwards;
+}
+
 .animate-typing-cursor {
   animation: typingCursorBlink 0.9s infinite;
 }
