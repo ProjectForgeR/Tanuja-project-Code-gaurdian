@@ -534,19 +534,6 @@ export const LandingPage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
             {/* Left Column: Headline, Description & Interactive CTAs */}
             <div className="lg:col-span-6 flex flex-col items-start text-left">
-              {/* Badge: AI-Powered Code Security */}
-              <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-950/40 px-3.5 py-1.5 text-xs font-bold text-cyan-300 mb-6 backdrop-blur-xl shadow-lg shadow-cyan-950/50">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-400" />
-                </span>
-                <span className="font-mono tracking-wider uppercase text-[11px]">
-                  AI-Powered Code Security
-                </span>
-                <span className="text-slate-600">•</span>
-                <span className="text-slate-300 font-sans font-medium">GuardianBot Active</span>
-              </div>
-
               {/* Main Heading: Write Better Code. Ship With Confidence. */}
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1] max-w-2xl">
                 Write{' '}
@@ -582,26 +569,6 @@ export const LandingPage: React.FC = () => {
                   <Sparkles className="h-4 w-4 text-cyan-400 group-hover:rotate-12 transition-transform" />
                   <span>Explore Features</span>
                 </button>
-              </div>
-
-              {/* Trust Indicators / Verified Capability Badges */}
-              <div className="mt-10 pt-6 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-xl">
-                <div className="flex items-center gap-2 text-xs text-slate-300 font-mono">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-cyan-400 shrink-0" />
-                  <span>12+ Runtimes</span>
-                </div>
-                <div className="flex items-center gap-2 text-xs text-slate-300 font-mono">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-cyan-400 shrink-0" />
-                  <span>150+ AST Rules</span>
-                </div>
-                <div className="flex items-center gap-2 text-xs text-slate-300 font-mono">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-cyan-400 shrink-0" />
-                  <span>Judge0 Sandbox</span>
-                </div>
-                <div className="flex items-center gap-2 text-xs text-slate-300 font-mono">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-cyan-400 shrink-0" />
-                  <span>Neural Fixes</span>
-                </div>
               </div>
             </div>
 
@@ -645,36 +612,6 @@ export const LandingPage: React.FC = () => {
 
                     {/* Moving Scanline effect */}
                     <div className="pointer-events-none absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent animate-scanline" />
-
-                    {/* Ambient Bottom Overlay */}
-                    <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-[#02050e] via-[#02050e]/80 to-transparent flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-2.5">
-                        <span className="relative flex h-2.5 w-2.5">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
-                          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500" />
-                        </span>
-                        <div>
-                          <div className="text-xs font-bold text-white flex items-center gap-2 font-mono">
-                            <span>FAIL src/utils/eq</span>
-                            <span className="rounded bg-rose-500/20 border border-rose-500/40 px-2 py-0.2 text-[9px] font-bold text-rose-300">
-                              Assertion Mismatch
-                            </span>
-                          </div>
-                          <div className="text-[11px] text-slate-300">
-                            Neural bug detector flagging logic regression under magnification
-                          </div>
-                        </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => navigate('/workspace')}
-                        className="hidden sm:inline-flex items-center gap-1.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-3.5 py-1.5 text-xs font-bold shadow-md shadow-cyan-500/30 transition cursor-pointer"
-                      >
-                        <span>Try Live</span>
-                        <ArrowRight className="h-3 w-3" />
-                      </button>
-                    </div>
                   </div>
                 </div>
               </div>
