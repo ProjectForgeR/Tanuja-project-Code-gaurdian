@@ -129,6 +129,17 @@ export const CodeEditor = React.forwardRef<CodeEditorHandle, CodeEditorProps>(({
     }
   }, [findings, executionErrorLine, executionErrorMessage])
 
+  // Synchronize Monaco Editor theme dynamically when application theme changes
+  useEffect(() => {
+    try {
+      if (monacoRef.current) {
+        monacoRef.current.editor.setTheme(theme === 'dark' ? 'vs-dark' : 'vs')
+      }
+    } catch (err) {
+      console.warn('Monaco theme switch bypassed:', err)
+    }
+  }, [theme])
+
   // Scroll to target line when clicked
   useEffect(() => {
     try {

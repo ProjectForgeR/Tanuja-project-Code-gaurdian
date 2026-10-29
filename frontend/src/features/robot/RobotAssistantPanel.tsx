@@ -6,16 +6,10 @@ import {
   X,
   Minimize2,
   Maximize2,
-  ShieldCheck,
-  Terminal,
-  Bug,
   HelpCircle,
   ArrowRight,
-  RotateCcw,
-  BookOpen,
-  Code2,
 } from 'lucide-react'
-import { CodeGuardianRobot, RobotMood } from './CodeGuardianRobot'
+import { RobotMood } from './CodeGuardianRobot'
 
 interface Message {
   id: string
@@ -102,7 +96,7 @@ export const RobotAssistantPanel: React.FC<RobotAssistantPanelProps> = ({
   ])
   const [inputValue, setInputValue] = useState('')
   const [isThinking, setIsThinking] = useState(false)
-  const [robotMood, setRobotMood] = useState<RobotMood>('happy')
+  const [, setRobotMood] = useState<RobotMood>('happy')
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -123,7 +117,6 @@ export const RobotAssistantPanel: React.FC<RobotAssistantPanelProps> = ({
     setRobotMood('thinking')
 
     setTimeout(() => {
-      // Find matching knowledge base answer or generate relevant response
       const matchedFaq = Object.keys(KNOWLEDGE_BASE).find(
         (k) => k.toLowerCase() === question.toLowerCase()
       )
@@ -186,19 +179,16 @@ export const RobotAssistantPanel: React.FC<RobotAssistantPanelProps> = ({
 
   return (
     <div
-      className={`fixed z-50 flex flex-col rounded-3xl border border-cyan-500/40 bg-slate-900/95 dark:bg-slate-950/95 shadow-2xl backdrop-blur-2xl transition-all duration-300 ${
+      className={`fixed z-50 flex flex-col rounded-3xl border border-slate-200 dark:border-cyan-500/40 bg-white/95 dark:bg-slate-950/95 shadow-2xl backdrop-blur-2xl transition-all duration-300 ${
         isExpanded
           ? 'inset-4 sm:inset-12 md:inset-20'
           : 'bottom-4 right-4 sm:bottom-6 sm:right-6 w-[350px] sm:w-[410px] h-[560px] max-h-[85vh]'
       }`}
-      style={{
-        boxShadow: '0 20px 50px -10px rgba(2, 6, 23, 0.9), 0 0 25px -2px rgba(56, 189, 248, 0.3)',
-      }}
     >
       {/* Panel Header */}
-      <div className="flex items-center justify-between border-b border-slate-800 px-4 py-3 bg-slate-950/70 rounded-t-3xl">
+      <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 px-4 py-3 bg-slate-50/90 dark:bg-slate-950/70 rounded-t-3xl">
         <div className="flex items-center gap-2.5">
-          <div className="relative w-9 h-9 rounded-full overflow-hidden border-2 border-cyan-400 shadow-xs shadow-cyan-400/40 shrink-0 bg-slate-950">
+          <div className="relative w-9 h-9 rounded-full overflow-hidden border-2 border-blue-500 dark:border-cyan-400 shadow-xs shrink-0 bg-slate-950">
             <video
               src="/robot-assistant.mp4"
               autoPlay
@@ -207,25 +197,25 @@ export const RobotAssistantPanel: React.FC<RobotAssistantPanelProps> = ({
               playsInline
               className="w-full h-full object-cover"
             />
-            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-slate-950" />
+            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-white dark:border-slate-950" />
           </div>
           <div>
-            <h3 className="text-xs font-bold text-white flex items-center gap-1.5">
+            <h3 className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
               CodeGuardian AI Assistant
-              <Sparkles className="h-3 w-3 text-cyan-400" />
+              <Sparkles className="h-3 w-3 text-blue-600 dark:text-cyan-400" />
             </h3>
-            <p className="text-[10px] text-cyan-400/90 font-medium">
+            <p className="text-[10px] text-blue-600 dark:text-cyan-400/90 font-medium">
               {isThinking ? 'Analyzing query...' : 'Ready to help with your code'}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-1 text-slate-400">
+        <div className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
           {onToggleExpand && (
             <button
               type="button"
               onClick={onToggleExpand}
-              className="rounded-lg p-1.5 hover:text-white hover:bg-slate-800 transition cursor-pointer"
+              className="rounded-lg p-1.5 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
               title={isExpanded ? 'Restore size' : 'Expand panel'}
             >
               {isExpanded ? <Minimize2 className="h-3.5 w-3.5" /> : <Maximize2 className="h-3.5 w-3.5" />}
@@ -234,15 +224,15 @@ export const RobotAssistantPanel: React.FC<RobotAssistantPanelProps> = ({
           <button
             type="button"
             onClick={onMinimize}
-            className="rounded-lg p-1.5 hover:text-white hover:bg-slate-800 transition cursor-pointer"
+            className="rounded-lg p-1.5 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
             title="Minimize"
           >
-            <span className="block w-3 h-0.5 bg-slate-400" />
+            <span className="block w-3 h-0.5 bg-slate-500 dark:bg-slate-400" />
           </button>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 hover:text-white hover:bg-slate-800 transition cursor-pointer"
+            className="rounded-lg p-1.5 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
             title="Close"
           >
             <X className="h-4 w-4" />
@@ -261,7 +251,7 @@ export const RobotAssistantPanel: React.FC<RobotAssistantPanelProps> = ({
               className={`max-w-[85%] rounded-2xl p-3 leading-relaxed ${
                 m.sender === 'user'
                   ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-br-xs shadow-md shadow-blue-600/20'
-                  : 'bg-slate-800/90 text-slate-200 border border-slate-700/80 rounded-bl-xs whitespace-pre-line'
+                  : 'bg-slate-100 dark:bg-slate-800/90 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700/80 rounded-bl-xs whitespace-pre-line'
               }`}
             >
               {m.text}
@@ -272,7 +262,7 @@ export const RobotAssistantPanel: React.FC<RobotAssistantPanelProps> = ({
               <button
                 type="button"
                 onClick={() => navigate(m.action!.route)}
-                className="mt-1.5 inline-flex items-center gap-1.5 rounded-xl border border-cyan-500/40 bg-cyan-500/10 px-3 py-1.5 text-[11px] font-bold text-cyan-300 hover:bg-cyan-500/20 hover:text-white transition cursor-pointer shadow-xs"
+                className="mt-1.5 inline-flex items-center gap-1.5 rounded-xl border border-blue-500/30 dark:border-cyan-500/40 bg-blue-500/10 dark:bg-cyan-500/10 px-3 py-1.5 text-[11px] font-bold text-blue-600 dark:text-cyan-300 hover:bg-blue-500/20 dark:hover:bg-cyan-500/20 transition cursor-pointer shadow-2xs"
               >
                 <span>{m.action.label}</span>
                 <ArrowRight className="h-3 w-3" />
@@ -283,13 +273,13 @@ export const RobotAssistantPanel: React.FC<RobotAssistantPanelProps> = ({
 
         {/* Thinking Indicator */}
         {isThinking && (
-          <div className="flex items-center gap-2 text-cyan-400 bg-slate-800/80 border border-cyan-500/30 rounded-2xl px-3.5 py-2.5 w-fit">
+          <div className="flex items-center gap-2 text-blue-600 dark:text-cyan-400 bg-blue-50 dark:bg-slate-800/80 border border-blue-200 dark:border-cyan-500/30 rounded-2xl px-3.5 py-2.5 w-fit">
             <Sparkles className="h-3.5 w-3.5 animate-spin" />
             <span className="text-xs font-semibold">GuardianBot is thinking...</span>
             <div className="flex items-center gap-1 ml-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping delay-150" />
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping delay-300" />
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-cyan-400 animate-ping" />
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-cyan-400 animate-ping delay-150" />
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-cyan-400 animate-ping delay-300" />
             </div>
           </div>
         )}
@@ -298,9 +288,9 @@ export const RobotAssistantPanel: React.FC<RobotAssistantPanelProps> = ({
       </div>
 
       {/* Suggested Quick Questions */}
-      <div className="px-3 pt-2 pb-1 border-t border-slate-800/80 bg-slate-950/50">
-        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5 flex items-center gap-1">
-          <HelpCircle className="h-3 w-3 text-cyan-400" />
+      <div className="px-3 pt-2 pb-1 border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/80 dark:bg-slate-950/50">
+        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 flex items-center gap-1">
+          <HelpCircle className="h-3 w-3 text-blue-600 dark:text-cyan-400" />
           <span>Suggested Questions:</span>
         </div>
         <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto no-scrollbar">
@@ -310,7 +300,7 @@ export const RobotAssistantPanel: React.FC<RobotAssistantPanelProps> = ({
               type="button"
               onClick={() => handleAskQuestion(q)}
               disabled={isThinking}
-              className="rounded-lg border border-slate-700/80 bg-slate-800/60 px-2 py-1 text-[11px] text-slate-300 hover:text-white hover:border-cyan-500/50 hover:bg-slate-750 transition text-left cursor-pointer disabled:opacity-50"
+              className="rounded-lg border border-slate-200 dark:border-slate-700/80 bg-white dark:bg-slate-800/60 px-2 py-1 text-[11px] text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-white hover:border-blue-400 dark:hover:border-cyan-500/50 hover:bg-slate-50 dark:hover:bg-slate-700 transition text-left cursor-pointer disabled:opacity-50"
             >
               {q}
             </button>
@@ -319,19 +309,19 @@ export const RobotAssistantPanel: React.FC<RobotAssistantPanelProps> = ({
       </div>
 
       {/* Input Field Form */}
-      <form onSubmit={handleSubmit} className="p-3 border-t border-slate-800 flex items-center gap-2 bg-slate-950/80 rounded-b-3xl">
+      <form onSubmit={handleSubmit} className="p-3 border-t border-slate-200 dark:border-slate-800 flex items-center gap-2 bg-slate-50 dark:bg-slate-950/80 rounded-b-3xl">
         <input
           type="text"
           placeholder="Ask a question about CodeGuardian AI..."
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           disabled={isThinking}
-          className="flex-1 rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 disabled:opacity-50"
+          className="flex-1 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 dark:focus:border-cyan-500 disabled:opacity-50"
         />
         <button
           type="submit"
           disabled={!inputValue.trim() || isThinking}
-          className="rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 p-2 text-white hover:from-blue-500 hover:to-cyan-500 disabled:opacity-40 transition cursor-pointer shadow-md shadow-cyan-600/20"
+          className="rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 p-2 text-white hover:from-blue-500 hover:to-cyan-500 disabled:opacity-40 transition cursor-pointer shadow-md shadow-blue-600/20"
           title="Send message"
         >
           <Send className="h-4 w-4" />

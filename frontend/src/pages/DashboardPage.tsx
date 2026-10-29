@@ -152,34 +152,34 @@ export const DashboardPage: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden">
+    <div className="flex h-screen bg-[#F8FAFC] dark:bg-slate-950 text-[#172033] dark:text-slate-100 overflow-hidden transition-colors">
       <Sidebar />
 
       <main className="flex-1 flex flex-col h-full overflow-y-auto">
         {/* Header */}
-        <div className="border-b border-slate-800 bg-slate-950/80 px-8 py-5 backdrop-blur-md">
+        <div className="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 px-8 py-5 backdrop-blur-md">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div>
                 <div className="flex items-center gap-3">
-                  <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2.5">
-                    <LayoutDashboard className="h-5 w-5 text-blue-400" />
+                  <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2.5">
+                    <LayoutDashboard className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                     Security &amp; Code Health Dashboard
                   </h1>
 
                   {/* Real-Time Live Status Pulse */}
                   <div
-                    className="flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[11px] font-semibold text-emerald-400 shadow-sm shadow-emerald-500/10"
+                    className="flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 shadow-xs"
                     title={`Real-Time Telemetry Active — Last synced at ${lastRefreshed.toLocaleTimeString()}`}
                   >
                     <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 dark:bg-emerald-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                     </span>
                     <span>Live Sync Active</span>
                   </div>
                 </div>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   Real-time multi-language execution metrics, defect distributions, and security posture monitoring.
                 </p>
               </div>
@@ -192,18 +192,18 @@ export const DashboardPage: React.FC = () => {
                 type="button"
                 aria-label="Toggle theme mode"
                 title={theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-800 bg-slate-900/60 text-slate-300 transition hover:bg-slate-800 hover:text-white"
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 text-slate-700 dark:text-slate-300 transition hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-white cursor-pointer shadow-xs"
               >
                 {theme === 'dark' ? (
                   <Sun className="h-4 w-4 text-amber-400" />
                 ) : (
-                  <Moon className="h-4 w-4 text-indigo-500" />
+                  <Moon className="h-4 w-4 text-blue-600" />
                 )}
               </button>
 
               <Link
                 to="/workspace"
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-2.5 text-xs font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:from-blue-500 hover:to-indigo-500"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-2.5 text-xs font-semibold text-white shadow-md shadow-blue-500/20 transition hover:from-blue-500 hover:to-indigo-500"
               >
                 <Sparkles className="h-4 w-4" />
                 Quick Analyze
@@ -236,18 +236,18 @@ export const DashboardPage: React.FC = () => {
           </div>
 
           {/* Recent Analyses Activity Table */}
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-xl backdrop-blur-md">
-            <div className="flex items-center justify-between border-b border-slate-800/80 pb-4">
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 p-6 shadow-xs dark:shadow-xl backdrop-blur-md">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800/80 pb-4">
               <div>
-                <h3 className="text-base font-bold text-white">Recent Analysis Activity</h3>
-                <p className="text-xs text-slate-400">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">Recent Analysis Activity</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   Latest executed scans and security scores
                 </p>
               </div>
 
               <Link
                 to="/history"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-400 hover:text-blue-300 transition"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition"
               >
                 View Full History
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -257,11 +257,11 @@ export const DashboardPage: React.FC = () => {
             <div className="mt-4 overflow-x-auto">
               {analyses.length === 0 ? (
                 <div className="py-12 text-center space-y-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 mx-auto">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 mx-auto">
                     <ShieldCheck className="h-6 w-6" />
                   </div>
-                  <h3 className="text-base font-bold text-white">No Code Reviews Yet</h3>
-                  <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">No Code Reviews Yet</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">
                     You haven't performed any code scans. Launch the analysis workspace to test code, uncover security vulnerabilities, and inspect live compiler output.
                   </p>
                   <div className="pt-2">
@@ -277,7 +277,7 @@ export const DashboardPage: React.FC = () => {
               ) : (
                 <table className="w-full text-left text-xs">
                   <thead>
-                    <tr className="border-b border-slate-800 text-slate-400">
+                    <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400">
                       <th className="pb-3 font-semibold">Title</th>
                       <th className="pb-3 font-semibold">Language</th>
                       <th className="pb-3 font-semibold">Quality Score</th>
@@ -287,37 +287,37 @@ export const DashboardPage: React.FC = () => {
                       <th className="pb-3 font-semibold text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800/60">
+                  <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60">
                     {analyses.slice(0, 8).map((a) => (
                       <tr
                         key={a.id}
-                        className="transition hover:bg-slate-800/40 cursor-pointer"
+                        className="transition hover:bg-slate-50 dark:hover:bg-slate-800/40 cursor-pointer"
                         onClick={() => navigate('/workspace')}
                       >
-                        <td className="py-3.5 font-semibold text-white">
+                        <td className="py-3.5 font-semibold text-slate-900 dark:text-white">
                           {a.title}
                         </td>
                         <td className="py-3.5">
-                          <span className="rounded-md border border-slate-700 bg-slate-800/80 px-2 py-0.5 text-[10px] font-bold uppercase text-slate-300">
+                          <span className="rounded-md border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 px-2 py-0.5 text-[10px] font-bold uppercase text-slate-700 dark:text-slate-300">
                             {a.language}
                           </span>
                         </td>
                         <td className={`py-3.5 font-bold ${getScoreColor(a.quality_score)}`}>
                           {a.quality_score} / 100
                         </td>
-                        <td className="py-3.5 text-slate-300">
+                        <td className="py-3.5 text-slate-700 dark:text-slate-300">
                           {a.findings_count}
                         </td>
                         <td className="py-3.5">
                           {a.critical_count > 0 ? (
-                            <span className="rounded bg-red-500/20 px-2 py-0.5 text-[11px] font-bold text-red-400">
+                            <span className="rounded bg-red-500/15 text-red-600 dark:text-red-400 border border-red-500/30 px-2 py-0.5 text-[11px] font-bold">
                               {a.critical_count}
                             </span>
                           ) : (
-                            <span className="text-slate-500">0</span>
+                            <span className="text-slate-400">0</span>
                           )}
                         </td>
-                        <td className="py-3.5 text-slate-400">
+                        <td className="py-3.5 text-slate-500 dark:text-slate-400">
                           {formatDate(a.created_at)}
                         </td>
                         <td className="py-3.5 text-right">
@@ -326,14 +326,14 @@ export const DashboardPage: React.FC = () => {
                               href={analysisService.getExportHtmlUrl(a.id)}
                               download
                               onClick={(e) => e.stopPropagation()}
-                              className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-emerald-400 transition"
+                              className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400 transition"
                               title="Download HTML Report"
                             >
                               <Download className="h-3.5 w-3.5" />
                             </a>
                             <button
                               onClick={(e) => handleDelete(a.id, e)}
-                              className="rounded-lg p-1.5 text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition"
+                              className="rounded-lg p-1.5 text-slate-400 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-400 transition cursor-pointer"
                               title="Delete record"
                             >
                               <Trash2 className="h-3.5 w-3.5" />

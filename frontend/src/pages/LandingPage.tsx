@@ -347,26 +347,26 @@ const LanguageCard: React.FC<LanguageCardProps> = ({ lang, onSelect, isInteracti
         }
       }}
       aria-label={`Open ${lang.name} in Code Workspace`}
-      className="cg-card-hover w-[280px] sm:w-[320px] shrink-0 rounded-2xl border border-slate-800 bg-[#0b1021]/90 p-5 shadow-lg flex flex-col justify-between cursor-pointer group hover:border-cyan-400/80 hover:shadow-cyan-500/15 select-none text-left backdrop-blur-md"
+      className="cg-card-hover w-[280px] sm:w-[320px] shrink-0 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0b1021]/90 p-5 shadow-sm dark:shadow-lg flex flex-col justify-between cursor-pointer group hover:border-blue-400 dark:hover:border-cyan-400/80 hover:shadow-cyan-500/15 select-none text-left backdrop-blur-md"
     >
       <div>
         <div className="flex items-center justify-between mb-3">
           <span className="text-2xl transition-transform duration-200 group-hover:scale-110">{lang.icon}</span>
-          <span className="rounded-full bg-slate-800/80 border border-slate-700/80 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-cyan-400">
+          <span className="rounded-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-blue-600 dark:text-cyan-400">
             {lang.category}
           </span>
         </div>
-        <h3 className="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors flex items-center justify-between">
+        <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-cyan-300 transition-colors flex items-center justify-between">
           <span>{lang.name}</span>
-          <ArrowRight className="h-4 w-4 text-cyan-400 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0" />
+          <ArrowRight className="h-4 w-4 text-blue-600 dark:text-cyan-400 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0" />
         </h3>
-        <p className="text-xs font-mono font-semibold text-blue-400 mt-1">{lang.version}</p>
-        <p className="text-xs text-slate-300 mt-2.5 leading-relaxed font-normal">{lang.capability}</p>
+        <p className="text-xs font-mono font-semibold text-blue-600 dark:text-blue-400 mt-1">{lang.version}</p>
+        <p className="text-xs text-slate-600 dark:text-slate-300 mt-2.5 leading-relaxed font-normal">{lang.capability}</p>
       </div>
 
-      <div className="mt-4 pt-3.5 border-t border-slate-800/80 flex items-center justify-between">
-        <span className="text-[11px] font-medium text-slate-400 group-hover:text-slate-200 transition">Launch in Editor</span>
-        <span className="inline-flex items-center gap-1 text-xs font-bold text-cyan-400 group-hover:text-cyan-300 transition">
+      <div className="mt-4 pt-3.5 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between">
+        <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-200 transition">Launch in Editor</span>
+        <span className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-cyan-400 group-hover:text-blue-700 dark:group-hover:text-cyan-300 transition">
           <span>Analyze {lang.name}</span>
           <ChevronRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
         </span>
@@ -489,36 +489,36 @@ export const LandingPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#030712] text-slate-100 flex flex-col relative overflow-hidden selection:bg-cyan-500 selection:text-slate-950">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#030712] text-slate-900 dark:text-slate-100 flex flex-col relative overflow-hidden selection:bg-cyan-500 selection:text-slate-950 transition-colors">
       {/* ============================================================== */}
       {/* 0. CODING BACKGROUND: AMBIENT GLOWS, CYBER MESH & CODE TOKENS  */}
       {/* ============================================================== */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden z-0" aria-hidden="true">
         {/* Subtle Cyber Grid Pattern */}
-        <div className="absolute inset-0 cyber-grid-pattern opacity-60" />
+        <div className="absolute inset-0 cyber-grid-pattern opacity-40 dark:opacity-60" />
 
         {/* Ambient Radial Lights */}
-        <div className="absolute -top-32 left-1/4 h-[550px] w-[550px] rounded-full radial-glow-blue blur-3xl opacity-50" />
-        <div className="absolute top-1/3 -right-20 h-[600px] w-[600px] rounded-full radial-glow-cyan blur-3xl opacity-40" />
-        <div className="absolute top-2/3 left-10 h-[500px] w-[500px] rounded-full radial-glow-purple blur-3xl opacity-30" />
+        <div className="absolute -top-32 left-1/4 h-[550px] w-[550px] rounded-full radial-glow-blue blur-3xl opacity-30 dark:opacity-50" />
+        <div className="absolute top-1/3 -right-20 h-[600px] w-[600px] rounded-full radial-glow-cyan blur-3xl opacity-25 dark:opacity-40" />
+        <div className="absolute top-2/3 left-10 h-[500px] w-[500px] rounded-full radial-glow-purple blur-3xl opacity-20 dark:opacity-30" />
 
         {/* Floating Code & Syntax Fragments */}
-        <div className="absolute top-24 left-[8%] font-mono text-xs font-bold text-cyan-400/15 animate-syntax-1 select-none">
+        <div className="absolute top-24 left-[8%] font-mono text-xs font-bold text-blue-600/25 dark:text-cyan-400/15 animate-syntax-1 select-none">
           {`const audit = analyze(AST);`}
         </div>
-        <div className="absolute top-36 right-[12%] font-mono text-sm font-bold text-blue-400/20 animate-syntax-2 select-none">
+        <div className="absolute top-36 right-[12%] font-mono text-sm font-bold text-indigo-600/25 dark:text-blue-400/20 animate-syntax-2 select-none">
           {`{ CWE-89: "SQL_INJECTION" }`}
         </div>
-        <div className="absolute top-96 left-[18%] font-mono text-xs text-purple-400/20 animate-syntax-3 select-none">
+        <div className="absolute top-96 left-[18%] font-mono text-xs text-purple-600/25 dark:text-purple-400/20 animate-syntax-3 select-none">
           {`try { sandbox.run(); } catch (err)`}
         </div>
-        <div className="absolute top-[480px] right-[6%] font-mono text-xs text-cyan-300/15 animate-syntax-1 select-none">
+        <div className="absolute top-[480px] right-[6%] font-mono text-xs text-cyan-700/25 dark:text-cyan-300/15 animate-syntax-1 select-none">
           {`function patch(diff) => CleanCode`}
         </div>
-        <div className="absolute top-[800px] left-[5%] font-mono text-xs text-blue-300/15 animate-syntax-2 select-none">
+        <div className="absolute top-[800px] left-[5%] font-mono text-xs text-blue-700/25 dark:text-blue-300/15 animate-syntax-2 select-none">
           {`[PASS] 21/21 security assertions ok`}
         </div>
-        <div className="absolute top-[1200px] right-[15%] font-mono text-sm text-cyan-500/15 animate-syntax-3 select-none">
+        <div className="absolute top-[1200px] right-[15%] font-mono text-sm text-cyan-600/25 dark:text-cyan-500/15 animate-syntax-3 select-none">
           {`</> deterministic-ast-scanner`}
         </div>
       </div>
@@ -535,7 +535,7 @@ export const LandingPage: React.FC = () => {
             {/* Left Column: Headline, Description & Interactive CTAs */}
             <div className="lg:col-span-6 flex flex-col items-start text-left">
               {/* Main Heading: Write Better Code. Ship With Confidence. */}
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1] max-w-2xl">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.1] max-w-2xl">
                 Write{' '}
                 <span className="gradient-text-cyan-blue">Better Code.</span>
                 <br />
@@ -544,7 +544,7 @@ export const LandingPage: React.FC = () => {
               </h1>
 
               {/* Subtitle / Description */}
-              <p className="mt-6 text-base sm:text-lg text-slate-300 font-normal leading-relaxed max-w-xl">
+              <p className="mt-6 text-base sm:text-lg text-slate-600 dark:text-slate-300 font-normal leading-relaxed max-w-xl">
                 CodeGuardian AI detects bugs, explains runtime errors, audits security vulnerabilities (OWASP &amp; CWE), and applies verified one-click patches across 12+ polyglot languages.
               </p>
 
@@ -576,34 +576,34 @@ export const LandingPage: React.FC = () => {
             <div className="lg:col-span-6 w-full flex items-center justify-center">
               <div className="relative w-full max-w-lg lg:max-w-none">
                 {/* Ambient drop shadow & cyan glow */}
-                <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-600/30 via-cyan-500/30 to-purple-600/30 blur-2xl opacity-70" />
+                <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-600/30 via-cyan-500/30 to-purple-600/30 blur-2xl opacity-50 dark:opacity-70" />
 
                 {/* Window Mock Container */}
-                <div className="relative rounded-3xl border border-cyan-500/25 bg-[#0a0f1e]/95 shadow-2xl overflow-hidden backdrop-blur-2xl">
+                <div className="relative rounded-3xl border border-slate-200 dark:border-cyan-500/25 bg-white dark:bg-[#0a0f1e]/95 shadow-2xl overflow-hidden backdrop-blur-2xl">
                   {/* Top Window Bar */}
-                  <div className="flex items-center justify-between px-4 py-3 bg-[#0d1428] border-b border-slate-800/90 gap-2">
+                  <div className="flex items-center justify-between px-4 py-3 bg-slate-100 dark:bg-[#0d1428] border-b border-slate-200 dark:border-slate-800/90 gap-2">
                     {/* Traffic light control dots */}
                     <div className="flex items-center gap-2">
-                      <div className="h-3 w-3 rounded-full bg-rose-500/90 shadow-sm" />
-                      <div className="h-3 w-3 rounded-full bg-amber-400/90 shadow-sm" />
-                      <div className="h-3 w-3 rounded-full bg-emerald-500/90 shadow-sm" />
+                      <div className="h-3 w-3 rounded-full bg-rose-500/90 shadow-xs" />
+                      <div className="h-3 w-3 rounded-full bg-amber-400/90 shadow-xs" />
+                      <div className="h-3 w-3 rounded-full bg-emerald-500/90 shadow-xs" />
                     </div>
 
                     {/* Window Center Title */}
-                    <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-[#060b18] border border-slate-800 text-xs font-mono text-slate-300">
-                      <Terminal className="h-3.5 w-3.5 text-cyan-400" />
+                    <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-white dark:bg-[#060b18] border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-700 dark:text-slate-300">
+                      <Terminal className="h-3.5 w-3.5 text-blue-600 dark:text-cyan-400" />
                       <span>Code Inspection &amp; Bug Predictor</span>
                     </div>
 
                     {/* Right Live Status Badge */}
-                    <div className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-400">
-                      <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <div className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-600 dark:text-emerald-400">
+                      <span className="h-2 w-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
                       <span className="hidden sm:inline">Active Scanner</span>
                     </div>
                   </div>
 
                   {/* Window Content: 2nd Image (Magnifying Glass Inspecting Code Error) */}
-                  <div className="relative aspect-[4/3] sm:aspect-[16/11] bg-[#020612] overflow-hidden flex items-center justify-center group">
+                  <div className="relative aspect-[4/3] sm:aspect-[16/11] bg-slate-950 overflow-hidden flex items-center justify-center group">
                     <img
                       src="/hero-preview.jpg"
                       alt="Code debugging failure test suite under magnifying glass inspection"
@@ -623,36 +623,36 @@ export const LandingPage: React.FC = () => {
       {/* ============================================================== */}
       {/* 3. INTERACTIVE CODE SCANNER & DIFF COMPARISON SECTION           */}
       {/* ============================================================== */}
-      <section className="relative z-10 border-t border-slate-800/80 bg-[#040916]/80 py-20 sm:py-28">
+      <section className="relative z-10 border-t border-slate-200 dark:border-slate-800/80 bg-slate-100/60 dark:bg-[#040916]/80 py-20 sm:py-28 transition-colors">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-14">
-            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
+            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               Instant Vulnerability Pinpointing &amp; Auto-Fix
             </h2>
-            <p className="mt-4 text-base text-slate-300 leading-relaxed">
+            <p className="mt-4 text-base text-slate-600 dark:text-slate-300 leading-relaxed">
               Compare vulnerable source code with verified AI-generated patches and real sandboxed stdout execution outputs.
             </p>
           </div>
 
           {/* Interactive Code Preview Window */}
-          <div className="max-w-5xl mx-auto rounded-3xl border border-slate-800 bg-[#080e1e]/90 shadow-2xl overflow-hidden backdrop-blur-xl">
+          <div className="max-w-5xl mx-auto rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#080e1e]/90 shadow-2xl overflow-hidden backdrop-blur-xl">
             {/* Window Title Bar */}
-            <div className="flex flex-wrap items-center justify-between border-b border-slate-800 bg-[#0a1124] px-4 py-3 sm:px-6 gap-3">
+            <div className="flex flex-wrap items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0a1124] px-4 py-3 sm:px-6 gap-3">
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1.5">
                   <div className="h-3 w-3 rounded-full bg-rose-500/80" />
                   <div className="h-3 w-3 rounded-full bg-amber-400/80" />
                   <div className="h-3 w-3 rounded-full bg-emerald-500/80" />
                 </div>
-                <div className="h-4 w-px bg-slate-800" />
-                <div className="flex items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1 font-mono text-xs font-semibold text-cyan-400 border border-slate-800">
+                <div className="h-4 w-px bg-slate-200 dark:bg-slate-800" />
+                <div className="flex items-center gap-1.5 rounded-lg bg-white dark:bg-slate-900 px-3 py-1 font-mono text-xs font-semibold text-blue-600 dark:text-cyan-400 border border-slate-200 dark:border-slate-800">
                   <FileCode className="h-3.5 w-3.5" />
                   <span>{activeSample.filename}</span>
                 </div>
               </div>
 
               {/* Language Switchers */}
-              <div className="flex items-center gap-1 bg-[#050914] p-1 rounded-xl border border-slate-800 overflow-x-auto">
+              <div className="flex items-center gap-1 bg-slate-100 dark:bg-[#050914] p-1 rounded-xl border border-slate-200 dark:border-slate-800 overflow-x-auto">
                 {DEMO_SAMPLES.map((s) => (
                   <button
                     key={s.id}
@@ -662,8 +662,8 @@ export const LandingPage: React.FC = () => {
                     }}
                     className={`rounded-lg px-3 py-1 text-xs font-semibold transition cursor-pointer select-none ${
                       selectedSampleId === s.id
-                        ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-sm'
-                        : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                        ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-xs'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/60'
                     }`}
                   >
                     {s.lang}
@@ -671,23 +671,23 @@ export const LandingPage: React.FC = () => {
                 ))}
               </div>
 
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-400">
-                <CheckCircle2 className="h-3 w-3 text-emerald-400" />
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                <CheckCircle2 className="h-3 w-3 text-emerald-500 dark:text-emerald-400" />
                 <span>Deterministic Match</span>
               </span>
             </div>
 
             {/* Sub-header with Rule & Severity */}
-            <div className="flex flex-wrap items-center justify-between border-b border-slate-800/80 bg-[#060b18] px-4 py-2.5 text-xs text-slate-400">
+            <div className="flex flex-wrap items-center justify-between border-b border-slate-200 dark:border-slate-800/80 bg-slate-50/80 dark:bg-[#060b18] px-4 py-2.5 text-xs text-slate-500 dark:text-slate-400">
               <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
-                <span className="font-mono text-slate-300">Security Rule: {activeSample.rule}</span>
+                <span className="h-2 w-2 rounded-full bg-blue-600 dark:bg-cyan-400 animate-pulse" />
+                <span className="font-mono text-slate-700 dark:text-slate-300">Security Rule: {activeSample.rule}</span>
               </div>
               <span
                 className={`rounded-lg px-2.5 py-0.5 font-bold text-xs ${
                   activeTab === 'fix' || activeTab === 'output'
-                    ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                    : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                    ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30'
+                    : 'bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30'
                 }`}
               >
                 Quality Score: {activeTab === 'fix' || activeTab === 'output' ? `${activeSample.fixedScore}/100 (+56)` : `${activeSample.initialScore}/100`}
@@ -695,21 +695,21 @@ export const LandingPage: React.FC = () => {
             </div>
 
             {/* Preview Body */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-slate-800 bg-[#070c1a]">
+            <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-slate-200 dark:divide-slate-800 bg-white dark:bg-[#070c1a]">
               {/* Code View (Left 7 Cols) */}
               <div className="lg:col-span-7 flex flex-col justify-between">
                 {/* Action Mode Tabs */}
-                <div className="flex items-center justify-between border-b border-slate-800/80 bg-[#090f20] px-4 py-2">
+                <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800/80 bg-slate-50 dark:bg-[#090f20] px-4 py-2">
                   <div className="flex items-center gap-1.5">
                     <button
                       onClick={() => setActiveTab('vuln')}
                       className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
                         activeTab === 'vuln'
-                          ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
-                          : 'text-slate-400 hover:text-white'
+                          ? 'bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-500/40'
+                          : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                       }`}
                     >
-                      <ShieldAlert className="h-3.5 w-3.5 text-rose-400" />
+                      <ShieldAlert className="h-3.5 w-3.5 text-rose-500 dark:text-rose-400" />
                       <span>Detected Vulnerability</span>
                     </button>
 
@@ -717,11 +717,11 @@ export const LandingPage: React.FC = () => {
                       onClick={() => setActiveTab('fix')}
                       className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
                         activeTab === 'fix'
-                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                          : 'text-slate-400 hover:text-white'
+                          ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40'
+                          : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                       }`}
                     >
-                      <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
+                      <Sparkles className="h-3.5 w-3.5 text-emerald-500 dark:text-emerald-400" />
                       <span>AI Auto-Fix Diff</span>
                     </button>
 
@@ -729,39 +729,39 @@ export const LandingPage: React.FC = () => {
                       onClick={() => setActiveTab('output')}
                       className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
                         activeTab === 'output'
-                          ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40'
-                          : 'text-slate-400 hover:text-white'
+                          ? 'bg-blue-500/20 text-blue-700 dark:text-blue-300 border border-blue-500/40'
+                          : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                       }`}
                     >
-                      <Terminal className="h-3.5 w-3.5 text-blue-400" />
+                      <Terminal className="h-3.5 w-3.5 text-blue-500 dark:text-blue-400" />
                       <span>Sandbox Output</span>
                     </button>
                   </div>
 
                   <button
                     onClick={handleCopyCode}
-                    className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-white transition cursor-pointer"
+                    className="flex items-center gap-1 text-[11px] text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"
                     title="Copy code"
                   >
-                    {copied ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
+                    {copied ? <Check className="h-3 w-3 text-emerald-500 dark:text-emerald-400" /> : <Copy className="h-3 w-3" />}
                     <span>{copied ? 'Copied' : 'Copy'}</span>
                   </button>
                 </div>
 
                 {/* Code Block Container */}
-                <div className="p-4 sm:p-5 font-mono text-xs overflow-x-auto min-h-[300px]">
+                <div className="p-4 sm:p-5 font-mono text-xs overflow-x-auto min-h-[300px] bg-slate-50/50 dark:bg-transparent">
                   {activeTab === 'vuln' && (
-                    <pre className="text-slate-200 leading-relaxed font-mono">
+                    <pre className="text-slate-800 dark:text-slate-200 leading-relaxed font-mono">
                       <code>{activeSample.vulnCode}</code>
                     </pre>
                   )}
 
                   {activeTab === 'fix' && (
                     <div className="space-y-2.5">
-                      <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/30 p-2.5 text-emerald-300 text-[11px]">
+                      <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/30 p-2.5 text-emerald-800 dark:text-emerald-300 text-[11px]">
                         <strong>AI Patch Remediation:</strong> {activeSample.fixLineComment}
                       </div>
-                      <pre className="text-emerald-300 leading-relaxed font-mono">
+                      <pre className="text-emerald-700 dark:text-emerald-300 leading-relaxed font-mono">
                         <code>{activeSample.fixCode}</code>
                       </pre>
                     </div>
@@ -769,10 +769,10 @@ export const LandingPage: React.FC = () => {
 
                   {activeTab === 'output' && (
                     <div className="space-y-2.5">
-                      <div className="rounded-xl bg-blue-500/10 border border-blue-500/30 p-2.5 text-blue-300 text-[11px]">
+                      <div className="rounded-xl bg-blue-500/10 border border-blue-500/30 p-2.5 text-blue-800 dark:text-blue-300 text-[11px]">
                         <strong>Verified Execution Engine:</strong> Real Judge0 stdout output &amp; assertion check.
                       </div>
-                      <pre className="text-sky-300 leading-relaxed font-mono">
+                      <pre className="text-sky-700 dark:text-sky-300 leading-relaxed font-mono">
                         <code>{activeSample.outputPreview}</code>
                       </pre>
                     </div>
@@ -780,46 +780,46 @@ export const LandingPage: React.FC = () => {
                 </div>
 
                 {/* Editor Bottom Status Bar */}
-                <div className="flex items-center justify-between border-t border-slate-800 bg-[#060a16] px-4 py-2 text-[11px] text-slate-400">
+                <div className="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#060a16] px-4 py-2 text-[11px] text-slate-500 dark:text-slate-400">
                   <span className="flex items-center gap-1.5">
-                    <Code2 className="h-3.5 w-3.5 text-cyan-400" />
+                    <Code2 className="h-3.5 w-3.5 text-blue-600 dark:text-cyan-400" />
                     <span>{activeSample.lang} Runtime Active</span>
                   </span>
-                  <span className="font-mono text-slate-400">Isolated Sandbox • Zero Retention</span>
+                  <span className="font-mono text-slate-500 dark:text-slate-400">Isolated Sandbox • Zero Retention</span>
                 </div>
               </div>
 
               {/* Finding & Diagnostic Panel (Right 5 Cols) */}
-              <div className="lg:col-span-5 p-5 sm:p-6 flex flex-col justify-between bg-[#080d1c]">
+              <div className="lg:col-span-5 p-5 sm:p-6 flex flex-col justify-between bg-slate-50/50 dark:bg-[#080d1c]">
                 <div className="space-y-5">
                   <div className="flex items-center justify-between">
-                    <div className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/15 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-rose-400">
+                    <div className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/15 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-rose-600 dark:text-rose-400">
                       <Flame className="h-3.5 w-3.5" />
                       <span>{activeSample.severity} Severity</span>
                     </div>
-                    <span className="rounded bg-slate-800/80 border border-slate-700/80 px-2 py-0.5 font-mono text-[10px] text-slate-300">
+                    <span className="rounded bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 px-2 py-0.5 font-mono text-[10px] text-slate-700 dark:text-slate-300">
                       CWE Identified
                     </span>
                   </div>
 
                   <div>
-                    <h3 className="text-base sm:text-lg font-bold text-white tracking-tight">
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
                       {activeSample.title}
                     </h3>
-                    <p className="font-mono text-[11px] text-cyan-400 mt-1">
+                    <p className="font-mono text-[11px] text-blue-600 dark:text-cyan-400 mt-1">
                       {activeSample.cwe}
                     </p>
                   </div>
 
                   {/* Health Impact Gauge */}
-                  <div className="rounded-2xl border border-slate-800 bg-[#040814] p-4 space-y-2.5 shadow-inner">
+                  <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#040814] p-4 space-y-2.5 shadow-inner">
                     <div className="flex justify-between items-center text-xs">
-                      <span className="font-semibold text-slate-300">Code Health Index</span>
-                      <span className="font-mono font-bold text-emerald-400">
+                      <span className="font-semibold text-slate-700 dark:text-slate-300">Code Health Index</span>
+                      <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
                         {activeTab === 'fix' || activeTab === 'output' ? `${activeSample.fixedScore}/100 (+56)` : `${activeSample.initialScore}/100`}
                       </span>
                     </div>
-                    <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                    <div className="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
                       <div
                         className={`h-full transition-all duration-500 rounded-full ${
                           activeTab === 'fix' || activeTab === 'output'
@@ -831,19 +831,19 @@ export const LandingPage: React.FC = () => {
                         }}
                       />
                     </div>
-                    <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                    <div className="flex justify-between text-[10px] text-slate-500 dark:text-slate-400 font-mono">
                       <span>Status: {activeTab === 'fix' || activeTab === 'output' ? 'Remediated' : 'Exploitable'}</span>
                       <span>Security: {activeTab === 'fix' || activeTab === 'output' ? 'Passed' : 'Action Required'}</span>
                     </div>
                   </div>
 
                   {/* Quick Action Button */}
-                  <div className="rounded-2xl border border-slate-800 bg-[#050a17] p-3.5">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-slate-200 mb-1">
-                      <Sparkles className="h-3.5 w-3.5 text-purple-400" />
+                  <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#050a17] p-3.5 shadow-xs">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-slate-200 mb-1">
+                      <Sparkles className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
                       <span>AI Patch Remediation</span>
                     </div>
-                    <p className="text-[11px] text-slate-400 mb-3">
+                    <p className="text-[11px] text-slate-600 dark:text-slate-400 mb-3">
                       {activeTab === 'vuln'
                         ? 'Click below to review side-by-side patch diff generated by CodeGuardian AI.'
                         : 'Patch validated against AST security specifications. Ready to test.'}
@@ -869,7 +869,7 @@ export const LandingPage: React.FC = () => {
                 </div>
 
                 {/* Direct Link to full workspace */}
-                <div className="mt-5 pt-4 border-t border-slate-800">
+                <div className="mt-5 pt-4 border-t border-slate-200 dark:border-slate-800">
                   <button
                     type="button"
                     onClick={() => handleLanguageSelect(selectedSampleId)}
@@ -888,14 +888,14 @@ export const LandingPage: React.FC = () => {
       {/* ============================================================== */}
       {/* 4. SUPPORTED PROGRAMMING LANGUAGES SECTION                     */}
       {/* ============================================================== */}
-      <section id="languages" className="relative z-10 border-t border-slate-800/80 bg-[#030712] py-20 sm:py-28 overflow-hidden">
+      <section id="languages" className="relative z-10 border-t border-slate-200 dark:border-slate-800/80 bg-white dark:bg-[#030712] py-20 sm:py-28 overflow-hidden transition-colors">
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 mb-10">
             <div className="max-w-2xl">
-              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
+              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                 12+ Supported Programming Languages &amp; Frameworks
               </h2>
-              <p className="mt-4 text-base text-slate-300 font-normal leading-relaxed">
+              <p className="mt-4 text-base text-slate-600 dark:text-slate-300 font-normal leading-relaxed">
                 Native support for compiling, executing, and diagnosing code across modern systems, web frontends, backend microservices, and databases.
               </p>
 
@@ -907,8 +907,8 @@ export const LandingPage: React.FC = () => {
                     onClick={() => setLanguageFilter(filter)}
                     className={`rounded-xl px-4 py-2 text-xs font-semibold transition cursor-pointer select-none ${
                       languageFilter === filter
-                        ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md shadow-cyan-500/20'
-                        : 'border border-slate-800 bg-[#080d1a] text-slate-300 hover:border-cyan-500/40 hover:text-cyan-300'
+                        ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md shadow-blue-500/20'
+                        : 'border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-[#080d1a] text-slate-700 dark:text-slate-300 hover:border-blue-400 dark:hover:border-cyan-500/40 hover:text-blue-600 dark:hover:text-cyan-300'
                     }`}
                   >
                     {filter === 'All' ? 'All Languages (12)' : filter}
@@ -919,13 +919,13 @@ export const LandingPage: React.FC = () => {
 
             {/* Inset Image Card & Carousel Controls */}
             <div className="flex flex-col items-start lg:items-end gap-3 shrink-0 w-full lg:w-auto">
-              <div className="group relative overflow-hidden rounded-3xl border border-slate-800 bg-[#0a0f1e] shadow-xl w-full sm:w-[460px] md:w-[500px] lg:w-[520px] h-56 sm:h-64">
+              <div className="group relative overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-[#0a0f1e] shadow-xl w-full sm:w-[460px] md:w-[500px] lg:w-[520px] h-56 sm:h-64">
                 <img
                   src="/languages-preview.jpg"
                   alt="Code execution and compiler diagnostics preview"
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 select-none"
                 />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-transparent" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent" />
                 <div className="absolute bottom-3.5 left-4 right-4 flex items-center justify-between text-xs font-semibold text-white">
                   <span className="bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-cyan-500/30 flex items-center gap-2">
                     <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
@@ -938,33 +938,33 @@ export const LandingPage: React.FC = () => {
               </div>
 
               {/* Carousel Controls */}
-              <div className="flex items-center gap-2 bg-[#080d1a] border border-slate-800 p-2 rounded-2xl shadow-sm">
+              <div className="flex items-center gap-2 bg-slate-100 dark:bg-[#080d1a] border border-slate-200 dark:border-slate-800 p-2 rounded-2xl shadow-xs">
                 <button
                   type="button"
                   onClick={togglePlayPause}
                   aria-label={isPlaying ? 'Pause auto-scroll' : 'Resume auto-scroll'}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-cyan-400 bg-slate-900 border border-slate-700/80 transition cursor-pointer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-cyan-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 transition cursor-pointer"
                 >
                   {isPlaying ? (
                     <>
-                      <Pause className="h-3.5 w-3.5 text-cyan-400" />
+                      <Pause className="h-3.5 w-3.5 text-blue-600 dark:text-cyan-400" />
                       <span>Pause</span>
                     </>
                   ) : (
                     <>
-                      <Play className="h-3.5 w-3.5 text-cyan-400 fill-cyan-400" />
+                      <Play className="h-3.5 w-3.5 text-blue-600 dark:text-cyan-400 fill-current" />
                       <span>Play</span>
                     </>
                   )}
                 </button>
 
-                <div className="h-4 w-px bg-slate-800" />
+                <div className="h-4 w-px bg-slate-200 dark:bg-slate-800" />
 
                 <button
                   type="button"
                   onClick={handleScrollLeft}
                   aria-label="Scroll left"
-                  className="p-1.5 rounded-xl text-slate-300 hover:text-cyan-400 bg-slate-900 border border-slate-700/80 transition cursor-pointer"
+                  className="p-1.5 rounded-xl text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-cyan-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 transition cursor-pointer"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
@@ -973,7 +973,7 @@ export const LandingPage: React.FC = () => {
                   type="button"
                   onClick={handleScrollRight}
                   aria-label="Scroll right"
-                  className="p-1.5 rounded-xl text-slate-300 hover:text-cyan-400 bg-slate-900 border border-slate-700/80 transition cursor-pointer"
+                  className="p-1.5 rounded-xl text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-cyan-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 transition cursor-pointer"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </button>
@@ -984,8 +984,8 @@ export const LandingPage: React.FC = () => {
 
         {/* Continuous Horizontal Carousel */}
         <div className="relative mt-4 w-full">
-          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-20 bg-gradient-to-r from-[#030712] to-transparent z-10" />
-          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-20 bg-gradient-to-l from-[#030712] to-transparent z-10" />
+          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-20 bg-gradient-to-r from-white dark:from-[#030712] to-transparent z-10" />
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-20 bg-gradient-to-l from-white dark:from-[#030712] to-transparent z-10" />
 
           <div
             ref={carouselRef}
@@ -1025,117 +1025,117 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* ============================================================== */}
-      {/* 5. SECURITY FEATURES & VISUAL ERROR DEMOS (PROMPT 4 & 10)       */}
+      {/* 5. SECURITY FEATURES & VISUAL ERROR DEMOS                       */}
       {/* ============================================================== */}
-      <section id="features" className="relative z-10 border-t border-slate-800/80 bg-[#040815]/90 py-20 sm:py-28">
+      <section id="features" className="relative z-10 border-t border-slate-200 dark:border-slate-800/80 bg-slate-100/60 dark:bg-[#040815]/90 py-20 sm:py-28 transition-colors">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
+            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               From Vulnerability Detection to Production Peace of Mind
             </h2>
-            <p className="mt-4 text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
+            <p className="mt-4 text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
               Explore how CodeGuardian AI inspects your code, flags hidden threats, and verifies clean execution before you commit.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Card 1: Real-Time Security Threat Alerts */}
-            <div className="cg-card-hover rounded-3xl border border-slate-800 bg-[#090f20]/80 p-6 flex flex-col justify-between backdrop-blur-xl">
+            <div className="cg-card-hover rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#090f20]/80 p-6 flex flex-col justify-between backdrop-blur-xl shadow-xs dark:shadow-xl">
               <div>
-                <div className="overflow-hidden rounded-2xl bg-[#030612] aspect-[16/10] border border-slate-800/80 relative group">
+                <div className="overflow-hidden rounded-2xl bg-slate-950 aspect-[16/10] border border-slate-200 dark:border-slate-800/80 relative group">
                   <img
                     src="/security-threats.jpg"
                     alt="Real-Time Security Threat Alerts"
                     className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#090f20] via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
                   <div className="absolute top-3 left-3 bg-rose-500/90 text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded-md">
                     CWE-89 / OWASP TOP 10
                   </div>
                 </div>
                 <div className="mt-6">
-                  <h3 className="text-lg sm:text-xl font-bold tracking-tight text-white">
+                  <h3 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
                     Real-Time Security Threat Alerts
                   </h3>
-                  <p className="mt-2.5 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  <p className="mt-2.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                     Identify injection vectors, weak cryptographic ciphers, and unvalidated inputs directly within your active workspace before commit.
                   </p>
                 </div>
               </div>
 
-              <div className="mt-8 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold">
-                <span className="border border-rose-500/30 bg-rose-500/10 text-rose-300 px-2.5 py-1 rounded-lg">
+              <div className="mt-8 pt-4 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold">
+                <span className="border border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-300 px-2.5 py-1 rounded-lg">
                   150+ Bandit &amp; OWASP Rules
                 </span>
-                <span className="border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 px-2.5 py-1 rounded-lg">
+                <span className="border border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-cyan-300 px-2.5 py-1 rounded-lg">
                   Zero Server Retained
                 </span>
               </div>
             </div>
 
             {/* Card 2: Multi-Language AST Diagnostics */}
-            <div className="cg-card-hover rounded-3xl border border-slate-800 bg-[#090f20]/80 p-6 flex flex-col justify-between backdrop-blur-xl">
+            <div className="cg-card-hover rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#090f20]/80 p-6 flex flex-col justify-between backdrop-blur-xl shadow-xs dark:shadow-xl">
               <div>
-                <div className="overflow-hidden rounded-2xl bg-[#030612] aspect-[16/10] border border-slate-800/80 relative group">
+                <div className="overflow-hidden rounded-2xl bg-slate-950 aspect-[16/10] border border-slate-200 dark:border-slate-800/80 relative group">
                   <img
                     src="/ast-diagnostics.jpg"
                     alt="Multi-Language AST Diagnostics"
                     className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#090f20] via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
                   <div className="absolute top-3 left-3 bg-blue-600/90 text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded-md">
                     SUB-SECOND PARSING
                   </div>
                 </div>
                 <div className="mt-6">
-                  <h3 className="text-lg sm:text-xl font-bold tracking-tight text-white">
+                  <h3 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
                     Multi-Language AST Diagnostics
                   </h3>
-                  <p className="mt-2.5 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  <p className="mt-2.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                     High-performance static parsing across Python, JavaScript, TypeScript, Java, C, C++, and SQL with instant editor squiggly markers.
                   </p>
                 </div>
               </div>
 
-              <div className="mt-8 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold">
-                <span className="border border-blue-500/30 bg-blue-500/10 text-blue-300 px-2.5 py-1 rounded-lg">
+              <div className="mt-8 pt-4 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold">
+                <span className="border border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-300 px-2.5 py-1 rounded-lg">
                   Deterministic AST
                 </span>
-                <span className="border border-purple-500/30 bg-purple-500/10 text-purple-300 px-2.5 py-1 rounded-lg">
+                <span className="border border-purple-500/30 bg-purple-500/10 text-purple-600 dark:text-purple-300 px-2.5 py-1 rounded-lg">
                   Polyglot Engine
                 </span>
               </div>
             </div>
 
             {/* Card 3: Prevent Costly Outages & 404s */}
-            <div className="cg-card-hover rounded-3xl border border-slate-800 bg-[#090f20]/80 p-6 flex flex-col justify-between backdrop-blur-xl">
+            <div className="cg-card-hover rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#090f20]/80 p-6 flex flex-col justify-between backdrop-blur-xl shadow-xs dark:shadow-xl">
               <div>
-                <div className="overflow-hidden rounded-2xl bg-[#030612] aspect-[16/10] border border-slate-800/80 relative group">
+                <div className="overflow-hidden rounded-2xl bg-slate-950 aspect-[16/10] border border-slate-200 dark:border-slate-800/80 relative group">
                   <img
                     src="/prevent-outages.jpg"
                     alt="Prevent Costly Outages & 404s"
                     className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#090f20] via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
                   <div className="absolute top-3 left-3 bg-emerald-600/90 text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded-md">
                     REGRESSION GUARD
                   </div>
                 </div>
                 <div className="mt-6">
-                  <h3 className="text-lg sm:text-xl font-bold tracking-tight text-white">
+                  <h3 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
                     Automated Test Generation &amp; Guard
                   </h3>
-                  <p className="mt-2.5 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  <p className="mt-2.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                     Automated unit test generation (pytest, Jest, JUnit) covers malicious inputs, edge cases, and type violations to eliminate surprises.
                   </p>
                 </div>
               </div>
 
-              <div className="mt-8 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold">
-                <span className="border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 px-2.5 py-1 rounded-lg">
+              <div className="mt-8 pt-4 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold">
+                <span className="border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 px-2.5 py-1 rounded-lg">
                   Automated Test Suites
                 </span>
-                <span className="border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 px-2.5 py-1 rounded-lg">
+                <span className="border border-cyan-500/30 bg-cyan-500/10 text-blue-600 dark:text-cyan-300 px-2.5 py-1 rounded-lg">
                   Sandbox Verified
                 </span>
               </div>
@@ -1147,95 +1147,95 @@ export const LandingPage: React.FC = () => {
       {/* ============================================================== */}
       {/* 6. HOW IT WORKS SECTION (Write Code -> Analyze -> Fix -> Test)  */}
       {/* ============================================================== */}
-      <section id="how-it-works" className="relative z-10 border-t border-slate-800/80 bg-[#030712] py-20 sm:py-28 overflow-hidden">
+      <section id="how-it-works" className="relative z-10 border-t border-slate-200 dark:border-slate-800/80 bg-white dark:bg-[#030712] py-20 sm:py-28 overflow-hidden transition-colors">
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
+            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               How CodeGuardian AI Works
             </h2>
-            <p className="mt-4 text-base text-slate-300 leading-relaxed">
+            <p className="mt-4 text-base text-slate-600 dark:text-slate-300 leading-relaxed">
               A seamless, developer-friendly 4-step workflow: Write Code &rarr; Analyze &rarr; Fix &rarr; Test.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {/* Step 1: Write Code */}
-            <div className="cg-card-hover rounded-3xl border border-slate-800 bg-[#090f20]/90 p-6 flex flex-col justify-between backdrop-blur-xl group">
+            <div className="cg-card-hover rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090f20]/90 p-6 flex flex-col justify-between backdrop-blur-xl group shadow-xs dark:shadow-xl">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 shadow-md shadow-cyan-500/10 group-hover:scale-105 transition-transform">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/15 border border-blue-500/30 text-blue-600 dark:text-cyan-400 shadow-md group-hover:scale-105 transition-transform">
                     <FileCode className="h-6 w-6" />
                   </div>
-                  <span className="font-mono text-3xl font-black text-slate-700 group-hover:text-cyan-400 transition-colors">01</span>
+                  <span className="font-mono text-3xl font-black text-slate-300 dark:text-slate-700 group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors">01</span>
                 </div>
-                <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition-colors">Write or Paste Code</h3>
-                <p className="mt-2.5 text-xs text-slate-300 leading-relaxed font-normal">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-cyan-300 transition-colors">Write or Paste Code</h3>
+                <p className="mt-2.5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
                   Select your runtime from 12+ supported languages. Upload or edit code with Monaco Editor and syntax highlighting.
                 </p>
               </div>
-              <div className="mt-5 pt-3 border-t border-slate-800 text-[11px] font-semibold text-cyan-400 flex items-center justify-between">
+              <div className="mt-5 pt-3 border-t border-slate-200 dark:border-slate-800 text-[11px] font-semibold text-blue-600 dark:text-cyan-400 flex items-center justify-between">
                 <span>Monaco Editor</span>
-                <span className="text-slate-400">12+ Runtimes</span>
+                <span className="text-slate-500 dark:text-slate-400">12+ Runtimes</span>
               </div>
             </div>
 
             {/* Step 2: Analyze */}
-            <div className="cg-card-hover rounded-3xl border border-slate-800 bg-[#090f20]/90 p-6 flex flex-col justify-between backdrop-blur-xl group">
+            <div className="cg-card-hover rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090f20]/90 p-6 flex flex-col justify-between backdrop-blur-xl group shadow-xs dark:shadow-xl">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/15 border border-blue-500/30 text-blue-400 shadow-md shadow-blue-500/10 group-hover:scale-105 transition-transform">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/15 border border-blue-500/30 text-blue-600 dark:text-blue-400 shadow-md group-hover:scale-105 transition-transform">
                     <Cpu className="h-6 w-6" />
                   </div>
-                  <span className="font-mono text-3xl font-black text-slate-700 group-hover:text-blue-400 transition-colors">02</span>
+                  <span className="font-mono text-3xl font-black text-slate-300 dark:text-slate-700 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">02</span>
                 </div>
-                <h3 className="text-base font-bold text-white group-hover:text-blue-300 transition-colors">Analyze &amp; Scan</h3>
-                <p className="mt-2.5 text-xs text-slate-300 leading-relaxed font-normal">
-                  Click <strong className="text-white font-semibold">Analyze Code</strong> to trigger deterministic AST parsing, Bandit security audits, and quality scoring.
+                <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">Analyze &amp; Scan</h3>
+                <p className="mt-2.5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                  Click <strong className="text-slate-900 dark:text-white font-semibold">Analyze Code</strong> to trigger deterministic AST parsing, Bandit security audits, and quality scoring.
                 </p>
               </div>
-              <div className="mt-5 pt-3 border-t border-slate-800 text-[11px] font-semibold text-blue-400 flex items-center justify-between">
+              <div className="mt-5 pt-3 border-t border-slate-200 dark:border-slate-800 text-[11px] font-semibold text-blue-600 dark:text-blue-400 flex items-center justify-between">
                 <span>Deterministic AST</span>
-                <span className="text-slate-400">Security &amp; Bugs</span>
+                <span className="text-slate-500 dark:text-slate-400">Security &amp; Bugs</span>
               </div>
             </div>
 
             {/* Step 3: Fix */}
-            <div className="cg-card-hover rounded-3xl border border-slate-800 bg-[#090f20]/90 p-6 flex flex-col justify-between backdrop-blur-xl group">
+            <div className="cg-card-hover rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090f20]/90 p-6 flex flex-col justify-between backdrop-blur-xl group shadow-xs dark:shadow-xl">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-500/15 border border-purple-500/30 text-purple-400 shadow-md shadow-purple-500/10 group-hover:scale-105 transition-transform">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-500/15 border border-purple-500/30 text-purple-600 dark:text-purple-400 shadow-md group-hover:scale-105 transition-transform">
                     <Sparkles className="h-6 w-6" />
                   </div>
-                  <span className="font-mono text-3xl font-black text-slate-700 group-hover:text-purple-400 transition-colors">03</span>
+                  <span className="font-mono text-3xl font-black text-slate-300 dark:text-slate-700 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">03</span>
                 </div>
-                <h3 className="text-base font-bold text-white group-hover:text-purple-300 transition-colors">Fix Error with AI</h3>
-                <p className="mt-2.5 text-xs text-slate-300 leading-relaxed font-normal">
-                  Click <strong className="text-white font-semibold">Fix Error</strong> to generate corrected patches. Review side-by-side diffs and revert via Undo if needed.
+                <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors">Fix Error with AI</h3>
+                <p className="mt-2.5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                  Click <strong className="text-slate-900 dark:text-white font-semibold">Fix Error</strong> to generate corrected patches. Review side-by-side diffs and revert via Undo if needed.
                 </p>
               </div>
-              <div className="mt-5 pt-3 border-t border-slate-800 text-[11px] font-semibold text-purple-400 flex items-center justify-between">
+              <div className="mt-5 pt-3 border-t border-slate-200 dark:border-slate-800 text-[11px] font-semibold text-purple-600 dark:text-purple-400 flex items-center justify-between">
                 <span>Unified Diffs</span>
-                <span className="text-slate-400">Undo Stack</span>
+                <span className="text-slate-500 dark:text-slate-400">Undo Stack</span>
               </div>
             </div>
 
             {/* Step 4: Test */}
-            <div className="cg-card-hover rounded-3xl border border-slate-800 bg-[#090f20]/90 p-6 flex flex-col justify-between backdrop-blur-xl group">
+            <div className="cg-card-hover rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090f20]/90 p-6 flex flex-col justify-between backdrop-blur-xl group shadow-xs dark:shadow-xl">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 shadow-md shadow-emerald-500/10 group-hover:scale-105 transition-transform">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 shadow-md group-hover:scale-105 transition-transform">
                     <TestTube2 className="h-6 w-6" />
                   </div>
-                  <span className="font-mono text-3xl font-black text-slate-700 group-hover:text-emerald-400 transition-colors">04</span>
+                  <span className="font-mono text-3xl font-black text-slate-300 dark:text-slate-700 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">04</span>
                 </div>
-                <h3 className="text-base font-bold text-white group-hover:text-emerald-300 transition-colors">Test &amp; Verify Output</h3>
-                <p className="mt-2.5 text-xs text-slate-300 leading-relaxed font-normal">
-                  Click <strong className="text-white font-semibold">Run Code</strong> or <strong className="text-white font-semibold">Run Tests</strong> to execute in Judge0 sandboxes and verify stdout against assertions.
+                <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors">Test &amp; Verify Output</h3>
+                <p className="mt-2.5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                  Click <strong className="text-slate-900 dark:text-white font-semibold">Run Code</strong> or <strong className="text-slate-900 dark:text-white font-semibold">Run Tests</strong> to execute in Judge0 sandboxes and verify stdout against assertions.
                 </p>
               </div>
-              <div className="mt-5 pt-3 border-t border-slate-800 text-[11px] font-semibold text-emerald-400 flex items-center justify-between">
+              <div className="mt-5 pt-3 border-t border-slate-200 dark:border-slate-800 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 flex items-center justify-between">
                 <span>Judge0 Sandbox</span>
-                <span className="text-slate-400">Assertion Bench</span>
+                <span className="text-slate-500 dark:text-slate-400">Assertion Bench</span>
               </div>
             </div>
           </div>

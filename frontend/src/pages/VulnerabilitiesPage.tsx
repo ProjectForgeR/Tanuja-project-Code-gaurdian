@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
 import {
   ShieldAlert,
   Search,
-  Filter,
-  CheckCircle2,
-  AlertTriangle,
-  ArrowRight,
-  ExternalLink,
-  ArrowLeft,
-  Home,
 } from 'lucide-react'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { analysisService } from '@/services/analysisService'
@@ -17,7 +9,6 @@ import { Finding } from '@/types/analysis'
 import { FindingCard } from '@/features/analysis/FindingCard'
 
 export const VulnerabilitiesPage: React.FC = () => {
-  const navigate = useNavigate()
   const [allFindings, setAllFindings] = useState<Finding[]>([])
   const [search, setSearch] = useState('')
   const [selectedSev, setSelectedSev] = useState('all')
@@ -47,19 +38,19 @@ export const VulnerabilitiesPage: React.FC = () => {
   })
 
   return (
-    <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden">
+    <div className="flex h-screen bg-[#F8FAFC] dark:bg-slate-950 text-[#172033] dark:text-slate-100 overflow-hidden transition-colors">
       <Sidebar />
 
       <main className="flex-1 flex flex-col h-full overflow-y-auto">
-        <div className="border-b border-slate-800 bg-slate-950/80 px-8 py-5 backdrop-blur-md">
+        <div className="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 px-8 py-5 backdrop-blur-md">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div>
-                <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2.5">
-                  <ShieldAlert className="h-5 w-5 text-red-400" />
-                  Vulnerability Explorer & CWE Matrix
+                <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2.5">
+                  <ShieldAlert className="h-5 w-5 text-red-600 dark:text-red-400" />
+                  Vulnerability Explorer &amp; CWE Matrix
                 </h1>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   Dedicated security audit stream highlighting injection vulnerabilities, credential exposures, and CVE risks.
                 </p>
               </div>
@@ -70,38 +61,38 @@ export const VulnerabilitiesPage: React.FC = () => {
         <div className="p-8 space-y-6">
           {/* Top CWE Reference Cards */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-            <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-4">
-              <span className="text-[10px] font-bold uppercase text-red-400">CWE-89</span>
-              <h4 className="text-sm font-bold text-white mt-1">SQL Injection</h4>
-              <p className="text-[11px] text-slate-400 mt-1">Dynamic query concatenation</p>
+            <div className="rounded-xl border border-red-200 dark:border-red-500/20 bg-red-50 dark:bg-red-500/10 p-4">
+              <span className="text-[10px] font-bold uppercase text-red-600 dark:text-red-400">CWE-89</span>
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white mt-1">SQL Injection</h4>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Dynamic query concatenation</p>
             </div>
-            <div className="rounded-xl border border-amber-500/20 bg-amber-500/10 p-4">
-              <span className="text-[10px] font-bold uppercase text-amber-400">CWE-79</span>
-              <h4 className="text-sm font-bold text-white mt-1">Cross-Site Scripting</h4>
-              <p className="text-[11px] text-slate-400 mt-1">DOM & template injection</p>
+            <div className="rounded-xl border border-amber-200 dark:border-amber-500/20 bg-amber-50 dark:bg-amber-500/10 p-4">
+              <span className="text-[10px] font-bold uppercase text-amber-600 dark:text-amber-400">CWE-79</span>
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white mt-1">Cross-Site Scripting</h4>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">DOM &amp; template injection</p>
             </div>
-            <div className="rounded-xl border border-purple-500/20 bg-purple-500/10 p-4">
-              <span className="text-[10px] font-bold uppercase text-purple-400">CWE-78</span>
-              <h4 className="text-sm font-bold text-white mt-1">Command Injection</h4>
-              <p className="text-[11px] text-slate-400 mt-1">Shell execution from input</p>
+            <div className="rounded-xl border border-purple-200 dark:border-purple-500/20 bg-purple-50 dark:bg-purple-500/10 p-4">
+              <span className="text-[10px] font-bold uppercase text-purple-600 dark:text-purple-400">CWE-78</span>
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white mt-1">Command Injection</h4>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Shell execution from input</p>
             </div>
-            <div className="rounded-xl border border-blue-500/20 bg-blue-500/10 p-4">
-              <span className="text-[10px] font-bold uppercase text-blue-400">CWE-798</span>
-              <h4 className="text-sm font-bold text-white mt-1">Hardcoded Secrets</h4>
-              <p className="text-[11px] text-slate-400 mt-1">API keys & cloud tokens</p>
+            <div className="rounded-xl border border-blue-200 dark:border-blue-500/20 bg-blue-50 dark:bg-blue-500/10 p-4">
+              <span className="text-[10px] font-bold uppercase text-blue-600 dark:text-blue-400">CWE-798</span>
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white mt-1">Hardcoded Secrets</h4>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">API keys &amp; cloud tokens</p>
             </div>
           </div>
 
           {/* Search bar */}
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
+              <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
               <input
                 type="text"
                 placeholder="Filter vulnerabilities by rule, description, or keyword..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full rounded-xl border border-slate-800 bg-slate-950/80 py-2 pl-9 pr-4 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-950/80 py-2 pl-9 pr-4 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500"
               />
             </div>
 
@@ -110,8 +101,10 @@ export const VulnerabilitiesPage: React.FC = () => {
                 <button
                   key={s}
                   onClick={() => setSelectedSev(s)}
-                  className={`rounded-lg px-3 py-1 text-xs font-semibold uppercase transition ${
-                    selectedSev === s ? 'bg-red-600 text-white' : 'bg-slate-900 text-slate-400 hover:text-white'
+                  className={`rounded-lg px-3 py-1 text-xs font-semibold uppercase transition cursor-pointer ${
+                    selectedSev === s
+                      ? 'bg-red-600 text-white shadow-xs'
+                      : 'border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   {s}
@@ -123,7 +116,7 @@ export const VulnerabilitiesPage: React.FC = () => {
           {/* Vulnerabilities List */}
           <div className="space-y-3">
             {filtered.length === 0 ? (
-              <div className="py-16 text-center text-xs text-slate-500 rounded-xl border border-slate-800 bg-slate-900/40">
+              <div className="py-16 text-center text-xs text-slate-500 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40">
                 No security vulnerabilities currently matching criteria.
               </div>
             ) : (
@@ -137,3 +130,4 @@ export const VulnerabilitiesPage: React.FC = () => {
     </div>
   )
 }
+export default VulnerabilitiesPage

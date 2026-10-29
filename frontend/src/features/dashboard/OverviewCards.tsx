@@ -29,7 +29,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({
       value: totalAnalyses,
       subtext: 'Scans executed across codebase',
       icon: Activity,
-      color: 'text-blue-400',
+      color: 'text-blue-600 dark:text-blue-400',
       bgColor: 'bg-blue-500/10',
       borderColor: 'border-blue-500/20',
     },
@@ -38,7 +38,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({
       value: bugsDetected,
       subtext: 'Runtime errors & logic defects',
       icon: Bug,
-      color: 'text-amber-400',
+      color: 'text-amber-600 dark:text-amber-400',
       bgColor: 'bg-amber-500/10',
       borderColor: 'border-amber-500/20',
     },
@@ -47,7 +47,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({
       value: securityIssues,
       subtext: 'CWEs, injections & leaks',
       icon: ShieldAlert,
-      color: 'text-purple-400',
+      color: 'text-purple-600 dark:text-purple-400',
       bgColor: 'bg-purple-500/10',
       borderColor: 'border-purple-500/20',
     },
@@ -56,7 +56,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({
       value: criticalFindings,
       subtext: 'Urgent production blockers',
       icon: Flame,
-      color: 'text-red-400',
+      color: 'text-red-600 dark:text-red-400',
       bgColor: 'bg-red-500/10',
       borderColor: 'border-red-500/20',
     },
@@ -65,7 +65,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({
       value: `${averageQualityScore.toFixed(1)}/100`,
       subtext: 'Weighted health index',
       icon: Award,
-      color: 'text-emerald-400',
+      color: 'text-emerald-600 dark:text-emerald-400',
       bgColor: 'bg-emerald-500/10',
       borderColor: 'border-emerald-500/20',
     },
@@ -76,19 +76,19 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({
       {cards.map((c, idx) => (
         <div
           key={idx}
-          className={`rounded-2xl border ${c.borderColor} bg-slate-900/60 p-5 shadow-lg backdrop-blur-md transition hover:scale-[1.02]`}
+          className={`rounded-2xl border border-slate-200 dark:${c.borderColor} bg-white dark:bg-slate-900/60 p-5 shadow-xs dark:shadow-lg backdrop-blur-md transition hover:scale-[1.02]`}
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-400">{c.title}</span>
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">{c.title}</span>
             <div className={`flex h-8 w-8 items-center justify-center rounded-xl ${c.bgColor} ${c.color}`}>
               <c.icon className="h-4 w-4" />
             </div>
           </div>
-          <div className="mt-3 text-2xl font-black tracking-tight text-white">
+          <div className="mt-3 text-2xl font-black tracking-tight text-slate-900 dark:text-white">
             {c.value}
           </div>
-          <div className="mt-1 flex items-center gap-1 text-[11px] text-slate-400">
-            <TrendingUp className="h-3 w-3 text-blue-400" />
+          <div className="mt-1 flex items-center gap-1 text-[11px] text-slate-500 dark:text-slate-400">
+            <TrendingUp className="h-3 w-3 text-blue-600 dark:text-blue-400" />
             <span>{c.subtext}</span>
           </div>
         </div>

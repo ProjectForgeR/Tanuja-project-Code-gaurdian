@@ -98,9 +98,9 @@ export const RobotFloatingWidget: React.FC = () => {
             <button
               type="button"
               onClick={handleOpenAssistant}
-              className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-cyan-500/40 bg-slate-900/90 dark:bg-slate-950/90 px-3.5 py-1.5 text-xs font-bold text-cyan-300 shadow-lg shadow-cyan-950/50 hover:bg-slate-800 transition cursor-pointer mb-6 animate-pulse backdrop-blur-md"
+              className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-slate-300 dark:border-cyan-500/40 bg-white/95 dark:bg-slate-950/90 px-3.5 py-1.5 text-xs font-bold text-slate-800 dark:text-cyan-300 shadow-lg shadow-slate-900/10 dark:shadow-cyan-950/50 hover:bg-slate-50 dark:hover:bg-slate-850 transition cursor-pointer mb-6 animate-pulse backdrop-blur-md"
             >
-              <Sparkles className="h-3 w-3 text-cyan-400" />
+              <Sparkles className="h-3 w-3 text-blue-600 dark:text-cyan-400" />
               <span>Ask AI Assistant</span>
             </button>
           )}

@@ -67,19 +67,19 @@ export const TestGeneratorPage: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden">
+    <div className="flex h-screen bg-[#F8FAFC] dark:bg-slate-950 text-[#172033] dark:text-slate-100 overflow-hidden transition-colors">
       <Sidebar />
 
       <main className="flex-1 flex flex-col h-full overflow-y-auto">
-        <div className="border-b border-slate-800 bg-slate-950/80 px-8 py-5 backdrop-blur-md">
+        <div className="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 px-8 py-5 backdrop-blur-md">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div>
-                <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2.5">
-                  <TestTube2 className="h-5 w-5 text-purple-400" />
+                <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2.5">
+                  <TestTube2 className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                   Automatic Unit Test Generator
                 </h1>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   Synthesize unit tests, boundary conditions, edge cases, and security regression guards.
                 </p>
               </div>
@@ -89,9 +89,9 @@ export const TestGeneratorPage: React.FC = () => {
 
         <div className="p-8 space-y-6">
           {/* Controls */}
-          <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+          <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 p-4 shadow-xs dark:shadow-xl">
             <div className="flex flex-wrap items-center gap-3 text-xs">
-              <span className="font-semibold text-slate-400">Language:</span>
+              <span className="font-semibold text-slate-500 dark:text-slate-400">Language:</span>
               <select
                 value={language}
                 onChange={(e) => {
@@ -101,7 +101,7 @@ export const TestGeneratorPage: React.FC = () => {
                   else if (e.target.value === 'java') setFramework('junit5')
                   else if (e.target.value === 'go') setFramework('testing')
                 }}
-                className="rounded-xl border border-slate-700 bg-slate-950 px-3 py-1.5 text-white focus:outline-none"
+                className="rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3 py-1.5 text-slate-800 dark:text-white focus:outline-none"
               >
                 <option value="python">Python</option>
                 <option value="javascript">JavaScript</option>
@@ -110,11 +110,11 @@ export const TestGeneratorPage: React.FC = () => {
                 <option value="go">Go</option>
               </select>
 
-              <span className="font-semibold text-slate-400 ml-2">Framework:</span>
+              <span className="font-semibold text-slate-500 dark:text-slate-400 ml-2">Framework:</span>
               <select
                 value={framework}
                 onChange={(e) => setFramework(e.target.value)}
-                className="rounded-xl border border-slate-700 bg-slate-950 px-3 py-1.5 text-white focus:outline-none"
+                className="rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3 py-1.5 text-slate-800 dark:text-white focus:outline-none"
               >
                 <option value="pytest">pytest (Python)</option>
                 <option value="jest">Jest / Vitest (JS/TS)</option>
@@ -126,7 +126,7 @@ export const TestGeneratorPage: React.FC = () => {
             <button
               onClick={handleGenerate}
               disabled={isGenerating}
-              className="inline-flex items-center gap-2 rounded-xl bg-purple-600 px-5 py-2 text-xs font-semibold text-white shadow-lg shadow-purple-600/30 hover:bg-purple-500 disabled:opacity-50 transition"
+              className="inline-flex items-center gap-2 rounded-xl bg-purple-600 px-5 py-2 text-xs font-semibold text-white shadow-md shadow-purple-600/20 hover:bg-purple-500 disabled:opacity-50 transition cursor-pointer"
             >
               <Sparkles className="h-4 w-4" />
               {isGenerating ? 'Synthesizing...' : 'Generate Test Suite'}
@@ -136,7 +136,7 @@ export const TestGeneratorPage: React.FC = () => {
           {/* Editors Grid */}
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             <div>
-              <div className="mb-2 text-xs text-slate-400 font-semibold">Source Code Under Test</div>
+              <div className="mb-2 text-xs text-slate-500 dark:text-slate-400 font-semibold">Source Code Under Test</div>
               <CodeEditor
                 code={code}
                 language={language}
@@ -146,20 +146,20 @@ export const TestGeneratorPage: React.FC = () => {
             </div>
 
             <div>
-              <div className="mb-2 flex items-center justify-between text-xs text-slate-400">
+              <div className="mb-2 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                 <span className="font-semibold">Synthesized Test Suite</span>
                 {testResult && (
                   <div className="flex items-center gap-2">
                     <button
                       onClick={handleCopy}
-                      className="inline-flex items-center gap-1 hover:text-white transition"
+                      className="inline-flex items-center gap-1 hover:text-blue-600 dark:hover:text-white transition cursor-pointer"
                     >
-                      {copied ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
+                      {copied ? <Check className="h-3 w-3 text-emerald-500 dark:text-emerald-400" /> : <Copy className="h-3 w-3" />}
                       {copied ? 'Copied' : 'Copy'}
                     </button>
                     <button
                       onClick={handleDownload}
-                      className="inline-flex items-center gap-1 hover:text-purple-400 transition ml-2"
+                      className="inline-flex items-center gap-1 hover:text-purple-600 dark:hover:text-purple-400 transition ml-2 cursor-pointer"
                     >
                       <Download className="h-3 w-3" />
                       Download
@@ -168,14 +168,14 @@ export const TestGeneratorPage: React.FC = () => {
                 )}
               </div>
 
-              <div className="h-[450px] overflow-hidden rounded-xl border border-slate-800 bg-slate-950 font-mono text-xs">
+              <div className="h-[450px] overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 font-mono text-xs">
                 {testResult ? (
-                  <pre className="h-full overflow-y-auto p-4 text-slate-200">
+                  <pre className="h-full overflow-y-auto p-4 text-slate-800 dark:text-slate-200">
                     <code>{testResult.tests_code}</code>
                   </pre>
                 ) : (
-                  <div className="flex h-full flex-col items-center justify-center p-8 text-center text-slate-500">
-                    <TestTube2 className="h-10 w-10 text-slate-700 mb-2" />
+                  <div className="flex h-full flex-col items-center justify-center p-8 text-center text-slate-400 dark:text-slate-500">
+                    <TestTube2 className="h-10 w-10 text-slate-300 dark:text-slate-700 mb-2" />
                     <p>Click &quot;Generate Test Suite&quot; to synthesize unit tests for the source code on the left.</p>
                   </div>
                 )}

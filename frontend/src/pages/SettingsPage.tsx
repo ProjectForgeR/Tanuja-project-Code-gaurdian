@@ -88,19 +88,19 @@ export const SettingsPage: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden">
+    <div className="flex h-screen bg-[#F8FAFC] dark:bg-slate-950 text-[#172033] dark:text-slate-100 overflow-hidden transition-colors">
       <Sidebar />
 
       <main className="flex-1 flex flex-col h-full overflow-y-auto">
-        <div className="border-b border-slate-800 bg-slate-950/80 px-8 py-5 backdrop-blur-md">
+        <div className="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 px-8 py-5 backdrop-blur-md">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div>
-                <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2.5">
-                  <SettingsIcon className="h-5 w-5 text-blue-400" />
-                  System & Engine Settings
+                <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2.5">
+                  <SettingsIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                  System &amp; Engine Settings
                 </h1>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   Configure analysis thresholds, theme, default language, and data retention.
                 </p>
               </div>
@@ -110,67 +110,67 @@ export const SettingsPage: React.FC = () => {
 
         <form onSubmit={handleSave} className="p-8 max-w-4xl space-y-6">
           {saveSuccess && (
-            <div className="flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-xs font-semibold text-emerald-400">
+            <div className="flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
               <Check className="h-4 w-4" />
               Settings updated successfully!
             </div>
           )}
 
           {/* User Profile */}
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-xl backdrop-blur-md">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2 mb-4">
-              <User className="h-4 w-4 text-blue-400" />
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 p-6 shadow-xs dark:shadow-xl backdrop-blur-md">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-4">
+              <User className="h-4 w-4 text-blue-600 dark:text-blue-400" />
               User Profile
             </h3>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 text-xs">
               <div>
-                <label className="text-slate-400 font-semibold">Email Address</label>
+                <label className="text-slate-500 dark:text-slate-400 font-semibold">Email Address</label>
                 <input
                   type="text"
                   disabled
                   value={user?.email || 'Not signed in'}
-                  className="mt-1 w-full rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-slate-400"
+                  className="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 px-3 py-2 text-slate-500 dark:text-slate-400"
                 />
               </div>
               <div>
-                <label className="text-slate-400 font-semibold">Full Name / Alias</label>
+                <label className="text-slate-500 dark:text-slate-400 font-semibold">Full Name / Alias</label>
                 <input
                   type="text"
                   disabled
                   value={user?.full_name || 'Guest'}
-                  className="mt-1 w-full rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-slate-400"
+                  className="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 px-3 py-2 text-slate-500 dark:text-slate-400"
                 />
               </div>
             </div>
           </div>
 
           {/* Preferences */}
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-xl backdrop-blur-md space-y-4">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <Moon className="h-4 w-4 text-purple-400" />
-              Interface & Editor Preferences
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 p-6 shadow-xs dark:shadow-xl backdrop-blur-md space-y-4">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <Moon className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+              Interface &amp; Editor Preferences
             </h3>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 text-xs">
               <div>
-                <label className="text-slate-400 font-semibold">Theme Mode</label>
+                <label className="text-slate-500 dark:text-slate-400 font-semibold">Theme Mode</label>
                 <div className="mt-1 flex items-center gap-2">
                   <button
                     type="button"
                     onClick={toggleTheme}
-                    className="rounded-xl border border-slate-700 bg-slate-950 px-4 py-2 font-semibold text-slate-200 hover:bg-slate-800 transition cursor-pointer"
+                    className="rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-950 px-4 py-2 font-semibold text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer"
                   >
-                    Current: {theme === 'dark' ? 'Dark Navy' : 'Light Clean'} (Click to toggle)
+                    Current: {theme === 'dark' ? '🌙 Dark Mode' : '☀️ Light Mode'} (Click to toggle)
                   </button>
                 </div>
               </div>
 
               <div>
-                <label className="text-slate-400 font-semibold">Default Workspace Language</label>
+                <label className="text-slate-500 dark:text-slate-400 font-semibold">Default Workspace Language</label>
                 <select
                   value={defaultLang}
                   onChange={(e) => setDefaultLang(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:outline-none"
+                  className="mt-1 w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3 py-2 text-slate-800 dark:text-white focus:outline-none"
                 >
                   <option value="python">Python</option>
                   <option value="javascript">JavaScript</option>
@@ -189,7 +189,7 @@ export const SettingsPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-slate-400 font-semibold">Real-Time Debounce Delay</label>
+                <label className="text-slate-500 dark:text-slate-400 font-semibold">Real-Time Debounce Delay</label>
                 <div className="mt-1 flex items-center gap-3">
                   <input
                     type="range"
@@ -200,28 +200,28 @@ export const SettingsPage: React.FC = () => {
                     onChange={(e) => setDebounceDelay(Number(e.target.value))}
                     className="flex-1"
                   />
-                  <span className="font-mono text-blue-400">{debounceDelay}ms</span>
+                  <span className="font-mono text-blue-600 dark:text-blue-400 font-bold">{debounceDelay}ms</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Data Retention & Privacy */}
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-xl backdrop-blur-md space-y-4">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <Database className="h-4 w-4 text-emerald-400" />
-              Data Retention & Privacy
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 p-6 shadow-xs dark:shadow-xl backdrop-blur-md space-y-4">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <Database className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              Data Retention &amp; Privacy
             </h3>
             <div className="text-xs space-y-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="font-semibold text-slate-300">Retention Horizon</span>
-                  <p className="text-slate-500">Auto-purge analysis reports after specified days</p>
+                  <span className="font-semibold text-slate-800 dark:text-slate-300">Retention Horizon</span>
+                  <p className="text-slate-500 dark:text-slate-400">Auto-purge analysis reports after specified days</p>
                 </div>
                 <select
                   value={retentionDays}
                   onChange={(e) => setRetentionDays(Number(e.target.value))}
-                  className="rounded-xl border border-slate-700 bg-slate-950 px-3 py-1.5 text-white focus:outline-none"
+                  className="rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3 py-1.5 text-slate-800 dark:text-white focus:outline-none"
                 >
                   <option value={7}>7 Days</option>
                   <option value={30}>30 Days</option>
