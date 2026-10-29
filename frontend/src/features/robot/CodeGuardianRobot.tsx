@@ -1,9 +1,10 @@
 import React from 'react'
 
 export type RobotMood = 'normal' | 'happy' | 'waving' | 'thinking'
+export type RobotSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
 interface CodeGuardianRobotProps {
-  size?: 'sm' | 'md' | 'lg' | 'xl'
+  size?: RobotSize
   mood?: RobotMood
   isWaving?: boolean
   showParticles?: boolean
@@ -12,19 +13,20 @@ interface CodeGuardianRobotProps {
 }
 
 export const CodeGuardianRobot: React.FC<CodeGuardianRobotProps> = ({
-  size = 'md',
+  size = 'sm',
   mood = 'normal',
   isWaving = false,
   showParticles = false,
   className = '',
   onClick,
 }) => {
-  // Dimensions based on size
+  // Dimensions based on size (compact & refined)
   const sizeMap = {
-    sm: { width: 54, height: 64 },
-    md: { width: 110, height: 132 },
-    lg: { width: 160, height: 192 },
-    xl: { width: 220, height: 264 },
+    xs: { width: 50, height: 60 },
+    sm: { width: 74, height: 89 },
+    md: { width: 92, height: 110 },
+    lg: { width: 135, height: 162 },
+    xl: { width: 180, height: 216 },
   }
 
   const { width, height } = sizeMap[size]

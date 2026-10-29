@@ -56,7 +56,7 @@ export const RobotFloatingWidget: React.FC = () => {
           <button
             type="button"
             onClick={handleToggleAssistant}
-            className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 dark:border-cyan-500/30 bg-white/95 dark:bg-slate-900/90 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-cyan-300 shadow-md shadow-slate-900/5 dark:shadow-cyan-950/40 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-cyan-400 transition cursor-pointer mb-5 backdrop-blur-md group"
+            className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 dark:border-cyan-500/30 bg-white/95 dark:bg-slate-900/90 px-2.5 py-1 text-[11px] font-semibold text-slate-700 dark:text-cyan-300 shadow-md shadow-slate-900/5 dark:shadow-cyan-950/40 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-cyan-400 transition cursor-pointer mb-3 backdrop-blur-md group"
             title="Open AI Assistant"
           >
             <Sparkles className="h-3 w-3 text-blue-600 dark:text-cyan-400 group-hover:rotate-12 transition-transform" />
@@ -80,7 +80,7 @@ export const RobotFloatingWidget: React.FC = () => {
             {/* Pure Robot Floating (Particles / surrounding symbols removed) */}
             <div className="relative transform group-hover:scale-105 transition-transform duration-300">
               <CodeGuardianRobot
-                size="md"
+                size="sm"
                 mood={robotMood}
                 isWaving={robotMood === 'waving'}
                 showParticles={false}
