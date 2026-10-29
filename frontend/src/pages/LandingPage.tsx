@@ -25,7 +25,6 @@ import {
   ChevronLeft,
   AlertTriangle,
   FileText,
-  Sliders,
   Copy,
   Eye,
   Database,
@@ -34,9 +33,6 @@ import {
   Server,
   Atom,
   RotateCcw,
-  CheckSquare,
-  Wrench,
-  ExternalLink,
   Volume2,
   VolumeX,
 } from 'lucide-react'
@@ -211,7 +207,6 @@ Total Items Processed: 4 | Exit Code: 0`,
   },
 ]
 
-// The 12 Supported Languages requested in Section 1
 interface SupportedLanguage {
   name: string
   code: string
@@ -352,27 +347,27 @@ const LanguageCard: React.FC<LanguageCardProps> = ({ lang, onSelect, isInteracti
         }
       }}
       aria-label={`Open ${lang.name} in Code Workspace`}
-      className="language-card w-[280px] sm:w-[320px] shrink-0 rounded-2xl border border-slate-800 bg-slate-900/90 p-5 shadow-sm flex flex-col justify-between cursor-pointer group hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-200 select-none text-left"
+      className="cg-card-hover w-[280px] sm:w-[320px] shrink-0 rounded-2xl border border-slate-800 bg-[#0b1021]/90 p-5 shadow-lg flex flex-col justify-between cursor-pointer group hover:border-cyan-400/80 hover:shadow-cyan-500/15 select-none text-left backdrop-blur-md"
     >
       <div>
         <div className="flex items-center justify-between mb-3">
           <span className="text-2xl transition-transform duration-200 group-hover:scale-110">{lang.icon}</span>
-          <span className="rounded-full bg-slate-800 border border-slate-700 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-cyan-400">
+          <span className="rounded-full bg-slate-800/80 border border-slate-700/80 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-cyan-400">
             {lang.category}
           </span>
         </div>
-        <h3 className="text-lg font-black text-white group-hover:text-cyan-400 transition-colors flex items-center justify-between">
+        <h3 className="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors flex items-center justify-between">
           <span>{lang.name}</span>
           <ArrowRight className="h-4 w-4 text-cyan-400 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0" />
         </h3>
-        <p className="text-xs font-mono font-bold text-blue-400 mt-1">{lang.version}</p>
-        <p className="text-xs text-slate-300 mt-2 leading-relaxed font-normal">{lang.capability}</p>
+        <p className="text-xs font-mono font-semibold text-blue-400 mt-1">{lang.version}</p>
+        <p className="text-xs text-slate-300 mt-2.5 leading-relaxed font-normal">{lang.capability}</p>
       </div>
 
-      <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
-        <span className="text-[11px] font-medium text-slate-400 group-hover:text-slate-200 transition">Click to Open Editor</span>
+      <div className="mt-4 pt-3.5 border-t border-slate-800/80 flex items-center justify-between">
+        <span className="text-[11px] font-medium text-slate-400 group-hover:text-slate-200 transition">Launch in Editor</span>
         <span className="inline-flex items-center gap-1 text-xs font-bold text-cyan-400 group-hover:text-cyan-300 transition">
-          <span>Test {lang.name}</span>
+          <span>Analyze {lang.name}</span>
           <ChevronRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
         </span>
       </div>
@@ -381,8 +376,6 @@ const LanguageCard: React.FC<LanguageCardProps> = ({ lang, onSelect, isInteracti
 }
 
 export const LandingPage: React.FC = () => {
-  const { activateDemoUser } = useAuth()
-  const { theme } = useTheme()
   const navigate = useNavigate()
 
   // Interactive Code Preview state
@@ -391,7 +384,7 @@ export const LandingPage: React.FC = () => {
   const [copied, setCopied] = useState<boolean>(false)
   const [languageFilter, setLanguageFilter] = useState<'All' | 'Core' | 'Web' | 'Database'>('All')
   const [isHeroVideoMuted, setIsHeroVideoMuted] = useState<boolean>(true)
-  const [activeHeroTab, setActiveHeroTab] = useState<'robot' | 'scanner'>('robot')
+  const [activeHeroTab, setActiveHeroTab] = useState<'robot' | 'scanner' | 'diagnostics'>('robot')
 
   // Language Carousel state and refs
   const [isPlaying, setIsPlaying] = useState<boolean>(true)
@@ -432,7 +425,6 @@ export const LandingPage: React.FC = () => {
       ? SUPPORTED_LANGUAGES
       : SUPPORTED_LANGUAGES.filter((l) => l.category === languageFilter)
 
-  // Ensure enough items in each loop set so that wide screens never run out of cards
   const normalizedLanguages = React.useMemo(() => {
     let list = [...filteredLanguages]
     while (list.length < 8) {
@@ -441,12 +433,10 @@ export const LandingPage: React.FC = () => {
     return list
   }, [filteredLanguages])
 
-  // Continuous smooth auto-scrolling (slow right-to-left marquee)
   useEffect(() => {
     const container = carouselRef.current
     if (!container) return
 
-    // Respect reduced motion preference
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
     if (mediaQuery.matches) return
 
@@ -459,7 +449,6 @@ export const LandingPage: React.FC = () => {
           if (container.scrollLeft >= loopDistance * 2) {
             container.scrollLeft -= loopDistance
           } else {
-            // Smooth, slow right-to-left crawl (0.75px per frame)
             container.scrollLeft += 0.75
           }
         }
@@ -471,14 +460,12 @@ export const LandingPage: React.FC = () => {
     return () => cancelAnimationFrame(animationFrameId)
   }, [isPlaying, isHovered, normalizedLanguages])
 
-  // Reset scroll when user selects a different category filter
   useEffect(() => {
     if (carouselRef.current) {
       carouselRef.current.scrollLeft = 0
     }
   }, [languageFilter])
 
-  // Manual carousel navigation
   const handleScrollLeft = () => {
     const container = carouselRef.current
     if (!container || !set1Ref.current || !set2Ref.current) return
@@ -504,117 +491,180 @@ export const LandingPage: React.FC = () => {
   }
 
   return (
-    <div className="landing-page-root min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col selection:bg-blue-600 selection:text-white">
-      {/* 1. Navigation Bar with CodeGuardian AI Logo */}
+    <div className="min-h-screen bg-[#030712] text-slate-100 flex flex-col relative overflow-hidden selection:bg-cyan-500 selection:text-slate-950">
+      {/* ============================================================== */}
+      {/* 0. CODING BACKGROUND: AMBIENT GLOWS, CYBER MESH & CODE TOKENS  */}
+      {/* ============================================================== */}
+      <div className="pointer-events-none fixed inset-0 overflow-hidden z-0" aria-hidden="true">
+        {/* Subtle Cyber Grid Pattern */}
+        <div className="absolute inset-0 cyber-grid-pattern opacity-60" />
+
+        {/* Ambient Radial Lights */}
+        <div className="absolute -top-32 left-1/4 h-[550px] w-[550px] rounded-full radial-glow-blue blur-3xl opacity-50" />
+        <div className="absolute top-1/3 -right-20 h-[600px] w-[600px] rounded-full radial-glow-cyan blur-3xl opacity-40" />
+        <div className="absolute top-2/3 left-10 h-[500px] w-[500px] rounded-full radial-glow-purple blur-3xl opacity-30" />
+
+        {/* Floating Code & Syntax Fragments */}
+        <div className="absolute top-24 left-[8%] font-mono text-xs font-bold text-cyan-400/15 animate-syntax-1 select-none">
+          {`const audit = analyze(AST);`}
+        </div>
+        <div className="absolute top-36 right-[12%] font-mono text-sm font-bold text-blue-400/20 animate-syntax-2 select-none">
+          {`{ CWE-89: "SQL_INJECTION" }`}
+        </div>
+        <div className="absolute top-96 left-[18%] font-mono text-xs text-purple-400/20 animate-syntax-3 select-none">
+          {`try { sandbox.run(); } catch (err)`}
+        </div>
+        <div className="absolute top-[480px] right-[6%] font-mono text-xs text-cyan-300/15 animate-syntax-1 select-none">
+          {`function patch(diff) => CleanCode`}
+        </div>
+        <div className="absolute top-[800px] left-[5%] font-mono text-xs text-blue-300/15 animate-syntax-2 select-none">
+          {`[PASS] 21/21 security assertions ok`}
+        </div>
+        <div className="absolute top-[1200px] right-[15%] font-mono text-sm text-cyan-500/15 animate-syntax-3 select-none">
+          {`</> deterministic-ast-scanner`}
+        </div>
+      </div>
+
+      {/* 1. Modern Glassmorphic Navigation Bar */}
       <Navbar />
 
-      {/* 2. Hero Section (Matches Screenshot 3 Reference with 2nd Image) */}
-      <section className="hero-section relative w-full min-h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24 bg-white dark:bg-slate-950 transition-colors">
-        {/* Subtle ambient light gradient in background */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-          <div className="absolute -top-32 right-10 h-96 w-96 rounded-full bg-blue-500/10 dark:bg-blue-600/10 blur-3xl" />
-          <div className="absolute top-1/2 left-0 h-96 w-96 rounded-full bg-indigo-500/10 dark:bg-indigo-600/10 blur-3xl -translate-y-1/2" />
-        </div>
-
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-            {/* Left Column: Heading, Description & Action Buttons */}
+      {/* ============================================================== */}
+      {/* 2. HERO SECTION: CODING CYBERSECURITY REDESIGN                  */}
+      {/* ============================================================== */}
+      <section className="relative z-10 w-full min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
+        <div className="mx-auto max-w-7xl w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+            {/* Left Column: Headline, Description & Interactive CTAs */}
             <div className="lg:col-span-6 flex flex-col items-start text-left">
-              {/* Mascot Welcome Badge */}
-              <div className="hero-animate-fade-in inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 dark:bg-cyan-950/40 px-3.5 py-1 text-xs font-semibold text-cyan-700 dark:text-cyan-300 mb-4 backdrop-blur-md">
-                <span className="flex h-2 w-2 rounded-full bg-cyan-500 animate-pulse" />
-                <span className="flex items-center gap-1.5 font-sans">
-                  <span>Meet GuardianBot</span>
-                  <span className="text-slate-400 dark:text-slate-500">•</span>
-                  <span className="font-normal text-slate-600 dark:text-slate-300">Your Animated AI Assistant Below 👋</span>
+              {/* Badge: AI-Powered Code Security */}
+              <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-950/40 px-3.5 py-1.5 text-xs font-bold text-cyan-300 mb-6 backdrop-blur-xl shadow-lg shadow-cyan-950/50">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-400" />
                 </span>
+                <span className="font-mono tracking-wider uppercase text-[11px]">
+                  AI-Powered Code Security
+                </span>
+                <span className="text-slate-600">•</span>
+                <span className="text-slate-300 font-sans font-medium">GuardianBot Active</span>
               </div>
 
-              {/* Master Heading: Build Smarter. Ship Faster. */}
-              <h1 className="hero-title hero-animate-fade-in hero-delay-1 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 dark:text-white leading-[1.12]">
-                <span className="hero-title-text block text-slate-900 dark:text-white font-serif">
-                  Build Smarter.
-                </span>
-                <span className="hero-ship-faster block mt-1">
-                  Ship Faster.
-                </span>
+              {/* Main Heading: Write Better Code. Ship With Confidence. */}
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1] max-w-2xl">
+                Write{' '}
+                <span className="gradient-text-cyan-blue">Better Code.</span>
+                <br />
+                Ship With{' '}
+                <span className="gradient-text-cyan-blue">Confidence.</span>
               </h1>
 
               {/* Subtitle / Description */}
-              <p className="hero-desc hero-animate-fade-in hero-delay-2 mt-5 sm:mt-6 text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-300 font-normal leading-relaxed max-w-xl">
-                Turn ambitious ideas into powerful digital experiences with modern tools, intelligent workflows, and technology built for what comes next.
+              <p className="mt-6 text-base sm:text-lg text-slate-300 font-normal leading-relaxed max-w-xl">
+                CodeGuardian AI detects bugs, explains runtime errors, audits security vulnerabilities (OWASP &amp; CWE), and applies verified one-click patches across 12+ polyglot languages.
               </p>
 
-              {/* CTA Buttons Row */}
-              <div className="hero-animate-fade-in hero-delay-3 mt-8 sm:mt-10 flex flex-wrap items-center gap-3.5 sm:gap-4 w-full sm:w-auto">
-                {/* Primary CTA: Start Free Trial */}
+              {/* Primary & Secondary Action Buttons with Floating Hover */}
+              <div className="mt-8 sm:mt-10 flex flex-wrap items-center gap-4 w-full sm:w-auto">
+                {/* Primary CTA: Start Analyzing Code */}
                 <button
                   type="button"
                   onClick={() => navigate('/workspace')}
-                  className="hero-primary-btn inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-[0.98] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition-all duration-200 cursor-pointer"
+                  className="cg-btn-primary px-7 py-3.5 text-sm sm:text-base group"
                 >
-                  <span>Start Free Trial</span>
-                  <ArrowRight className="h-4 w-4" />
+                  <span>Start Analyzing Code</span>
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </button>
 
-                {/* Secondary CTA: How It Works */}
+                {/* Secondary CTA: Explore Features */}
                 <button
                   type="button"
-                  onClick={() => handleScrollToSection('how-it-works')}
-                  className="hero-secondary-btn inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 active:scale-[0.98] px-7 py-3.5 text-sm font-semibold shadow-xs transition-all duration-200 cursor-pointer"
+                  onClick={() => handleScrollToSection('features')}
+                  className="cg-btn-secondary px-6 py-3.5 text-sm sm:text-base group"
                 >
-                  <Sparkles className="h-4 w-4 text-blue-600 dark:text-cyan-400" />
-                  <span>How it works</span>
+                  <Sparkles className="h-4 w-4 text-cyan-400 group-hover:rotate-12 transition-transform" />
+                  <span>Explore Features</span>
                 </button>
+              </div>
+
+              {/* Trust Indicators / Verified Capability Badges */}
+              <div className="mt-10 pt-6 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-xl">
+                <div className="flex items-center gap-2 text-xs text-slate-300 font-mono">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-cyan-400 shrink-0" />
+                  <span>12+ Runtimes</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-slate-300 font-mono">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-cyan-400 shrink-0" />
+                  <span>150+ AST Rules</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-slate-300 font-mono">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-cyan-400 shrink-0" />
+                  <span>Judge0 Sandbox</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-slate-300 font-mono">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-cyan-400 shrink-0" />
+                  <span>Neural Fixes</span>
+                </div>
               </div>
             </div>
 
-            {/* Right Column: Sleek Application Window containing 3D AI Robot Video & Debugger */}
+            {/* Right Column: Terminal Window with GuardianBot 3D Video & Code Diagnostics */}
             <div className="lg:col-span-6 w-full flex items-center justify-center">
               <div className="relative w-full max-w-lg lg:max-w-none">
-                {/* Ambient drop shadow / glow */}
-                <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-600/25 via-cyan-500/25 to-indigo-600/25 blur-xl opacity-75 dark:opacity-50" />
+                {/* Ambient drop shadow & cyan glow */}
+                <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-600/30 via-cyan-500/30 to-purple-600/30 blur-2xl opacity-70" />
 
-                {/* Window Mock Container matching Screenshot 3 */}
-                <div className="relative rounded-2xl sm:rounded-3xl border border-slate-800/90 dark:border-slate-800 bg-[#0c121e] shadow-2xl overflow-hidden">
-                  {/* Top Window Bar (traffic light dots + tabs + audio toggle) */}
-                  <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 bg-[#111827] border-b border-slate-800 gap-2">
-                    {/* Left: Window control dots */}
-                    <div className="flex items-center gap-1.5 sm:gap-2">
-                      <div className="h-3 w-3 rounded-full bg-rose-500 shadow-xs" />
-                      <div className="h-3 w-3 rounded-full bg-amber-400 shadow-xs" />
-                      <div className="h-3 w-3 rounded-full bg-emerald-500 shadow-xs" />
+                {/* Window Mock Container */}
+                <div className="relative rounded-3xl border border-cyan-500/25 bg-[#0a0f1e]/95 shadow-2xl overflow-hidden backdrop-blur-2xl">
+                  {/* Top Window Bar */}
+                  <div className="flex items-center justify-between px-4 py-3 bg-[#0d1428] border-b border-slate-800/90 gap-2">
+                    {/* Traffic light control dots */}
+                    <div className="flex items-center gap-2">
+                      <div className="h-3 w-3 rounded-full bg-rose-500/90 shadow-sm" />
+                      <div className="h-3 w-3 rounded-full bg-amber-400/90 shadow-sm" />
+                      <div className="h-3 w-3 rounded-full bg-emerald-500/90 shadow-sm" />
                     </div>
 
-                    {/* Center: Tabs to switch between 3D AI Mascot and Code Inspection */}
-                    <div className="flex items-center gap-1 bg-slate-900/90 border border-slate-700/60 rounded-xl p-0.5 text-xs font-semibold">
+                    {/* Tabs Switcher: 3D Mascot vs Code Scanner vs AST Diagnostics */}
+                    <div className="flex items-center gap-1 bg-[#060b18] border border-slate-700/60 rounded-xl p-1 text-xs font-semibold">
                       <button
                         type="button"
                         onClick={() => setActiveHeroTab('robot')}
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg transition cursor-pointer ${
+                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all cursor-pointer ${
                           activeHeroTab === 'robot'
-                            ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-xs font-bold'
+                            ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md font-bold'
                             : 'text-slate-400 hover:text-white'
                         }`}
                       >
-                        <Sparkles className="h-3.5 w-3.5" />
-                        <span>AI Assistant</span>
+                        <Sparkles className="h-3.5 w-3.5 text-cyan-300" />
+                        <span>GuardianBot</span>
                       </button>
                       <button
                         type="button"
                         onClick={() => setActiveHeroTab('scanner')}
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg transition cursor-pointer ${
+                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all cursor-pointer ${
                           activeHeroTab === 'scanner'
-                            ? 'bg-blue-600 text-white shadow-xs font-bold'
+                            ? 'bg-blue-600 text-white shadow-md font-bold'
                             : 'text-slate-400 hover:text-white'
                         }`}
                       >
                         <FileCode className="h-3.5 w-3.5" />
                         <span>Code Scanner</span>
                       </button>
+                      <button
+                        type="button"
+                        onClick={() => setActiveHeroTab('diagnostics')}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                          activeHeroTab === 'diagnostics'
+                            ? 'bg-purple-600 text-white shadow-md font-bold'
+                            : 'text-slate-400 hover:text-white'
+                        }`}
+                      >
+                        <ShieldAlert className="h-3.5 w-3.5 text-purple-300" />
+                        <span>AST Tree</span>
+                      </button>
                     </div>
 
-                    {/* Right: Audio Mute / Unmute Toggle */}
+                    {/* Audio Mute/Unmute Toggle Button */}
                     {activeHeroTab === 'robot' ? (
                       <button
                         type="button"
@@ -630,10 +680,10 @@ export const LandingPage: React.FC = () => {
                     )}
                   </div>
 
-                  {/* Window Content: 3D Robot Video (Autoplaying Looping) OR Code Debugger Image */}
-                  {activeHeroTab === 'robot' ? (
-                    <div className="relative aspect-[4/3] sm:aspect-[16/11] bg-slate-950 overflow-hidden flex items-center justify-center group">
-                      {/* Autoplaying continuous video */}
+                  {/* Window Content: 3D Robot Video OR Realistic Syntax Code Scanner OR AST Tree */}
+                  {activeHeroTab === 'robot' && (
+                    <div className="relative aspect-[4/3] sm:aspect-[16/11] bg-[#030712] overflow-hidden flex items-center justify-center group">
+                      {/* Video Autoplaying Looping */}
                       <video
                         src="/robot-assistant.mp4"
                         autoPlay
@@ -643,9 +693,12 @@ export const LandingPage: React.FC = () => {
                         className="w-full h-full object-cover object-center select-none"
                       />
 
-                      {/* Video ambient bottom overlay */}
-                      <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent flex items-center justify-between gap-3">
-                        <div className="flex items-center gap-2.5">
+                      {/* Moving Scanline effect */}
+                      <div className="pointer-events-none absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent animate-scanline" />
+
+                      {/* Ambient Bottom Overlay */}
+                      <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-[#02050e] via-[#02050e]/80 to-transparent flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-3">
                           <span className="relative flex h-3 w-3">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
                             <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500" />
@@ -658,7 +711,7 @@ export const LandingPage: React.FC = () => {
                               </span>
                             </div>
                             <div className="text-[11px] text-slate-300 font-sans">
-                              Saying "Hiii! 👋" • Ready to detect bugs and fix code
+                              "Hiii! 👋 I'm ready to detect bugs &amp; audit security"
                             </div>
                           </div>
                         </div>
@@ -666,20 +719,77 @@ export const LandingPage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => navigate('/workspace')}
-                          className="hidden sm:inline-flex items-center gap-1 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-3 py-1.5 text-xs font-bold shadow-md shadow-cyan-500/30 transition cursor-pointer"
+                          className="hidden sm:inline-flex items-center gap-1.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-3.5 py-1.5 text-xs font-bold shadow-md shadow-cyan-500/30 transition cursor-pointer"
                         >
                           <span>Try Live</span>
                           <ArrowRight className="h-3 w-3" />
                         </button>
                       </div>
                     </div>
-                  ) : (
-                    <div className="relative aspect-[4/3] sm:aspect-[16/11] bg-black overflow-hidden flex items-center justify-center">
-                      <img
-                        src="/hero-preview.jpg"
-                        alt="Code debugging failure test suite under magnifying glass inspection"
-                        className="w-full h-full object-cover object-center select-none"
-                      />
+                  )}
+
+                  {activeHeroTab === 'scanner' && (
+                    <div className="relative p-5 font-mono text-xs text-slate-200 bg-[#070b16] aspect-[4/3] sm:aspect-[16/11] overflow-y-auto">
+                      <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-800 text-[11px] text-slate-400">
+                        <span className="text-cyan-400 font-semibold flex items-center gap-1">
+                          <FileCode className="h-3.5 w-3.5" />
+                          <span>app/routes/auth_controller.py</span>
+                        </span>
+                        <span className="rounded bg-rose-500/20 border border-rose-500/40 text-rose-300 px-2 py-0.5 text-[10px] font-bold">
+                          CRITICAL: CWE-89
+                        </span>
+                      </div>
+                      <div className="space-y-1 text-slate-300">
+                        <div className="text-slate-500">1  import sqlite3, hashlib</div>
+                        <div className="text-slate-500">2  from flask import request, jsonify</div>
+                        <div className="text-slate-500">3  </div>
+                        <div><span className="text-blue-400">4  def</span> <span className="text-yellow-300">authenticate_user</span>(username, password):</div>
+                        <div>5      conn = sqlite3.connect(<span className="text-emerald-400">"users.db"</span>)</div>
+                        <div>6      cursor = conn.cursor()</div>
+                        <div className="bg-rose-950/40 border-l-2 border-rose-500 pl-2 -ml-2 py-1 text-rose-200">
+                          <span className="text-rose-400 font-bold">7      # ❌ SQL Injection Vulnerability Detected</span>
+                          <br />
+                          <span>8      query = f"SELECT * FROM users WHERE user = '&#123;username&#125;'"</span>
+                        </div>
+                        <div>9      cursor.execute(query)</div>
+                        <div>10     return cursor.fetchone()</div>
+                      </div>
+
+                      <div className="mt-4 p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between text-xs">
+                        <span className="text-slate-300">Bandit Rule: B608 (Hardcoded SQL String)</span>
+                        <button
+                          onClick={() => navigate('/workspace')}
+                          className="inline-flex items-center gap-1 text-cyan-400 hover:text-cyan-300 font-semibold"
+                        >
+                          <span>Auto-Fix in Workspace</span>
+                          <ArrowRight className="h-3 w-3" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {activeHeroTab === 'diagnostics' && (
+                    <div className="relative p-5 font-mono text-xs text-slate-200 bg-[#070b16] aspect-[4/3] sm:aspect-[16/11] overflow-y-auto space-y-3">
+                      <div className="flex items-center justify-between pb-2 border-b border-slate-800 text-[11px] text-slate-400">
+                        <span className="text-purple-400 font-semibold flex items-center gap-1">
+                          <Cpu className="h-3.5 w-3.5" />
+                          <span>AST Structural Node Tree</span>
+                        </span>
+                        <span className="text-emerald-400 font-bold">0.02s Parse Time</span>
+                      </div>
+                      <div className="space-y-2 text-xs">
+                        <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
+                          <span className="text-blue-400 font-bold">Module</span> &rarr; <span className="text-yellow-300">FunctionDef: authenticate_user</span>
+                        </div>
+                        <div className="p-2.5 rounded-xl bg-rose-950/30 border border-rose-500/30 text-rose-200">
+                          <span className="text-rose-400 font-bold">Call: cursor.execute</span> &larr; <span className="text-amber-300">JoinedStr (f-string)</span>
+                          <p className="text-[11px] text-slate-400 mt-1">Unsanitized user-tainted AST variable passed directly to relational driver.</p>
+                        </div>
+                        <div className="p-2.5 rounded-xl bg-emerald-950/30 border border-emerald-500/30 text-emerald-200 flex items-center justify-between">
+                          <span>Remediation Strategy: Parameterized Tuple</span>
+                          <span className="text-[10px] bg-emerald-500/20 px-2 py-0.5 rounded font-bold">Score: +56 pts</span>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -689,259 +799,268 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 3. Live Product Preview */}
-      <section className="relative border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-16 sm:py-24">
+      {/* ============================================================== */}
+      {/* 3. INTERACTIVE CODE SCANNER & DIFF COMPARISON SECTION           */}
+      {/* ============================================================== */}
+      <section className="relative z-10 border-t border-slate-800/80 bg-[#040916]/80 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Code-Editor-Inspired Product Preview */}
-          <div className="text-left max-w-5xl mx-auto">
-            <div className="relative rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl overflow-hidden">
-              {/* Window Title Bar */}
-              <div className="flex flex-wrap items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/90 px-4 py-3 sm:px-6">
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1.5">
-                    <div className="h-3 w-3 rounded-full bg-rose-400" />
-                    <div className="h-3 w-3 rounded-full bg-amber-400" />
-                    <div className="h-3 w-3 rounded-full bg-emerald-400" />
-                  </div>
-                  <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800" />
-                  <div className="flex items-center gap-1.5 rounded-lg bg-white dark:bg-slate-900 px-3 py-1 font-mono text-xs font-semibold text-blue-600 dark:text-cyan-400 border border-slate-200 dark:border-slate-800 shadow-sm">
-                    <FileCode className="h-3.5 w-3.5" />
-                    <span>{activeSample.filename}</span>
-                  </div>
-                </div>
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3.5 py-1 text-xs font-semibold text-blue-300 mb-3 font-mono">
+              <Code2 className="h-3.5 w-3.5 text-cyan-400" />
+              <span>LIVE KERNEL PREVIEW</span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
+              Instant Vulnerability Pinpointing &amp; Auto-Fix
+            </h2>
+            <p className="mt-4 text-base text-slate-300 leading-relaxed">
+              Compare vulnerable source code with verified AI-generated patches and real sandboxed stdout execution outputs.
+            </p>
+          </div>
 
-                {/* Language Selectors */}
-                <div className="flex items-center gap-1 overflow-x-auto py-1">
-                  {DEMO_SAMPLES.map((s) => (
-                    <button
-                      key={s.id}
-                      onClick={() => {
-                        setSelectedSampleId(s.id)
-                        setActiveTab('vuln')
-                      }}
-                      className={`rounded-lg px-3 py-1 text-xs font-medium transition cursor-pointer select-none ${
-                        selectedSampleId === s.id
-                          ? 'bg-blue-600 text-white shadow-sm font-semibold'
-                          : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-                      }`}
-                    >
-                      {s.lang}
-                    </button>
-                  ))}
+          {/* Interactive Code Preview Window */}
+          <div className="max-w-5xl mx-auto rounded-3xl border border-slate-800 bg-[#080e1e]/90 shadow-2xl overflow-hidden backdrop-blur-xl">
+            {/* Window Title Bar */}
+            <div className="flex flex-wrap items-center justify-between border-b border-slate-800 bg-[#0a1124] px-4 py-3 sm:px-6 gap-3">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1.5">
+                  <div className="h-3 w-3 rounded-full bg-rose-500/80" />
+                  <div className="h-3 w-3 rounded-full bg-amber-400/80" />
+                  <div className="h-3 w-3 rounded-full bg-emerald-500/80" />
                 </div>
-
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400">
-                    <CheckCircle2 className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
-                    Interactive Kernel
-                  </span>
+                <div className="h-4 w-px bg-slate-800" />
+                <div className="flex items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1 font-mono text-xs font-semibold text-cyan-400 border border-slate-800">
+                  <FileCode className="h-3.5 w-3.5" />
+                  <span>{activeSample.filename}</span>
                 </div>
               </div>
 
-              {/* Status Header */}
-              <div className="flex flex-wrap items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 px-4 py-2 text-xs text-slate-600 dark:text-slate-400">
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
-                  <span className="font-mono text-slate-700 dark:text-slate-300">Rule: {activeSample.rule}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span
-                    className={`rounded px-2 py-0.5 font-bold text-[10px] ${
-                      activeTab === 'fix' || activeTab === 'output'
-                        ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30'
-                        : 'bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30'
+              {/* Language Switchers */}
+              <div className="flex items-center gap-1 bg-[#050914] p-1 rounded-xl border border-slate-800 overflow-x-auto">
+                {DEMO_SAMPLES.map((s) => (
+                  <button
+                    key={s.id}
+                    onClick={() => {
+                      setSelectedSampleId(s.id)
+                      setActiveTab('vuln')
+                    }}
+                    className={`rounded-lg px-3 py-1 text-xs font-semibold transition cursor-pointer select-none ${
+                      selectedSampleId === s.id
+                        ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-sm'
+                        : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
                     }`}
                   >
-                    Quality Score: {activeTab === 'fix' || activeTab === 'output' ? `${activeSample.fixedScore}/100` : `${activeSample.initialScore}/100`}
+                    {s.lang}
+                  </button>
+                ))}
+              </div>
+
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-400">
+                <CheckCircle2 className="h-3 w-3 text-emerald-400" />
+                <span>Deterministic Match</span>
+              </span>
+            </div>
+
+            {/* Sub-header with Rule & Severity */}
+            <div className="flex flex-wrap items-center justify-between border-b border-slate-800/80 bg-[#060b18] px-4 py-2.5 text-xs text-slate-400">
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
+                <span className="font-mono text-slate-300">Security Rule: {activeSample.rule}</span>
+              </div>
+              <span
+                className={`rounded-lg px-2.5 py-0.5 font-bold text-xs ${
+                  activeTab === 'fix' || activeTab === 'output'
+                    ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                    : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                }`}
+              >
+                Quality Score: {activeTab === 'fix' || activeTab === 'output' ? `${activeSample.fixedScore}/100 (+56)` : `${activeSample.initialScore}/100`}
+              </span>
+            </div>
+
+            {/* Preview Body */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-slate-800 bg-[#070c1a]">
+              {/* Code View (Left 7 Cols) */}
+              <div className="lg:col-span-7 flex flex-col justify-between">
+                {/* Action Mode Tabs */}
+                <div className="flex items-center justify-between border-b border-slate-800/80 bg-[#090f20] px-4 py-2">
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => setActiveTab('vuln')}
+                      className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                        activeTab === 'vuln'
+                          ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <ShieldAlert className="h-3.5 w-3.5 text-rose-400" />
+                      <span>Detected Vulnerability</span>
+                    </button>
+
+                    <button
+                      onClick={() => setActiveTab('fix')}
+                      className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                        activeTab === 'fix'
+                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
+                      <span>AI Auto-Fix Diff</span>
+                    </button>
+
+                    <button
+                      onClick={() => setActiveTab('output')}
+                      className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                        activeTab === 'output'
+                          ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <Terminal className="h-3.5 w-3.5 text-blue-400" />
+                      <span>Sandbox Output</span>
+                    </button>
+                  </div>
+
+                  <button
+                    onClick={handleCopyCode}
+                    className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-white transition cursor-pointer"
+                    title="Copy code"
+                  >
+                    {copied ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
+                    <span>{copied ? 'Copied' : 'Copy'}</span>
+                  </button>
+                </div>
+
+                {/* Code Block Container */}
+                <div className="p-4 sm:p-5 font-mono text-xs overflow-x-auto min-h-[300px]">
+                  {activeTab === 'vuln' && (
+                    <pre className="text-slate-200 leading-relaxed font-mono">
+                      <code>{activeSample.vulnCode}</code>
+                    </pre>
+                  )}
+
+                  {activeTab === 'fix' && (
+                    <div className="space-y-2.5">
+                      <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/30 p-2.5 text-emerald-300 text-[11px]">
+                        <strong>AI Patch Remediation:</strong> {activeSample.fixLineComment}
+                      </div>
+                      <pre className="text-emerald-300 leading-relaxed font-mono">
+                        <code>{activeSample.fixCode}</code>
+                      </pre>
+                    </div>
+                  )}
+
+                  {activeTab === 'output' && (
+                    <div className="space-y-2.5">
+                      <div className="rounded-xl bg-blue-500/10 border border-blue-500/30 p-2.5 text-blue-300 text-[11px]">
+                        <strong>Verified Execution Engine:</strong> Real Judge0 stdout output &amp; assertion check.
+                      </div>
+                      <pre className="text-sky-300 leading-relaxed font-mono">
+                        <code>{activeSample.outputPreview}</code>
+                      </pre>
+                    </div>
+                  )}
+                </div>
+
+                {/* Editor Bottom Status Bar */}
+                <div className="flex items-center justify-between border-t border-slate-800 bg-[#060a16] px-4 py-2 text-[11px] text-slate-400">
+                  <span className="flex items-center gap-1.5">
+                    <Code2 className="h-3.5 w-3.5 text-cyan-400" />
+                    <span>{activeSample.lang} Runtime Active</span>
                   </span>
+                  <span className="font-mono text-slate-400">Isolated Sandbox • Zero Retention</span>
                 </div>
               </div>
 
-              {/* Preview Body */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-slate-200 dark:divide-slate-800/80 bg-white dark:bg-slate-950/50">
-                {/* Code View (Left 7 Cols) */}
-                <div className="lg:col-span-7 flex flex-col justify-between">
-                  {/* Action Mode Tabs */}
-                  <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800/60 bg-slate-50 dark:bg-slate-900/40 px-4 py-2">
-                    <div className="flex items-center gap-1">
-                      <button
-                        onClick={() => setActiveTab('vuln')}
-                        className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition ${
-                          activeTab === 'vuln'
-                            ? 'bg-rose-500/20 text-rose-600 dark:text-rose-300 border border-rose-500/30'
-                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
-                        }`}
-                      >
-                        <ShieldAlert className="h-3 w-3 text-rose-500 dark:text-rose-400" />
-                        <span>Detected Vulnerability</span>
-                      </button>
+              {/* Finding & Diagnostic Panel (Right 5 Cols) */}
+              <div className="lg:col-span-5 p-5 sm:p-6 flex flex-col justify-between bg-[#080d1c]">
+                <div className="space-y-5">
+                  <div className="flex items-center justify-between">
+                    <div className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/15 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-rose-400">
+                      <Flame className="h-3.5 w-3.5" />
+                      <span>{activeSample.severity} Severity</span>
+                    </div>
+                    <span className="rounded bg-slate-800/80 border border-slate-700/80 px-2 py-0.5 font-mono text-[10px] text-slate-300">
+                      CWE Identified
+                    </span>
+                  </div>
 
+                  <div>
+                    <h3 className="text-base sm:text-lg font-bold text-white tracking-tight">
+                      {activeSample.title}
+                    </h3>
+                    <p className="font-mono text-[11px] text-cyan-400 mt-1">
+                      {activeSample.cwe}
+                    </p>
+                  </div>
+
+                  {/* Health Impact Gauge */}
+                  <div className="rounded-2xl border border-slate-800 bg-[#040814] p-4 space-y-2.5 shadow-inner">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="font-semibold text-slate-300">Code Health Index</span>
+                      <span className="font-mono font-bold text-emerald-400">
+                        {activeTab === 'fix' || activeTab === 'output' ? `${activeSample.fixedScore}/100 (+56)` : `${activeSample.initialScore}/100`}
+                      </span>
+                    </div>
+                    <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full transition-all duration-500 rounded-full ${
+                          activeTab === 'fix' || activeTab === 'output'
+                            ? 'bg-gradient-to-r from-emerald-500 to-cyan-400'
+                            : 'bg-gradient-to-r from-rose-500 to-amber-500'
+                        }`}
+                        style={{
+                          width: `${activeTab === 'fix' || activeTab === 'output' ? activeSample.fixedScore : activeSample.initialScore}%`,
+                        }}
+                      />
+                    </div>
+                    <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                      <span>Status: {activeTab === 'fix' || activeTab === 'output' ? 'Remediated' : 'Exploitable'}</span>
+                      <span>Security: {activeTab === 'fix' || activeTab === 'output' ? 'Passed' : 'Action Required'}</span>
+                    </div>
+                  </div>
+
+                  {/* Quick Action Button */}
+                  <div className="rounded-2xl border border-slate-800 bg-[#050a17] p-3.5">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-slate-200 mb-1">
+                      <Sparkles className="h-3.5 w-3.5 text-purple-400" />
+                      <span>AI Patch Remediation</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 mb-3">
+                      {activeTab === 'vuln'
+                        ? 'Click below to review side-by-side patch diff generated by CodeGuardian AI.'
+                        : 'Patch validated against AST security specifications. Ready to test.'}
+                    </p>
+                    {activeTab === 'vuln' ? (
                       <button
                         onClick={() => setActiveTab('fix')}
-                        className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition ${
-                          activeTab === 'fix'
-                            ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30'
-                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
-                        }`}
+                        className="cg-btn-ai w-full py-2.5 text-xs"
                       >
-                        <Sparkles className="h-3 w-3 text-emerald-500 dark:text-emerald-400" />
-                        <span>AI Auto-Fix Diff</span>
+                        <Sparkles className="h-3.5 w-3.5" />
+                        <span>Review AI Auto-Fix Diff</span>
                       </button>
-
+                    ) : (
                       <button
                         onClick={() => setActiveTab('output')}
-                        className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition ${
-                          activeTab === 'output'
-                            ? 'bg-blue-500/20 text-blue-600 dark:text-blue-300 border border-blue-500/30'
-                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
-                        }`}
+                        className="cg-btn-primary w-full py-2.5 text-xs"
                       >
-                        <Terminal className="h-3 w-3 text-blue-500 dark:text-blue-400" />
-                        <span>Sandbox Output</span>
+                        <Play className="h-3.5 w-3.5 fill-white" />
+                        <span>Verify Output in Sandbox</span>
                       </button>
-                    </div>
-
-                    <button
-                      onClick={handleCopyCode}
-                      className="flex items-center gap-1 text-[11px] text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition"
-                      title="Copy code"
-                    >
-                      {copied ? <Check className="h-3 w-3 text-emerald-500 dark:text-emerald-400" /> : <Copy className="h-3 w-3" />}
-                      <span>{copied ? 'Copied' : 'Copy'}</span>
-                    </button>
-                  </div>
-
-                  {/* Code Block Container */}
-                  <div className="p-4 sm:p-5 font-mono text-xs overflow-x-auto min-h-[280px]">
-                    {activeTab === 'vuln' && (
-                      <pre className="text-slate-800 dark:text-slate-200 leading-relaxed font-mono">
-                        <code>{activeSample.vulnCode}</code>
-                      </pre>
                     )}
-
-                    {activeTab === 'fix' && (
-                      <div className="space-y-2">
-                        <div className="rounded-lg bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-500/30 p-2.5 text-emerald-700 dark:text-emerald-300 text-[11px]">
-                          <strong>AI Patch Remediation:</strong> {activeSample.fixLineComment}
-                        </div>
-                        <pre className="text-emerald-700 dark:text-emerald-300 leading-relaxed font-mono">
-                          <code>{activeSample.fixCode}</code>
-                        </pre>
-                      </div>
-                    )}
-
-                    {activeTab === 'output' && (
-                      <div className="space-y-2">
-                        <div className="rounded-lg bg-blue-50 dark:bg-blue-500/10 border border-blue-500/30 p-2.5 text-blue-700 dark:text-blue-300 text-[11px]">
-                          <strong>Verified Execution Engine:</strong> Real stdout output & test comparison.
-                        </div>
-                        <pre className="text-blue-700 dark:text-sky-300 leading-relaxed font-mono">
-                          <code>{activeSample.outputPreview}</code>
-                        </pre>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Editor Bottom Meta */}
-                  <div className="flex items-center justify-between border-t border-slate-200 dark:border-slate-800/60 bg-slate-50 dark:bg-slate-900/30 px-4 py-2 text-[11px] text-slate-500 dark:text-slate-400">
-                    <span className="flex items-center gap-1.5">
-                      <Code2 className="h-3 w-3 text-blue-500 dark:text-blue-400" />
-                      <span>{activeSample.lang} Runtime Active</span>
-                    </span>
-                    <span className="text-slate-400 dark:text-slate-500">Monaco Kernel • Sandboxed</span>
                   </div>
                 </div>
 
-                {/* Finding & Diagnostic Panel (Right 5 Cols) */}
-                <div className="lg:col-span-5 p-5 flex flex-col justify-between bg-slate-50/60 dark:bg-slate-900/30">
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/10 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-rose-600 dark:text-rose-400">
-                        <Flame className="h-3 w-3" />
-                        <span>{activeSample.severity} Severity</span>
-                      </div>
-                      <span className="rounded bg-slate-200 dark:bg-slate-800 px-2 py-0.5 font-mono text-[10px] text-slate-700 dark:text-slate-400">
-                        100% Deterministic Match
-                      </span>
-                    </div>
-
-                    <div>
-                      <h3 className="text-base font-bold text-slate-900 dark:text-white tracking-tight">
-                        {activeSample.title}
-                      </h3>
-                      <p className="font-mono text-[11px] text-blue-600 dark:text-cyan-400 mt-0.5">
-                        {activeSample.cwe}
-                      </p>
-                    </div>
-
-                    {/* Health Impact Gauge */}
-                    <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 p-3.5 space-y-2">
-                      <div className="flex justify-between items-center text-xs">
-                        <span className="font-medium text-slate-600 dark:text-slate-400">Code Health Index</span>
-                        <span className="font-bold text-emerald-600 dark:text-emerald-400">
-                          {activeTab === 'fix' || activeTab === 'output' ? `${activeSample.fixedScore}/100 (+56)` : `${activeSample.initialScore}/100 (-58)`}
-                        </span>
-                      </div>
-                      <div className="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                        <div
-                          className={`h-full transition-all duration-500 rounded-full ${
-                            activeTab === 'fix' || activeTab === 'output'
-                              ? 'bg-gradient-to-r from-emerald-500 to-cyan-400'
-                              : 'bg-gradient-to-r from-rose-500 to-amber-500'
-                          }`}
-                          style={{
-                            width: `${activeTab === 'fix' || activeTab === 'output' ? activeSample.fixedScore : activeSample.initialScore}%`,
-                          }}
-                        />
-                      </div>
-                      <div className="flex justify-between text-[10px] text-slate-500 font-mono">
-                        <span>Risk Impact: {activeTab === 'fix' || activeTab === 'output' ? '0 pts' : '-58 pts'}</span>
-                        <span>Exploitability: {activeTab === 'fix' || activeTab === 'output' ? 'Mitigated' : 'Severe'}</span>
-                      </div>
-                    </div>
-
-                    {/* Quick Action Button in Card */}
-                    <div className="rounded-2xl border border-slate-800/90 bg-slate-950/60 p-3">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-slate-200 mb-1.5">
-                        <Sparkles className="h-3.5 w-3.5 text-purple-400" />
-                        <span>Remediation Workflow</span>
-                      </div>
-                      <p className="text-[11px] text-slate-400 mb-3">
-                        {activeTab === 'vuln'
-                          ? 'Click below to review the AI auto-fix patch and compare side-by-side.'
-                          : 'Patch validated against AST security specifications. Ready to test.'}
-                      </p>
-                      {activeTab === 'vuln' ? (
-                        <button
-                          onClick={() => setActiveTab('fix')}
-                          className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 px-3 py-2 text-xs font-semibold text-white shadow-md shadow-purple-500/20 transition hover:from-purple-500 hover:to-blue-500 cursor-pointer"
-                        >
-                          <Sparkles className="h-3.5 w-3.5" />
-                          <span>Review AI Auto-Fix Diff</span>
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => setActiveTab('output')}
-                          className="w-full flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-3 py-2 text-xs font-semibold text-white shadow-md shadow-blue-500/20 transition hover:bg-blue-500 cursor-pointer"
-                        >
-                          <Play className="h-3.5 w-3.5 fill-white" />
-                          <span>Verify Output in Sandbox</span>
-                        </button>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Direct Link to full workspace */}
-                  <div className="mt-5 pt-3 border-t border-slate-800/80">
-                    <button
-                      type="button"
-                      onClick={() => handleLanguageSelect(selectedSampleId)}
-                      className="w-full flex items-center justify-center gap-2 rounded-xl bg-slate-900 border border-slate-700/80 text-white hover:bg-slate-800 py-2.5 px-4 text-xs font-bold transition shadow-sm group cursor-pointer"
-                    >
-                      <span>Open Full Code Testing Workspace</span>
-                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 text-blue-400" />
-                    </button>
-                  </div>
+                {/* Direct Link to full workspace */}
+                <div className="mt-5 pt-4 border-t border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => handleLanguageSelect(selectedSampleId)}
+                    className="w-full cg-btn-secondary py-2.5 px-4 text-xs font-bold"
+                  >
+                    <span>Open in Full Code Testing Workspace</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
                 </div>
               </div>
             </div>
@@ -950,36 +1069,32 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* ============================================================== */}
-      {/* 3. SUPPORTED LANGUAGES SECTION (Light / Dark Adaptive) */}
+      {/* 4. SUPPORTED PROGRAMMING LANGUAGES SECTION                     */}
       {/* ============================================================== */}
-      <section id="languages" className="languages-section relative border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-20 sm:py-28 overflow-hidden text-slate-900 dark:text-slate-100">
-        {/* Clean Ambient Gradient */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-          <div className="absolute top-1/4 left-1/4 h-96 w-96 rounded-full bg-blue-500/5 dark:bg-blue-600/10 blur-3xl" />
-          <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-cyan-500/5 dark:bg-cyan-600/10 blur-3xl" />
-        </div>
-
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
-          {/* Section Header with Left Content & Right Corner Inset Image + Controls */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+      <section id="languages" className="relative z-10 border-t border-slate-800/80 bg-[#030712] py-20 sm:py-28 overflow-hidden">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 mb-10">
             <div className="max-w-2xl">
-              <h2 className="languages-title text-3xl font-serif font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
-                Supported Programming Languages & Technologies
+              <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3.5 py-1 text-xs font-semibold text-cyan-300 mb-3 font-mono">
+                <span>POLYGLOT ECOSYSTEM</span>
+              </div>
+              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
+                12+ Supported Programming Languages &amp; Frameworks
               </h2>
-              <p className="languages-desc mt-4 text-base text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
-                Native support for compiling, executing, and analyzing code across modern systems, web frontends, backend runtimes, and databases.
+              <p className="mt-4 text-base text-slate-300 font-normal leading-relaxed">
+                Native support for compiling, executing, and diagnosing code across modern systems, web frontends, backend microservices, and databases.
               </p>
 
               {/* Filter Tabs */}
-              <div className="mt-8 flex flex-wrap items-center gap-2">
+              <div className="mt-6 flex flex-wrap items-center gap-2">
                 {(['All', 'Core', 'Web', 'Database'] as const).map((filter) => (
                   <button
                     key={filter}
                     onClick={() => setLanguageFilter(filter)}
                     className={`rounded-xl px-4 py-2 text-xs font-semibold transition cursor-pointer select-none ${
                       languageFilter === filter
-                        ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
-                        : 'filter-tab-inactive border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-cyan-600 dark:hover:text-cyan-400'
+                        ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md shadow-cyan-500/20'
+                        : 'border border-slate-800 bg-[#080d1a] text-slate-300 hover:border-cyan-500/40 hover:text-cyan-300'
                     }`}
                   >
                     {filter === 'All' ? 'All Languages (12)' : filter}
@@ -988,82 +1103,76 @@ export const LandingPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Side Corner: Large Inset Image + Carousel Controls */}
-            <div className="flex flex-col items-start lg:items-end gap-3.5 shrink-0 w-full lg:w-auto">
-              {/* Large Inset Image Card */}
-              <div className="group relative overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 shadow-xl hover:shadow-2xl transition-all duration-500 w-full sm:w-[460px] md:w-[500px] lg:w-[520px] xl:w-[580px] h-60 sm:h-72 md:h-80">
+            {/* Inset Image Card & Carousel Controls */}
+            <div className="flex flex-col items-start lg:items-end gap-3 shrink-0 w-full lg:w-auto">
+              <div className="group relative overflow-hidden rounded-3xl border border-slate-800 bg-[#0a0f1e] shadow-xl w-full sm:w-[460px] md:w-[500px] lg:w-[520px] h-56 sm:h-64">
                 <img
                   src="/languages-preview.jpg"
                   alt="Code execution and compiler diagnostics preview"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 select-none"
                 />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-transparent" />
                 <div className="absolute bottom-3.5 left-4 right-4 flex items-center justify-between text-xs font-semibold text-white">
-                  <span className="bg-slate-900/85 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/15 shadow-lg flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-cyan-500/30 flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
                     Live Compiler Engine
                   </span>
-                  <span className="bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 backdrop-blur-md px-3 py-1.5 rounded-xl drop-shadow">
-                    12+ Polyglot Runtimes
+                  <span className="bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 px-3 py-1.5 rounded-xl font-mono">
+                    12 Polyglot Runtimes
                   </span>
                 </div>
               </div>
 
-              {/* Carousel Controls (Pause/Play, Left Arrow, Right Arrow) */}
-              <div className="carousel-controls-box flex items-center gap-2 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-2 rounded-2xl shadow-sm">
+              {/* Carousel Controls */}
+              <div className="flex items-center gap-2 bg-[#080d1a] border border-slate-800 p-2 rounded-2xl shadow-sm">
                 <button
                   type="button"
                   onClick={togglePlayPause}
-                  aria-label={isPlaying ? 'Pause automatic scrolling' : 'Resume automatic scrolling'}
-                  title={isPlaying ? 'Pause' : 'Play'}
-                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-cyan-600 dark:hover:text-cyan-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition cursor-pointer shadow-sm"
+                  aria-label={isPlaying ? 'Pause auto-scroll' : 'Resume auto-scroll'}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-cyan-400 bg-slate-900 border border-slate-700/80 transition cursor-pointer"
                 >
                   {isPlaying ? (
                     <>
-                      <Pause className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" />
+                      <Pause className="h-3.5 w-3.5 text-cyan-400" />
                       <span>Pause</span>
                     </>
                   ) : (
                     <>
-                      <Play className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400 fill-cyan-600 dark:fill-cyan-400" />
+                      <Play className="h-3.5 w-3.5 text-cyan-400 fill-cyan-400" />
                       <span>Play</span>
                     </>
                   )}
                 </button>
 
-                <div className="h-4 w-px bg-slate-300 dark:bg-slate-700" />
+                <div className="h-4 w-px bg-slate-800" />
 
                 <button
                   type="button"
                   onClick={handleScrollLeft}
-                  aria-label="Scroll carousel to the left"
-                  title="Scroll Left"
-                  className="p-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-cyan-600 dark:hover:text-cyan-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition cursor-pointer shadow-sm"
+                  aria-label="Scroll left"
+                  className="p-1.5 rounded-xl text-slate-300 hover:text-cyan-400 bg-slate-900 border border-slate-700/80 transition cursor-pointer"
                 >
-                  <ChevronLeft className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
+                  <ChevronLeft className="h-4 w-4" />
                 </button>
 
                 <button
                   type="button"
                   onClick={handleScrollRight}
-                  aria-label="Scroll carousel to the right"
-                  title="Scroll Right"
-                  className="p-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-cyan-600 dark:hover:text-cyan-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition cursor-pointer shadow-sm"
+                  aria-label="Scroll right"
+                  className="p-1.5 rounded-xl text-slate-300 hover:text-cyan-400 bg-slate-900 border border-slate-700/80 transition cursor-pointer"
                 >
-                  <ChevronRight className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
+                  <ChevronRight className="h-4 w-4" />
                 </button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Single-Line Horizontal Carousel */}
-        <div className="relative mt-8 w-full">
-          {/* Edge fade overlays */}
-          <div className="carousel-edge-left pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-white dark:from-slate-950 to-transparent z-10" />
-          <div className="carousel-edge-right pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-white dark:from-slate-950 to-transparent z-10" />
+        {/* Continuous Horizontal Carousel */}
+        <div className="relative mt-4 w-full">
+          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-20 bg-gradient-to-r from-[#030712] to-transparent z-10" />
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-20 bg-gradient-to-l from-[#030712] to-transparent z-10" />
 
-          {/* Carousel Track Container */}
           <div
             ref={carouselRef}
             onMouseEnter={() => setIsHovered(true)}
@@ -1097,123 +1206,127 @@ export const LandingPage: React.FC = () => {
                 />
               ))}
             </div>
-
-            {/* Set 3 (buffer for fast arrow navigation / wide viewports) */}
-            <div className="flex gap-5 shrink-0 pr-5" aria-hidden="true">
-              {normalizedLanguages.map((lang, idx) => (
-                <LanguageCard
-                  key={`set3-${lang.code}-${idx}`}
-                  lang={lang}
-                  onSelect={handleLanguageSelect}
-                  isInteractive={false}
-                />
-              ))}
-            </div>
           </div>
         </div>
       </section>
 
       {/* ============================================================== */}
-      {/* 4. FEATURES SECTION (From Vulnerability Detection to Production Peace of Mind) */}
+      {/* 5. SECURITY FEATURES & VISUAL ERROR DEMOS (PROMPT 4 & 10)       */}
       {/* ============================================================== */}
-      <section id="features" className="relative border-t border-slate-900 bg-slate-950 py-20 sm:py-28">
+      <section id="features" className="relative z-10 border-t border-slate-800/80 bg-[#040815]/90 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl font-serif font-bold tracking-tight text-white sm:text-5xl">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3.5 py-1 text-xs font-semibold text-cyan-300 mb-3 font-mono">
+              <ShieldAlert className="h-3.5 w-3.5" />
+              <span>DEFENSE-IN-DEPTH CODE SECURITY</span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
               From Vulnerability Detection to Production Peace of Mind
             </h2>
-            <p className="mt-4 text-base text-slate-400 max-w-2xl mx-auto leading-relaxed">
-              Explore how CodeGuardian AI inspects every branch, flags hidden threats, and stops broken releases before they impact users.
+            <p className="mt-4 text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
+              Explore how CodeGuardian AI inspects your code, flags hidden threats, and verifies clean execution before you commit.
             </p>
           </div>
 
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Card 1: Real-Time Security Threat Alerts */}
-            <div className="group rounded-3xl border border-slate-800/90 bg-slate-900/60 p-5 sm:p-6 shadow-sm hover:shadow-xl hover:border-slate-700 transition-all duration-300 flex flex-col justify-between">
+            <div className="cg-card-hover rounded-3xl border border-slate-800 bg-[#090f20]/80 p-6 flex flex-col justify-between backdrop-blur-xl">
               <div>
-                <div className="overflow-hidden rounded-2xl bg-slate-950 aspect-[16/10]">
+                <div className="overflow-hidden rounded-2xl bg-[#030612] aspect-[16/10] border border-slate-800/80 relative group">
                   <img
                     src="/security-threats.jpg"
                     alt="Real-Time Security Threat Alerts"
                     className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#090f20] via-transparent to-transparent" />
+                  <div className="absolute top-3 left-3 bg-rose-500/90 text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded-md">
+                    CWE-89 / OWASP TOP 10
+                  </div>
                 </div>
                 <div className="mt-6">
                   <h3 className="text-lg sm:text-xl font-bold tracking-tight text-white">
                     Real-Time Security Threat Alerts
                   </h3>
-                  <p className="mt-2.5 text-xs sm:text-sm text-slate-400 leading-relaxed font-normal">
+                  <p className="mt-2.5 text-xs sm:text-sm text-slate-300 leading-relaxed">
                     Identify injection vectors, weak cryptographic ciphers, and unvalidated inputs directly within your active workspace before commit.
                   </p>
                 </div>
               </div>
 
               <div className="mt-8 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold">
-                <span className="border border-red-500/20 bg-red-500/10 text-red-400 px-2.5 py-1 rounded-lg">
-                  150+ Bandit & OWASP Rules
+                <span className="border border-rose-500/30 bg-rose-500/10 text-rose-300 px-2.5 py-1 rounded-lg">
+                  150+ Bandit &amp; OWASP Rules
                 </span>
-                <span className="border border-red-500/20 bg-red-500/10 text-red-400 px-2.5 py-1 rounded-lg">
-                  Zero Server Execution
+                <span className="border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 px-2.5 py-1 rounded-lg">
+                  Zero Server Retained
                 </span>
               </div>
             </div>
 
             {/* Card 2: Multi-Language AST Diagnostics */}
-            <div className="group rounded-3xl border border-slate-800/90 bg-slate-900/60 p-5 sm:p-6 shadow-sm hover:shadow-xl hover:border-slate-700 transition-all duration-300 flex flex-col justify-between">
+            <div className="cg-card-hover rounded-3xl border border-slate-800 bg-[#090f20]/80 p-6 flex flex-col justify-between backdrop-blur-xl">
               <div>
-                <div className="overflow-hidden rounded-2xl bg-slate-950 aspect-[16/10]">
+                <div className="overflow-hidden rounded-2xl bg-[#030612] aspect-[16/10] border border-slate-800/80 relative group">
                   <img
                     src="/ast-diagnostics.jpg"
                     alt="Multi-Language AST Diagnostics"
                     className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#090f20] via-transparent to-transparent" />
+                  <div className="absolute top-3 left-3 bg-blue-600/90 text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded-md">
+                    SUB-SECOND PARSING
+                  </div>
                 </div>
                 <div className="mt-6">
                   <h3 className="text-lg sm:text-xl font-bold tracking-tight text-white">
                     Multi-Language AST Diagnostics
                   </h3>
-                  <p className="mt-2.5 text-xs sm:text-sm text-slate-400 leading-relaxed font-normal">
-                    High-performance static parsing across Python, JavaScript, TypeScript, Go, Java, and C++ with instant editor squiggly markers.
+                  <p className="mt-2.5 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    High-performance static parsing across Python, JavaScript, TypeScript, Java, C, C++, and SQL with instant editor squiggly markers.
                   </p>
                 </div>
               </div>
 
               <div className="mt-8 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold">
-                <span className="border border-blue-500/20 bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded-lg">
-                  Sub-second Parsing
+                <span className="border border-blue-500/30 bg-blue-500/10 text-blue-300 px-2.5 py-1 rounded-lg">
+                  Deterministic AST
                 </span>
-                <span className="border border-blue-500/20 bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded-lg">
-                  Polyglot Support
+                <span className="border border-purple-500/30 bg-purple-500/10 text-purple-300 px-2.5 py-1 rounded-lg">
+                  Polyglot Engine
                 </span>
               </div>
             </div>
 
             {/* Card 3: Prevent Costly Outages & 404s */}
-            <div className="group rounded-3xl border border-slate-800/90 bg-slate-900/60 p-5 sm:p-6 shadow-sm hover:shadow-xl hover:border-slate-700 transition-all duration-300 flex flex-col justify-between">
+            <div className="cg-card-hover rounded-3xl border border-slate-800 bg-[#090f20]/80 p-6 flex flex-col justify-between backdrop-blur-xl">
               <div>
-                <div className="overflow-hidden rounded-2xl bg-slate-950 aspect-[16/10]">
+                <div className="overflow-hidden rounded-2xl bg-[#030612] aspect-[16/10] border border-slate-800/80 relative group">
                   <img
                     src="/prevent-outages.jpg"
                     alt="Prevent Costly Outages & 404s"
                     className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#090f20] via-transparent to-transparent" />
+                  <div className="absolute top-3 left-3 bg-emerald-600/90 text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded-md">
+                    REGRESSION GUARD
+                  </div>
                 </div>
                 <div className="mt-6">
                   <h3 className="text-lg sm:text-xl font-bold tracking-tight text-white">
-                    Prevent Costly Outages & 404s
+                    Automated Test Generation &amp; Guard
                   </h3>
-                  <p className="mt-2.5 text-xs sm:text-sm text-slate-400 leading-relaxed font-normal">
-                    Automated unit test generation (pytest, Jest, JUnit) covers malicious inputs and edge cases to ensure zero runtime surprises in production.
+                  <p className="mt-2.5 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    Automated unit test generation (pytest, Jest, JUnit) covers malicious inputs, edge cases, and type violations to eliminate surprises.
                   </p>
                 </div>
               </div>
 
               <div className="mt-8 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold">
-                <span className="border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-lg">
+                <span className="border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 px-2.5 py-1 rounded-lg">
                   Automated Test Suites
                 </span>
-                <span className="border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-lg">
-                  Regression Guard
+                <span className="border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 px-2.5 py-1 rounded-lg">
+                  Sandbox Verified
                 </span>
               </div>
             </div>
@@ -1222,117 +1335,148 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* ============================================================== */}
-      {/* 5. HOW IT WORKS SECTION (Write Code -> Analyze -> Fix -> Test) */}
+      {/* 6. HOW IT WORKS SECTION (Write Code -> Analyze -> Fix -> Test)  */}
       {/* ============================================================== */}
-      <section
-        id="how-it-works"
-        className="how-it-works-section relative border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-20 sm:py-28 overflow-hidden text-slate-900 dark:text-slate-100"
-      >
-        {/* Subtle Ambient Glow */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-          <div className="absolute top-1/3 left-1/3 h-96 w-96 rounded-full bg-indigo-500/5 dark:bg-indigo-600/10 blur-3xl" />
-          <div className="absolute bottom-1/4 right-1/4 h-80 w-80 rounded-full bg-blue-500/5 dark:bg-blue-600/10 blur-3xl" />
-        </div>
-
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
-          <div className="text-center max-w-3xl mx-auto">
-            <h2 className="how-it-works-title text-3xl font-serif font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
+      <section id="how-it-works" className="relative z-10 border-t border-slate-800/80 bg-[#030712] py-20 sm:py-28 overflow-hidden">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3.5 py-1 text-xs font-semibold text-cyan-300 mb-3 font-mono">
+              <span>WORKFLOW PIPELINE</span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
               How CodeGuardian AI Works
             </h2>
-            <p className="how-it-works-desc mt-4 text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed font-normal">
-              A reliable workflow: Write Code &rarr; Analyze &rarr; Fix &rarr; Test.
+            <p className="mt-4 text-base text-slate-300 leading-relaxed">
+              A seamless, developer-friendly 4-step workflow: Write Code &rarr; Analyze &rarr; Fix &rarr; Test.
             </p>
           </div>
 
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {/* Step 1: Write Code */}
-            <div className="how-it-works-card ui-hover-card rounded-3xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900/75 p-6 flex flex-col justify-between shadow-sm hover:shadow-xl dark:shadow-black/40 group hover:border-cyan-500/50 transition-all duration-300">
+            <div className="cg-card-hover rounded-3xl border border-slate-800 bg-[#090f20]/90 p-6 flex flex-col justify-between backdrop-blur-xl group">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-500 dark:text-cyan-300 shadow-md shadow-cyan-500/10 group-hover:scale-105 transition-transform">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 shadow-md shadow-cyan-500/10 group-hover:scale-105 transition-transform">
                     <FileCode className="h-6 w-6" />
                   </div>
-                  <span className="font-mono text-2xl font-black text-slate-300 dark:text-slate-500 group-hover:text-cyan-500 dark:group-hover:text-cyan-400 transition-colors">01</span>
+                  <span className="font-mono text-3xl font-black text-slate-700 group-hover:text-cyan-400 transition-colors">01</span>
                 </div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-200 transition-colors">Write or Paste Code</h3>
-                <p className="mt-2.5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-                  Select your language from the searchable selector and write or upload code in Monaco Editor with syntax highlighting.
+                <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition-colors">Write or Paste Code</h3>
+                <p className="mt-2.5 text-xs text-slate-300 leading-relaxed font-normal">
+                  Select your runtime from 12+ supported languages. Upload or edit code with Monaco Editor and syntax highlighting.
                 </p>
               </div>
-              <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/70 text-[11px] font-semibold text-cyan-600 dark:text-cyan-400 flex items-center justify-between">
+              <div className="mt-5 pt-3 border-t border-slate-800 text-[11px] font-semibold text-cyan-400 flex items-center justify-between">
                 <span>Monaco Editor</span>
-                <span className="text-slate-500 dark:text-slate-400">• 12+ Languages</span>
+                <span className="text-slate-400">12+ Runtimes</span>
               </div>
             </div>
 
             {/* Step 2: Analyze */}
-            <div className="how-it-works-card ui-hover-card rounded-3xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900/75 p-6 flex flex-col justify-between shadow-sm hover:shadow-xl dark:shadow-black/40 group hover:border-blue-500/50 transition-all duration-300">
+            <div className="cg-card-hover rounded-3xl border border-slate-800 bg-[#090f20]/90 p-6 flex flex-col justify-between backdrop-blur-xl group">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/15 border border-blue-500/30 text-blue-500 dark:text-blue-300 shadow-md shadow-blue-500/10 group-hover:scale-105 transition-transform">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/15 border border-blue-500/30 text-blue-400 shadow-md shadow-blue-500/10 group-hover:scale-105 transition-transform">
                     <Cpu className="h-6 w-6" />
                   </div>
-                  <span className="font-mono text-2xl font-black text-slate-300 dark:text-slate-500 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">02</span>
+                  <span className="font-mono text-3xl font-black text-slate-700 group-hover:text-blue-400 transition-colors">02</span>
                 </div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-200 transition-colors">Analyze &amp; Scan</h3>
-                <p className="mt-2.5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-                  Click <strong className="text-slate-900 dark:text-white font-semibold">Analyze Code</strong> to trigger AST parsing, Bandit security audits, syntax error detection, and quality metrics.
+                <h3 className="text-base font-bold text-white group-hover:text-blue-300 transition-colors">Analyze &amp; Scan</h3>
+                <p className="mt-2.5 text-xs text-slate-300 leading-relaxed font-normal">
+                  Click <strong className="text-white font-semibold">Analyze Code</strong> to trigger deterministic AST parsing, Bandit security audits, and quality scoring.
                 </p>
               </div>
-              <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/70 text-[11px] font-semibold text-blue-600 dark:text-blue-400 flex items-center justify-between">
+              <div className="mt-5 pt-3 border-t border-slate-800 text-[11px] font-semibold text-blue-400 flex items-center justify-between">
                 <span>Deterministic AST</span>
-                <span className="text-slate-500 dark:text-slate-400">• Security &amp; Bugs</span>
+                <span className="text-slate-400">Security &amp; Bugs</span>
               </div>
             </div>
 
             {/* Step 3: Fix */}
-            <div className="how-it-works-card ui-hover-card rounded-3xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900/75 p-6 flex flex-col justify-between shadow-sm hover:shadow-xl dark:shadow-black/40 group hover:border-purple-500/50 transition-all duration-300">
+            <div className="cg-card-hover rounded-3xl border border-slate-800 bg-[#090f20]/90 p-6 flex flex-col justify-between backdrop-blur-xl group">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-500/15 border border-purple-500/30 text-purple-500 dark:text-purple-300 shadow-md shadow-purple-500/10 group-hover:scale-105 transition-transform">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-500/15 border border-purple-500/30 text-purple-400 shadow-md shadow-purple-500/10 group-hover:scale-105 transition-transform">
                     <Sparkles className="h-6 w-6" />
                   </div>
-                  <span className="font-mono text-2xl font-black text-slate-300 dark:text-slate-500 group-hover:text-purple-500 dark:group-hover:text-purple-400 transition-colors">03</span>
+                  <span className="font-mono text-3xl font-black text-slate-700 group-hover:text-purple-400 transition-colors">03</span>
                 </div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-200 transition-colors">Fix Error with AI</h3>
-                <p className="mt-2.5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-                  Click <strong className="text-slate-900 dark:text-white font-semibold">Fix Error</strong> to generate corrected code. Review side-by-side diffs, apply them, and revert via Undo if needed.
+                <h3 className="text-base font-bold text-white group-hover:text-purple-300 transition-colors">Fix Error with AI</h3>
+                <p className="mt-2.5 text-xs text-slate-300 leading-relaxed font-normal">
+                  Click <strong className="text-white font-semibold">Fix Error</strong> to generate corrected patches. Review side-by-side diffs and revert via Undo if needed.
                 </p>
               </div>
-              <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/70 text-[11px] font-semibold text-purple-600 dark:text-purple-400 flex items-center justify-between">
+              <div className="mt-5 pt-3 border-t border-slate-800 text-[11px] font-semibold text-purple-400 flex items-center justify-between">
                 <span>Unified Diffs</span>
-                <span className="text-slate-500 dark:text-slate-400">• Undo Stack</span>
+                <span className="text-slate-400">Undo Stack</span>
               </div>
             </div>
 
             {/* Step 4: Test */}
-            <div className="how-it-works-card ui-hover-card rounded-3xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900/75 p-6 flex flex-col justify-between shadow-sm hover:shadow-xl dark:shadow-black/40 group hover:border-emerald-500/50 transition-all duration-300">
+            <div className="cg-card-hover rounded-3xl border border-slate-800 bg-[#090f20]/90 p-6 flex flex-col justify-between backdrop-blur-xl group">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-500 dark:text-emerald-300 shadow-md shadow-emerald-500/10 group-hover:scale-105 transition-transform">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 shadow-md shadow-emerald-500/10 group-hover:scale-105 transition-transform">
                     <TestTube2 className="h-6 w-6" />
                   </div>
-                  <span className="font-mono text-2xl font-black text-slate-300 dark:text-slate-500 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors">04</span>
+                  <span className="font-mono text-3xl font-black text-slate-700 group-hover:text-emerald-400 transition-colors">04</span>
                 </div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-200 transition-colors">Test &amp; Verify Output</h3>
-                <p className="mt-2.5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-                  Click <strong className="text-slate-900 dark:text-white font-semibold">Run Code</strong> or <strong className="text-slate-900 dark:text-white font-semibold">Run Tests</strong> to execute in the sandbox and verify real outputs against assertions.
+                <h3 className="text-base font-bold text-white group-hover:text-emerald-300 transition-colors">Test &amp; Verify Output</h3>
+                <p className="mt-2.5 text-xs text-slate-300 leading-relaxed font-normal">
+                  Click <strong className="text-white font-semibold">Run Code</strong> or <strong className="text-white font-semibold">Run Tests</strong> to execute in Judge0 sandboxes and verify stdout against assertions.
                 </p>
               </div>
-              <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/70 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 flex items-center justify-between">
-                <span>Sandbox Execution</span>
-                <span className="text-slate-500 dark:text-slate-400">• Assertion Bench</span>
+              <div className="mt-5 pt-3 border-t border-slate-800 text-[11px] font-semibold text-emerald-400 flex items-center justify-between">
+                <span>Judge0 Sandbox</span>
+                <span className="text-slate-400">Assertion Bench</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
+      {/* ============================================================== */}
+      {/* 7. HIGH-IMPACT CALL TO ACTION (CTA) SECTION                     */}
+      {/* ============================================================== */}
+      <section className="relative z-10 border-t border-slate-800/80 bg-gradient-to-b from-[#030712] via-[#070e24] to-[#030712] py-20 sm:py-24">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center">
+          <div className="rounded-3xl border border-cyan-500/30 bg-[#081026]/90 p-8 sm:p-14 shadow-2xl relative overflow-hidden backdrop-blur-2xl">
+            <div className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full radial-glow-cyan blur-2xl opacity-60" />
+            <div className="pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full radial-glow-blue blur-2xl opacity-60" />
 
-      {/* 7. Professional Footer with Working Navigation Links */}
+            <div className="relative z-10 max-w-2xl mx-auto">
+              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
+                Ready to Secure Your Codebase?
+              </h2>
+              <p className="mt-4 text-base text-slate-300 leading-relaxed">
+                Launch the CodeGuardian AI workspace now. Upload your files, detect hidden vulnerabilities, and ship verified bug-free code today.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+                <button
+                  type="button"
+                  onClick={() => navigate('/workspace')}
+                  className="cg-btn-primary px-8 py-3.5 text-base group"
+                >
+                  <span>Launch Code Workspace</span>
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleScrollToSection('languages')}
+                  className="cg-btn-secondary px-6 py-3.5 text-base"
+                >
+                  <span>View Supported Languages</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. Professional Cybersecurity Footer */}
       <Footer />
 
-      {/* 8. CodeGuardian AI Animated Robot Assistant Mascot & Speech Bubble */}
+      {/* 9. CodeGuardian AI Animated Robot Assistant Mascot & Speech Bubble */}
       <RobotFloatingWidget />
     </div>
   )
